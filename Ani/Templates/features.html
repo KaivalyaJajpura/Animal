@@ -1,0 +1,249 @@
+<!-- Features Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livestock Health Monitoring - Features</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white h-screen flex overflow-hidden antialiased selection:bg-primary/30 selection:text-green-900">
+<!-- Sidebar Navigation -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background-light dark:bg-background-dark relative">
+<!-- Top Navigation Bar -->
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium">Features</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- Scrollable Page Content -->
+<main class="flex-1 overflow-y-auto p-8">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-8">
+<!-- Page Heading Section -->
+<div class="flex flex-col gap-3">
+<h1 class="text-[#111813] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]" data-i18n="features.title">
+Advanced Monitoring for Herd Health
+</h1>
+<p class="text-[#61896f] dark:text-gray-400 text-lg font-normal leading-relaxed max-w-3xl" data-i18n="features.description">
+Explore the comprehensive suite of tools designed for early disease detection and livestock management. Our system integrates cutting-edge sensors with AI analysis.
+</p>
+</div>
+<!-- Feature Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Feature Card 1 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">ecg_heart</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.biometric_monitoring">Real-time Biometric Monitoring</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.biometric_desc">Live tracking of vital signs including heart rate and temperature.</p>
+</div>
+</div>
+<!-- Feature Card 2 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">pets</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.species_analysis">Species-based Analysis</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.species_desc">Tailored health metrics adjusted for specific livestock species.</p>
+</div>
+</div>
+<!-- Feature Card 3 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">calculate</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.auto_health">Auto Health Index</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.auto_health_desc">Automated wellness scoring algorithm for quick assessment.</p>
+</div>
+</div>
+<!-- Feature Card 4 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.false_reading">False Reading Filtering</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.false_reading_desc">Intelligent noise reduction eliminates sensor anomalies.</p>
+</div>
+</div>
+<!-- Feature Card 5 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.abnormal_detection">Continuous Abnormal Detection</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.abnormal_detection_desc">24/7 proactive alerting system for early sickness signs.</p>
+</div>
+</div>
+<!-- Feature Card 6 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.hourly_updates">Hourly Updates</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.hourly_updates_desc">Regular cloud synchronization ensures data integrity.</p>
+</div>
+</div>
+<!-- Feature Card 7 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">translate</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.bilingual">Bilingual Interface</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.bilingual_desc">Seamless switching between English and Spanish support.</p>
+</div>
+</div>
+<!-- Feature Card 8 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.history_tracking">Health History Tracking</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.history_tracking_desc">Comprehensive long-term health records per animal.</p>
+</div>
+</div>
+<!-- Feature Card 9 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.vet_alert">Veterinary Alert Queue</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.vet_alert_desc">Prioritized direct line to vet assistance and triage.</p>
+</div>
+</div>
+<!-- Feature Card 10 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.secure_auth">Secure Authentication</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.secure_auth_desc">Enterprise-grade security protecting sensitive farm data.</p>
+</div>
+</div>
+<!-- Feature Card 11 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">download</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.exportable_data">Exportable Health Data</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.exportable_data_desc">One-click downloadable pdf reports for analysis.</p>
+</div>
+</div>
+<!-- Feature Card 12 -->
+<div class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">diversity_3</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight" data-i18n="features.species_available">Species Available</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.species_available_desc">Support for Cow, Buffalo, Goat, Horse, and Sheep monitoring.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

@@ -1,0 +1,425 @@
+<!-- Export Data Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Export Data - Livestock Health Monitor</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen flex overflow-hidden">
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium">Export Data</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 scroll-smooth">
+<div class="max-w-4xl mx-auto flex flex-col gap-8">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight" data-i18n="export.title">Export Health Reports</h1>
+<p class="text-slate-500 dark:text-slate-400 max-w-2xl" data-i18n="export.description">Select the parameters below to generate a detailed PDF report of livestock health metrics, vaccinations, and movement history.</p>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-6 md:p-8 flex flex-col gap-8">
+<div class="flex flex-col gap-3">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">tag</span>
+<span data-i18n="export.select_livestock">Select Livestock</span>
+</label>
+<div class="relative">
+<select id="animalSelect" class="w-full h-14 pl-4 pr-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none text-base font-medium cursor-pointer">
+<option disabled="" value="" data-i18n="export.select_animal">Select an animal ID or Group...</option>
+<option value="all" data-i18n="export.all_livestock">All Livestock (Herd Report)</option>
+{% for animal in animals %}
+<option value="{{ animal.tag }}">{{ animal.species }} #{{ animal.tag }} - {{ animal.name }}</option>
+{% endfor %}
+</select>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-500 pl-1" data-i18n="export.help_text">Choose a specific animal to export individual health records, or select 'All Livestock' for a summary.</p>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<div class="flex flex-col gap-4">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">date_range</span>
+<span data-i18n="export.time_period">Time Period</span>
+</label>
+<div class="p-1 bg-slate-100 dark:bg-slate-800 rounded-lg flex flex-wrap sm:flex-nowrap">
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="date_range" type="radio" value="7days"/>
+<div class="py-2.5 px-4 text-center rounded-md text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-slate-900 dark:peer-checked:text-white peer-checked:shadow-sm transition-all" data-i18n="export.last_7_days">Last 7 Days</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="date_range" type="radio" value="1month"/>
+<div class="py-2.5 px-4 text-center rounded-md text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-slate-900 dark:peer-checked:text-white peer-checked:shadow-sm transition-all" data-i18n="export.last_1_month">Last 1 Month</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="date_range" type="radio" value="custom"/>
+<div class="py-2.5 px-4 text-center rounded-md text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-slate-900 dark:peer-checked:text-white peer-checked:shadow-sm transition-all" data-i18n="export.custom_range">Custom Range</div>
+</label>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+<div class="flex flex-col gap-1.5">
+<span class="text-xs font-medium text-slate-500" data-i18n="export.start_date">From</span>
+<input id="dateFrom" class="w-full h-11 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-white focus:ring-1 focus:ring-primary focus:border-primary text-sm px-3" type="date"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<span class="text-xs font-medium text-slate-500" data-i18n="export.end_date">To</span>
+<input id="dateTo" class="w-full h-11 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-white focus:ring-1 focus:ring-primary focus:border-primary text-sm px-3" type="date"/>
+</div>
+</div>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<div class="flex flex-col gap-4">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2" data-i18n="export.export_format">
+<span class="material-symbols-outlined text-primary text-[18px]">description</span>
+Export Format
+</label>
+<div class="grid grid-cols-1">
+<label class="cursor-pointer relative group">
+<input checked="" class="peer sr-only format-radio" name="format" type="radio" value="pdf"/>
+<div class="h-full p-5 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-primary/50 transition-all flex flex-row items-center gap-5">
+<div class="size-14 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0">
+<span class="material-symbols-outlined text-[32px]">picture_as_pdf</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-slate-900 dark:text-white text-lg" data-i18n="export.pdf_report">PDF Report</p>
+<p class="text-sm text-slate-500 mt-1" data-i18n="export.pdf_report_desc">High-quality document suitable for printing and official records.</p>
+</div>
+<div class="check-icon text-primary opacity-100 transform scale-100 transition-all duration-300 pr-2">
+<span class="material-symbols-outlined font-bold text-[28px]">check_circle</span>
+</div>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-6 md:p-8 border-t border-slate-200 dark:border-slate-800 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+<button onclick="window.history.back()" class="w-full sm:w-auto px-6 py-3 rounded-lg text-slate-600 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors" data-i18n="export.cancel">
+Cancel
+</button>
+<button id="downloadPdfBtn" onclick="downloadPDF()" class="w-full sm:w-auto bg-primary hover:bg-primary-dark text-slate-900 px-8 py-3 rounded-lg font-bold shadow-lg shadow-green-500/20 active:scale-95 transition-all flex items-center justify-center gap-2" data-i18n="export.download_pdf">
+<span class="material-symbols-outlined">download</span>
+Download PDF
+</button>
+</div>
+</div>
+<p class="text-center text-xs text-slate-400 dark:text-slate-500 pb-8" data-i18n="export.generating_pdf">
+Note: Generating complex PDF reports may take a moment. You will be notified when the download is ready.
+</p>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 flex flex-col gap-2 z-50 pointer-events-none">
+</div>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer" class="fixed top-6 right-6 flex flex-col gap-3 z-50"></div>
+
+</main>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+<script>
+// Toast notification function
+function showToast(message, type = 'info', duration = 4000) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    
+    // Icon and color based on type
+    let icon, bgColor, borderColor, textColor;
+    switch(type) {
+        case 'success':
+            icon = 'check_circle';
+            bgColor = 'bg-green-50 dark:bg-green-900/30';
+            borderColor = 'border-green-200 dark:border-green-800';
+            textColor = 'text-green-700 dark:text-green-400';
+            break;
+        case 'error':
+            icon = 'error';
+            bgColor = 'bg-red-50 dark:bg-red-900/30';
+            borderColor = 'border-red-200 dark:border-red-800';
+            textColor = 'text-red-700 dark:text-red-400';
+            break;
+        case 'warning':
+            icon = 'warning';
+            bgColor = 'bg-yellow-50 dark:bg-yellow-900/30';
+            borderColor = 'border-yellow-200 dark:border-yellow-800';
+            textColor = 'text-yellow-700 dark:text-yellow-400';
+            break;
+        default:
+            icon = 'info';
+            bgColor = 'bg-blue-50 dark:bg-blue-900/30';
+            borderColor = 'border-blue-200 dark:border-blue-800';
+            textColor = 'text-blue-700 dark:text-blue-400';
+    }
+    
+    toast.className = `flex items-center gap-3 px-5 py-4 rounded-xl border ${bgColor} ${borderColor} shadow-lg transform translate-x-full transition-all duration-300 ease-out min-w-[320px] max-w-md`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined ${textColor} text-[24px]">${icon}</span>
+        <p class="flex-1 text-sm font-medium ${textColor}">${message}</p>
+        <button onclick="this.parentElement.remove()" class="p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+            <span class="material-symbols-outlined text-slate-400 text-[18px]">close</span>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+        toast.classList.add('translate-x-0');
+    }, 10);
+    
+    // Auto-remove after duration
+    setTimeout(() => {
+        toast.classList.remove('translate-x-0');
+        toast.classList.add('translate-x-full', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// Auto-select animal from URL parameter
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const animalTag = urlParams.get('animal');
+    const animalSelect = document.getElementById('animalSelect');
+    
+    // Set default dates (last 7 days)
+    const today = new Date();
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    
+    document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+    document.getElementById('dateFrom').value = sevenDaysAgo.toISOString().split('T')[0];
+    
+    // Auto-select animal if provided in URL
+    if (animalTag && animalSelect) {
+        for (let option of animalSelect.options) {
+            if (option.value === animalTag) {
+                option.selected = true;
+                break;
+            }
+        }
+    } else {
+        // Select the first placeholder option if no animal specified
+        animalSelect.selectedIndex = 0;
+    }
+    
+    // Handle date range radio buttons
+    const dateRangeRadios = document.querySelectorAll('input[name="date_range"]');
+    dateRangeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const today = new Date();
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
+            
+            dateTo.value = today.toISOString().split('T')[0];
+            
+            if (this.value === '7days') {
+                const fromDate = new Date(today);
+                fromDate.setDate(today.getDate() - 7);
+                dateFrom.value = fromDate.toISOString().split('T')[0];
+            } else if (this.value === '1month') {
+                const fromDate = new Date(today);
+                fromDate.setMonth(today.getMonth() - 1);
+                dateFrom.value = fromDate.toISOString().split('T')[0];
+            }
+            // For 'custom', user sets dates manually
+        });
+    });
+    
+    // Select 7days radio by default
+    const sevenDaysRadio = document.querySelector('input[name="date_range"][value="7days"]');
+    if (sevenDaysRadio) {
+        sevenDaysRadio.checked = true;
+    }
+});
+
+// Download PDF function
+async function downloadPDF() {
+    const animalSelect = document.getElementById('animalSelect');
+    const dateFrom = document.getElementById('dateFrom').value;
+    const dateTo = document.getElementById('dateTo').value;
+    const downloadBtn = document.getElementById('downloadPdfBtn');
+    
+    // Validate inputs with toast notifications
+    let missingFields = [];
+    
+    if (!animalSelect.value || animalSelect.value === '') {
+        missingFields.push('Livestock selection');
+    }
+    
+    if (!dateFrom) {
+        missingFields.push('Start date');
+    }
+    
+    if (!dateTo) {
+        missingFields.push('End date');
+    }
+    
+    if (missingFields.length > 0) {
+        showToast(`⚠️ Incomplete information: Please fill in ${missingFields.join(', ')}`, 'warning', 5000);
+        return;
+    }
+    
+    // Validate date range
+    if (new Date(dateFrom) > new Date(dateTo)) {
+        showToast('⚠️ Invalid date range: Start date cannot be after end date', 'warning', 5000);
+        return;
+    }
+    
+    // Show loading state
+    downloadBtn.disabled = true;
+    downloadBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Generating...';
+    
+    showToast('🔄 Generating your PDF report, please wait...', 'info', 3000);
+    
+    try {
+        const response = await fetch('/api/export-pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                animal_tag: animalSelect.value,
+                date_from: dateFrom,
+                date_to: dateTo
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to generate PDF');
+        }
+        
+        // Check if response is actually a PDF
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/pdf')) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Server did not return a valid PDF');
+        }
+        
+        // Get the PDF blob
+        const blob = await response.blob();
+        
+        if (blob.size === 0) {
+            throw new Error('Generated PDF is empty. Please check if there is data for the selected period.');
+        }
+        
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        // Generate filename
+        const animalName = animalSelect.options[animalSelect.selectedIndex].text;
+        const filename = `Health_Report_${animalSelect.value}_${dateFrom}_to_${dateTo}.pdf`;
+        a.download = filename;
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Success notification
+        showToast(`✅ PDF downloaded successfully! File: ${filename}`, 'success', 5000);
+        
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        showToast(`❌ Error: ${error.message || 'Failed to generate PDF report. Please try again.'}`, 'error', 6000);
+    } finally {
+        // Restore button state
+        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = '<span class="material-symbols-outlined">download</span> Download PDF';
+    }
+}
+</script>
+</body></html>

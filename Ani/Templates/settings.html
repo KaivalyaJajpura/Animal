@@ -1,0 +1,259 @@
+<!-- Settings Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livestock Health System - Settings</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }.toggle-checkbox:checked {
+            right: 0;
+            border-color: #13ec5b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #13ec5b;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-[#111813] font-display antialiased overflow-hidden">
+<div class="flex h-screen w-full bg-background-light">
+<aside class="w-64 flex-shrink-0 bg-white border-r border-[#e5e7eb] flex flex-col h-full z-20 hidden md:flex">
+<div class="flex h-16 items-center px-6 border-b border-slate-100">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.settings">Settings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors group mt-2" href="{{ url_for('logout') }}">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium leading-normal group-hover:text-red-700">Logout</p>
+</a>
+</div>
+</aside>
+<div class="flex-1 flex flex-col h-full relative overflow-hidden">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium" data-i18n="settings.breadcrumb">Settings</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User avatar thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAbE7lg2NeFp7MATV6F0Rfc4R3ctOkM-HArbxh82_WQEWJq3t7ri_XfXmmbJE-R_ef5yB4BIj1Rva4yMtaEDPuJ72sKV8QU3fHzZtxEbpNoto_YcT1TG75eO_rYqVlYqB5IO-hEO0Pgj0lf4epnriZn9b8rG14eWFFBeZZbYtFJVdcRA2QRxTS3tRFBV13HgmCL3tvqBgL5XojmiRGSjiEqCc2NQEEgI2oKZlyzA51w2gtCscdxjKLAvQcD1DExDvmEhEvizxhbKBs");'>
+</a>
+</div>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto bg-background-light p-6 md:px-12 md:py-8">
+<div class="max-w-4xl mx-auto flex flex-col gap-8 pb-10">
+<nav class="flex items-center text-sm font-medium text-[#61896f]">
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl md:text-4xl font-black text-[#111813] tracking-tight" data-i18n="settings.title">Settings &amp; Preferences</h1>
+<p class="text-[#61896f] text-base" data-i18n="settings.description">Manage your farm profile and notification preferences.</p>
+</div>
+<button class="bg-primary hover:bg-[#0fd650] text-[#052e13] px-6 py-2.5 rounded-lg text-sm font-bold shadow-sm shadow-primary/30 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                            <span data-i18n="settings.save">Save Changes</span>
+                        </button>
+</div>
+<div class="border-b border-[#dbe6df]">
+<div class="flex gap-8 overflow-x-auto no-scrollbar">
+<button class="pb-3 border-b-[3px] border-[#111813] text-[#111813] font-bold text-sm whitespace-nowrap" data-i18n="settings.account">Account</button>
+<a href="{{ url_for('notifications') }}" class="pb-3 border-b-[3px] border-transparent text-[#61896f] hover:text-[#111813] font-medium text-sm whitespace-nowrap transition-colors">Notifications</a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="bg-white rounded-xl shadow-[0_2px_12px_-4px_rgba(6,81,237,0.1)] p-6 md:p-8">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-[#f0f4f2] rounded-lg text-[#111813]">
+<span class="material-symbols-outlined">person</span>
+</div>
+<h3 class="text-lg font-bold text-[#111813]" data-i18n="settings.profile_info">Profile Information</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-1 md:col-span-2 flex items-center gap-6 mb-2">
+<div class="size-20 rounded-full bg-primary/20 flex items-center justify-center text-primary text-3xl font-bold">
+{{ user_data['full_name'][0] if user_data and user_data['full_name'] else 'U' }}
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-[#111813]" data-i18n="settings.profile_photo">Profile Photo</span>
+<span class="text-xs text-[#61896f]">JPG, GIF or PNG. Max 1MB.</span>
+<button class="mt-2 text-primary font-bold text-xs hover:underline text-left" data-i18n="settings.upload_new">Upload New</button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 md:col-span-2">
+<label class="text-xs font-bold text-[#61896f] uppercase tracking-wider" data-i18n="user.full_name">Full Name</label>
+<input class="w-full bg-[#f6f8f6] border border-[#dbe6df] rounded-lg px-4 py-2.5 text-[#111813] text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400" type="text" id="settingsFullName" value="{{ user_data['full_name'] if user_data else '' }}" readonly/>
+</div>
+<div class="flex flex-col gap-1.5 md:col-span-2">
+<label class="text-xs font-bold text-[#61896f] uppercase tracking-wider" data-i18n="settings.email_address">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#61896f] text-[20px]">mail</span>
+<input class="w-full bg-[#f6f8f6] border border-[#dbe6df] rounded-lg pl-10 pr-4 py-2.5 text-[#111813] text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400" type="email" id="settingsEmail" value="{{ user_data['email'] if user_data else '' }}" readonly/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold text-[#61896f] uppercase tracking-wider" data-i18n="user.phone_number">Mobile Number</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#61896f] text-[20px]">phone</span>
+<input class="w-full bg-[#f6f8f6] border border-[#dbe6df] rounded-lg pl-10 pr-4 py-2.5 text-[#111813] text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400" type="tel" id="settingsMobile" value="{{ user_data['mobile'] if user_data and user_data['mobile'] else 'Not provided' }}" readonly/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold text-[#61896f] uppercase tracking-wider" data-i18n="user.age">Age</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#61896f] text-[20px]">calendar_month</span>
+<input class="w-full bg-[#f6f8f6] border border-[#dbe6df] rounded-lg pl-10 pr-4 py-2.5 text-[#111813] text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400" type="text" id="settingsAge" value="{{ user_data['age'] if user_data and user_data['age'] else 'Not provided' }}" readonly/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 md:col-span-2">
+<label class="text-xs font-bold text-[#61896f] uppercase tracking-wider" data-i18n="user.gender">Gender</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#61896f] text-[20px]">wc</span>
+<input class="w-full bg-[#f6f8f6] border border-[#dbe6df] rounded-lg pl-10 pr-4 py-2.5 text-[#111813] text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400" type="text" id="settingsGender" value="{{ user_data['gender'] if user_data and user_data['gender'] else 'Not provided' }}" readonly/>
+</div>
+</div>
+<div class="md:col-span-2 pt-2">
+<a href="{{ url_for('userinfo') }}" class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+Edit Profile in User Info
+</a>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-xl shadow-[0_2px_12px_-4px_rgba(6,81,237,0.1)] p-6 md:p-8">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-[#f0f4f2] rounded-lg text-[#111813]">
+<span class="material-symbols-outlined">notifications_active</span>
+</div>
+<h3 class="text-lg font-bold text-[#111813]" data-i18n="settings.alert_config">Alert Configurations</h3>
+</div>
+<div class="flex flex-col gap-4 divide-y divide-[#f0f4f2]">
+<div class="flex items-center justify-between pt-4 first:pt-0">
+<div class="flex flex-col gap-1 max-w-[80%]">
+<h4 class="text-sm font-bold text-[#111813]" data-i18n="settings.critical_alerts">Critical Health Alerts</h4>
+<p class="text-xs text-[#61896f]" data-i18n="settings.critical_alerts_desc">Receive immediate SMS when livestock vitals (temp, heart rate) exceed safe thresholds.</p>
+</div>
+<label class="flex items-center cursor-pointer relative" for="toggle1">
+<input checked="" class="sr-only peer" id="toggle1" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between pt-4">
+<div class="flex flex-col gap-1 max-w-[80%]">
+<h4 class="text-sm font-bold text-[#111813]" data-i18n="settings.daily_summary">Daily Health Summary</h4>
+<p class="text-xs text-[#61896f]" data-i18n="settings.daily_summary_desc">Email report every morning at 8:00 AM with herd statistics.</p>
+</div>
+<label class="flex items-center cursor-pointer relative" for="toggle2">
+<input checked="" class="sr-only peer" id="toggle2" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between pt-4">
+<div class="flex flex-col gap-1 max-w-[80%]">
+<h4 class="text-sm font-bold text-[#111813]" data-i18n="settings.device_disconnect">Device Disconnection</h4>
+<p class="text-xs text-[#61896f]" data-i18n="settings.device_disconnect_desc">Notify if any sensor collar goes offline for more than 1 hour.</p>
+</div>
+<label class="flex items-center cursor-pointer relative" for="toggle3">
+<input class="sr-only peer" id="toggle3" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

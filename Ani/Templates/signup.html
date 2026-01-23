@@ -1,0 +1,398 @@
+<!-- Signup Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Signup - Livestock Health Monitor</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-hover": "#0fd650",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                        "text-main": "#111813",
+                        "text-secondary": "#61896f",
+                        "border-color": "#dbe6df",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "0.75rem", 
+                        "xl": "1rem", 
+                        "2xl": "1.5rem"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-white antialiased min-h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color bg-surface-light dark:bg-surface-dark px-6 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg md:text-xl font-bold leading-tight tracking-tight">Livestock Health Monitor</h2>
+</div>
+<div class="flex items-center gap-4 md:gap-8">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<button class="md:hidden p-2 text-text-main">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col md:flex-row h-full overflow-hidden">
+<!-- Left Side: Image/Hero (Hidden on mobile, 40% width on desktop) -->
+<div class="hidden md:block md:w-5/12 lg:w-1/2 relative overflow-hidden bg-surface-dark group">
+<div class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Healthy cows grazing in a green pasture under sunlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzFFusGM1q_MT14JgiJEpS38I26d_8g60fPg0Nm9y4sDLxPsSLLmuifKcbhfJRKhKGTa1PxpQD2_PPeYNScIz_DotKlOKVPC7kP3iM8R2-RGYV7AL32_JkxoN7AvbQ0C9RaAE_MtfdZEMKtU-sMUDX26qmF_edUl3w6Ox2xOiKY6pAy0c4y9NUDmADg2Hpt--ufQPeANmXoU111Va7dsjBsAyLRnWwkd6e26ZyWDYoZ2Oux-E2de8Upyi_IOYTsz8uKRXHrdRyzcg');"></div>
+<div class="absolute bottom-0 left-0 z-20 p-12 text-white">
+<div class="mb-4 inline-flex items-center justify-center rounded-full bg-primary/20 backdrop-blur-md px-4 py-1.5 text-sm font-medium text-primary border border-primary/30">
+<span class="material-symbols-outlined text-[18px] mr-2">agriculture</span>
+                    <span data-i18n="auth.smart_farming">Smart Farming</span>
+                </div>
+<h1 class="text-4xl lg:text-5xl font-black tracking-tight mb-4" data-i18n="auth.monitor_realtime">Monitor Livestock Health in Real-Time</h1>
+<p class="text-lg text-white/80 max-w-md" data-i18n="auth.early_detection_desc">Early disease detection and comprehensive health tracking for modern agriculture.</p>
+</div>
+</div>
+<!-- Right Side: Form (Scrollable) -->
+<div class="w-full md:w-7/12 lg:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-16 overflow-y-auto bg-background-light dark:bg-background-dark">
+<div class="w-full max-w-lg bg-surface-light dark:bg-surface-dark p-8 md:p-10 rounded-2xl shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-white/50 dark:border-white/5">
+<!-- Form Header -->
+<div class="mb-8">
+<h2 class="text-3xl font-black tracking-tight text-text-main dark:text-white mb-2" data-i18n="auth.farmer_registration">Farmer Registration</h2>
+<p class="text-text-secondary" data-i18n="auth.signup_desc">Enter your details to create an account and access the dashboard.</p>
+</div>
+<!-- Signup Form -->
+<form id="signupForm" method="POST" action="{{ url_for('signup') }}" class="flex flex-col gap-5">
+<!-- Full Name -->
+<label class="flex flex-col gap-1.5">
+<span class="text-sm font-semibold text-text-main dark:text-white"><span data-i18n="auth.full_name_label">Full Name</span> <span class="text-red-500" data-i18n="auth.required_field">*</span></span>
+<div class="relative">
+<input id="nameInput" name="full_name" class="w-full h-12 rounded-lg border-border-color bg-background-light dark:bg-background-dark/50 text-text-main dark:text-white placeholder:text-text-secondary px-4 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="e.g. Rajesh Kumar" data-i18n="auth.full_name_placeholder" type="text" required/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">person</span>
+</div>
+</label>
+<!-- Email -->
+<label class="flex flex-col gap-1.5">
+<span class="text-sm font-semibold text-text-main dark:text-white"><span data-i18n="auth.email_label">Email Address</span> <span class="text-red-500" data-i18n="auth.required_field">*</span></span>
+<div class="relative">
+<input id="emailInput" name="email" class="w-full h-12 rounded-lg border-border-color bg-background-light dark:bg-background-dark/50 text-text-main dark:text-white placeholder:text-text-secondary px-4 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="name@example.com" data-i18n="auth.email_placeholder" type="email" required/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">mail</span>
+</div>
+<p id="emailError" class="text-sm font-medium text-red-600 hidden" data-i18n="auth.email_invalid">Invalid email address</p>
+</label>
+<!-- Mobile -->
+<label class="flex flex-col gap-1.5">
+<span class="text-sm font-semibold text-text-main dark:text-white"><span data-i18n="auth.mobile_label">Mobile Number</span> <span class="text-red-500" data-i18n="auth.required_field">*</span></span>
+<div class="relative">
+<input id="phoneInput" name="mobile" class="w-full h-12 rounded-lg border-border-color bg-background-light dark:bg-background-dark/50 text-text-main dark:text-white placeholder:text-text-secondary px-4 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="9876543210" data-i18n="auth.mobile_placeholder" type="tel" maxlength="10" inputmode="numeric" required/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">smartphone</span>
+</div>
+<p id="phoneError" class="text-sm font-medium text-red-600 hidden" data-i18n="auth.mobile_invalid">Please enter a valid 10-digit phone number</p>
+</label>
+<!-- Passwords Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<label class="flex flex-col gap-1.5">
+<span class="text-sm font-semibold text-text-main dark:text-white"><span data-i18n="auth.password_label">Password</span> <span class="text-red-500" data-i18n="auth.required_field">*</span></span>
+<div class="relative group/pass">
+<input id="passwordInput" name="password" class="w-full h-12 rounded-lg border-border-color bg-background-light dark:bg-background-dark/50 text-text-main dark:text-white placeholder:text-text-secondary px-4 pr-10 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="••••••••" type="password" required/>
+<div id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-main transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon1">visibility</span>
+</div>
+</div>
+</label>
+<label class="flex flex-col gap-1.5">
+<span class="text-sm font-semibold text-text-main dark:text-white"><span data-i18n="auth.confirm_password_label">Confirm Password</span> <span class="text-red-500" data-i18n="auth.required_field">*</span></span>
+<div class="relative group/pass">
+<input id="confirmPasswordInput" name="confirm_password" class="w-full h-12 rounded-lg border-border-color bg-background-light dark:bg-background-dark/50 text-text-main dark:text-white placeholder:text-text-secondary px-4 pr-10 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="••••••••" type="password" required/>
+<div id="toggleConfirmPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-main transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon2">visibility</span>
+</div>
+</div>
+</label>
+</div>
+<p id="passwordMatchError" class="text-sm font-medium text-red-600 hidden" data-i18n="auth.passwords_mismatch">Passwords do not match</p>
+<!-- Terms Checkbox -->
+<label class="flex items-start gap-3 mt-2 cursor-pointer group">
+<input id="termsCheckbox" class="mt-1 size-4 rounded border-border-color text-primary focus:ring-primary/20 bg-background-light dark:bg-background-dark/50 dark:checked:bg-primary cursor-pointer" type="checkbox" required/>
+<span class="text-sm text-text-secondary group-hover:text-text-main transition-colors">
+                            <span data-i18n="auth.terms_text">I agree to the</span> <a class="text-text-main dark:text-white underline decoration-primary/50 hover:decoration-primary font-medium" href="#" data-i18n="auth.terms_link">Terms of Service</a> <span data-i18n="auth.and">and</span> <a class="text-text-main dark:text-white underline decoration-primary/50 hover:decoration-primary font-medium" href="#" data-i18n="auth.privacy_link">Privacy Policy</a>. <span class="text-red-500" data-i18n="auth.required_field">*</span>
+                        </span>
+</label>
+<!-- Submit Button -->
+<button id="submitBtn" class="mt-4 flex w-full items-center justify-center rounded-lg bg-gray-300 text-gray-500 font-bold h-12 px-6 transition-all cursor-not-allowed" type="submit" disabled data-i18n="auth.create_account_button">
+                        Create Account
+                    </button>
+</form>
+<!-- Footer Links -->
+<div class="mt-8 pt-6 border-t border-border-color text-center">
+<p class="text-sm text-text-secondary">
+                        <span data-i18n="auth.already_account">Already have an account?</span> 
+                        <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1" href="{{ url_for('login') }}" data-i18n="auth.login_here">Log in here</a>
+</p>
+</div>
+</div>
+<!-- Mobile Language Switcher (Visible only on small screens below form) -->
+<div class="mt-8 flex md:hidden items-center justify-center gap-3 pb-8 w-full absolute bottom-0 left-0">
+<div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+// Password visibility toggle for Password field
+document.getElementById('togglePassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    const passwordInput = document.getElementById('passwordInput');
+    const eyeIcon = document.getElementById('eyeIcon1');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+    }
+});
+
+// Password visibility toggle for Confirm Password field
+document.getElementById('toggleConfirmPassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+    const eyeIcon = document.getElementById('eyeIcon2');
+    
+    if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+    } else {
+        confirmPasswordInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+    }
+});
+
+// Email validation
+const emailInput = document.getElementById('emailInput');
+const emailError = document.getElementById('emailError');
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInput.addEventListener('blur', function() {
+    if (emailInput.value && !emailRegex.test(emailInput.value)) {
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('border-red-500', 'focus:ring-red-500');
+    } else {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+});
+
+emailInput.addEventListener('input', function() {
+    if (emailInput.value && emailRegex.test(emailInput.value)) {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+    validateForm();
+});
+
+// Phone number validation
+const phoneInput = document.getElementById('phoneInput');
+const phoneError = document.getElementById('phoneError');
+
+// Password match validation
+const passwordInput = document.getElementById('passwordInput');
+const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+const passwordMatchError = document.getElementById('passwordMatchError');
+
+function checkPasswordMatch() {
+    if (confirmPasswordInput.value && passwordInput.value !== confirmPasswordInput.value) {
+        passwordMatchError.classList.remove('hidden');
+        confirmPasswordInput.classList.add('border-red-500', 'focus:ring-red-500');
+        return false;
+    } else {
+        passwordMatchError.classList.add('hidden');
+        confirmPasswordInput.classList.remove('border-red-500', 'focus:ring-red-500');
+        return true;
+    }
+}
+
+passwordInput.addEventListener('input', function() {
+    checkPasswordMatch();
+    validateForm();
+});
+
+confirmPasswordInput.addEventListener('input', function() {
+    checkPasswordMatch();
+    validateForm();
+});
+
+confirmPasswordInput.addEventListener('blur', function() {
+    checkPasswordMatch();
+    validateForm();
+});
+
+// Form validation - enable/disable submit button
+const nameInput = document.getElementById('nameInput');
+const termsCheckbox = document.getElementById('termsCheckbox');
+const submitBtn = document.getElementById('submitBtn');
+
+function validateForm() {
+    const isNameValid = nameInput.value.trim() !== '';
+    const isEmailValid = emailInput.value && emailRegex.test(emailInput.value);
+    const isPhoneValid = phoneInput.value.length === 10;
+    const isPasswordValid = passwordInput.value.length >= 1;
+    const isConfirmPasswordValid = confirmPasswordInput.value.length >= 1;
+    const doPasswordsMatch = passwordInput.value === confirmPasswordInput.value;
+    const isTermsChecked = termsCheckbox.checked;
+    
+    if (isNameValid && isEmailValid && isPhoneValid && isPasswordValid && isConfirmPasswordValid && doPasswordsMatch && isTermsChecked) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        submitBtn.classList.add('bg-primary', 'hover:bg-primary-hover', 'text-[#111813]', 'shadow-lg', 'shadow-primary/20', 'active:scale-[0.98]');
+    } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        submitBtn.classList.remove('bg-primary', 'hover:bg-primary-hover', 'text-[#111813]', 'shadow-lg', 'shadow-primary/20', 'active:scale-[0.98]');
+    }
+}
+
+// Phone number validation
+phoneInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    if (this.value.length === 10) {
+        phoneError.classList.add('hidden');
+        phoneInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+    validateForm();
+});
+
+phoneInput.addEventListener('blur', function() {
+    if (this.value && this.value.length !== 10) {
+        phoneError.classList.remove('hidden');
+        phoneInput.classList.add('border-red-500', 'focus:ring-red-500');
+    }
+    validateForm();
+});
+
+// Add event listeners to all inputs
+nameInput.addEventListener('input', validateForm);
+termsCheckbox.addEventListener('change', validateForm);
+
+// Update placeholders when language changes
+window.addEventListener('languageChanged', function() {
+    if (window.i18n) {
+        nameInput.placeholder = window.i18n.getTranslation('auth.full_name_placeholder') || nameInput.placeholder;
+        emailInput.placeholder = window.i18n.getTranslation('auth.email_placeholder') || emailInput.placeholder;
+        phoneInput.placeholder = window.i18n.getTranslation('auth.mobile_placeholder') || phoneInput.placeholder;
+        passwordInput.placeholder = window.i18n.getTranslation('auth.password_placeholder') || passwordInput.placeholder;
+        confirmPasswordInput.placeholder = window.i18n.getTranslation('auth.password_placeholder') || confirmPasswordInput.placeholder;
+    }
+});
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+
+<!-- Popup Notification -->
+<div id="popup" class="fixed top-5 right-5 z-[9999] transform translate-x-full opacity-0 transition-all duration-300 ease-in-out">
+    <div id="popupContent" class="flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]">
+        <span id="popupIcon" class="material-symbols-outlined text-2xl"></span>
+        <span id="popupMessage" class="font-semibold text-sm"></span>
+        <button onclick="closePopup()" class="ml-auto text-current opacity-60 hover:opacity-100 transition-opacity">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
+</div>
+
+<script>
+function showPopup(message, type) {
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+    const popupIcon = document.getElementById('popupIcon');
+    const popupMessage = document.getElementById('popupMessage');
+    
+    popupMessage.textContent = message;
+    
+    // Reset classes
+    popupContent.className = 'flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]';
+    popupIcon.className = 'material-symbols-outlined text-2xl';
+    
+    if (type === 'success') {
+        popupContent.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+        popupIcon.textContent = 'check_circle';
+        popupIcon.classList.add('text-green-500');
+    } else if (type === 'error') {
+        popupContent.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+        popupIcon.textContent = 'error';
+        popupIcon.classList.add('text-red-500');
+    }
+    
+    // Show popup
+    popup.classList.remove('translate-x-full', 'opacity-0');
+    popup.classList.add('translate-x-0', 'opacity-100');
+    
+    // Auto close after 4 seconds
+    setTimeout(closePopup, 4000);
+}
+
+function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.add('translate-x-full', 'opacity-0');
+    popup.classList.remove('translate-x-0', 'opacity-100');
+}
+
+// Handle form submission with AJAX
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{{ url_for("signup") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Success - show popup and redirect to dashboard
+            showPopup('Account created successfully! Signing you in...', 'success');
+            setTimeout(function() {
+                window.location.href = data.redirect || '{{ url_for("dashboard") }}';
+            }, 1500);
+        } else {
+            // Error - show error popup
+            showPopup(data.message || 'An error occurred. Please try again.', 'error');
+        }
+    })
+    .catch(error => {
+        showPopup('An error occurred. Please try again.', 'error');
+    });
+});
+</script>
+</body></html>

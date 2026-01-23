@@ -1,0 +1,411 @@
+<!-- User Notifications Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifications - Livestock Health Monitor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-dark h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10 dark:bg-surface-dark dark:border-slate-800">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813] dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813] dark:text-white">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium" data-i18n="notification.title">Notifications</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] dark:border-slate-800 pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] dark:hover:bg-gray-800 text-[#61896f] dark:text-gray-400 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+<!-- Page Title -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight" data-i18n="notification.title">Notifications</h1>
+<p class="text-slate-500 dark:text-slate-400 max-w-2xl" data-i18n="notification.description">Health alerts, system updates, and important farm status messages.</p>
+</div>
+<button id="markAllReadBtn" onclick="markAllAsRead()" class="self-start md:self-auto px-4 py-2 bg-primary/10 text-primary font-semibold rounded-lg hover:bg-primary/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span data-i18n="notification.mark_all_read">Mark All as Read</span>
+</button>
+</div>
+
+<!-- Filter Tabs -->
+<div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
+<button id="filterAll" onclick="filterNotifications('all')" class="filter-btn px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary" data-i18n="notification.all">All</button>
+<button id="filterUnread" onclick="filterNotifications('unread')" class="filter-btn px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 border-b-2 border-transparent" data-i18n="notification.unread">Unread</button>
+<button id="filterCritical" onclick="filterNotifications('critical')" class="filter-btn px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 border-b-2 border-transparent hover:border-red-300 transition-colors" data-i18n="notification.critical">Critical</button>
+<button id="filterWarning" onclick="filterNotifications('warning')" class="filter-btn px-4 py-2 text-sm font-medium text-orange-600 dark:text-orange-400 hover:text-orange-700 border-b-2 border-transparent hover:border-orange-300 transition-colors" data-i18n="notification.warnings">Warnings</button>
+<button id="filterNormal" onclick="filterNotifications('normal')" class="filter-btn px-4 py-2 text-sm font-medium text-green-600 dark:text-green-400 hover:text-green-700 border-b-2 border-transparent hover:border-green-300 transition-colors" data-i18n="notification.normal">Normal</button>
+</div>
+
+<!-- Notifications List -->
+<div id="notificationsList" class="notification-list flex flex-col gap-3">
+    <!-- Dynamic notifications from database -->
+    {% if notifications %}
+        {% for notification in notifications %}
+        <div class="notification-item flex items-start md:items-center gap-4 bg-white dark:bg-surface-dark p-4 rounded-2xl shadow-sm border-l-4 
+            {% if notification.notification_type == 'critical' %}border-red-500{% elif notification.notification_type == 'warning' %}border-orange-500{% else %}border-primary{% endif %} 
+            hover:shadow-md transition-shadow group cursor-pointer relative {% if notification.is_read %}opacity-70{% endif %}"
+            data-type="{{ notification.notification_type }}"
+            data-read="{{ notification.is_read }}"
+            data-id="{{ notification.id }}">
+            <div class="{% if notification.notification_type == 'critical' %}bg-red-50 dark:bg-red-900/20 text-red-500{% elif notification.notification_type == 'warning' %}bg-orange-50 dark:bg-orange-900/20 text-orange-500{% else %}bg-primary/10 text-primary{% endif %} flex items-center justify-center rounded-xl shrink-0 size-12">
+                <span class="material-symbols-outlined text-2xl font-bold">
+                    {% if notification.notification_type == 'critical' %}error{% elif notification.notification_type == 'warning' %}warning{% else %}info{% endif %}
+                </span>
+            </div>
+            <div class="flex flex-col flex-1">
+                <div class="flex justify-between items-start gap-2">
+                    <div class="flex-1">
+                        <p class="text-slate-900 dark:text-white text-base font-bold leading-normal">{{ notification.title }}</p>
+                        <div class="mt-1 inline-flex">
+                            <span class="text-xs font-bold uppercase tracking-wide px-2.5 py-1 rounded-full
+                                {% if notification.notification_type == 'critical' %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400{% elif notification.notification_type == 'warning' %}bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400{% else %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% endif %}" data-i18n="notification.type_{{ notification.notification_type }}">
+                                {{ notification.notification_type }}
+                            </span>
+                        </div>
+                    </div>
+                    <span class="text-slate-500 dark:text-slate-400 text-xs font-medium notification-time whitespace-nowrap" data-time="{{ notification.created_at }}">{{ notification.created_at }}</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed mt-2">
+                    {{ notification.message }}
+                </p>
+                {% if notification.animal_tag %}
+                <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-gray-500">
+                    <span class="material-symbols-outlined text-[14px]">pets</span>
+                    <span data-i18n="notification.animal">Animal</span>: #{{ notification.animal_tag }}
+                </span>
+                {% endif %}
+            </div>
+            {% if not notification.is_read %}
+            <span class="unread-dot absolute top-4 right-4 size-2 bg-primary rounded-full"></span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Empty state when no notifications -->
+    <div id="emptyState" class="{% if notifications %}hidden{% endif %} flex flex-col items-center justify-center py-16 text-center">
+        <div class="bg-gray-100 dark:bg-gray-800 rounded-full p-6 mb-4">
+            <span class="material-symbols-outlined text-5xl text-gray-400">notifications_off</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="notification.no_notifications">No notifications yet</h3>
+        <p class="text-gray-500 dark:text-gray-400 max-w-sm" data-i18n="notification.hint">
+            When your animals have health alerts or important updates, they'll appear here.
+        </p>
+    </div>
+</div>
+
+<!-- Sample notifications hint -->
+<div class="{% if notifications %}hidden{% endif %} text-center mt-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+        <span class="material-symbols-outlined text-[16px] align-middle">info</span>
+        <span data-i18n="notification.hint">Notifications are generated when an animal has 3 consecutive Warning or Ill readings (15 minutes apart).</span>
+    </p>
+</div>
+</div>
+</div>
+</main>
+
+<script>
+// Filter notifications by type
+function filterNotifications(filter) {
+    const items = document.querySelectorAll('.notification-item');
+    const buttons = document.querySelectorAll('.filter-btn');
+    
+    // Reset all buttons to default state
+    buttons.forEach(btn => {
+        btn.classList.remove('border-primary', 'text-primary', 'border-red-500', 'text-red-600', 
+                            'border-orange-500', 'text-orange-600', 'border-green-500', 'text-green-600',
+                            'font-semibold', 'dark:text-red-400', 'dark:text-orange-400', 'dark:text-green-400');
+        btn.classList.add('border-transparent', 'text-gray-500', 'font-medium', 'dark:text-gray-400');
+    });
+    
+    // Find and style the active button
+    const filterMap = {
+        'all': 'filterAll',
+        'unread': 'filterUnread', 
+        'critical': 'filterCritical',
+        'warning': 'filterWarning',
+        'normal': 'filterNormal'
+    };
+    
+    const activeBtn = document.getElementById(filterMap[filter]);
+    if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-gray-500', 'font-medium', 'dark:text-gray-400');
+        activeBtn.classList.add('font-semibold');
+        
+        // Apply appropriate colors based on filter type
+        if (filter === 'critical') {
+            activeBtn.classList.add('border-red-500', 'text-red-600', 'dark:text-red-400');
+        } else if (filter === 'warning') {
+            activeBtn.classList.add('border-orange-500', 'text-orange-600', 'dark:text-orange-400');
+        } else if (filter === 'normal') {
+            activeBtn.classList.add('border-green-500', 'text-green-600', 'dark:text-green-400');
+        } else {
+            // 'all' and 'unread'
+            activeBtn.classList.add('border-primary', 'text-primary');
+        }
+    }
+    
+    // Filter items
+    let visibleCount = 0;
+    items.forEach(item => {
+        const type = item.dataset.type ? item.dataset.type.toLowerCase() : '';
+        const isRead = item.dataset.read === '1' || item.dataset.read === 'True';
+        
+        let show = false;
+        if (filter === 'all') {
+            show = true;
+        } else if (filter === 'unread') {
+            show = !isRead;
+        } else {
+            // Match the notification type
+            show = (type === filter);
+        }
+        
+        if (show) {
+            item.classList.remove('hidden');
+            item.style.display = '';
+            visibleCount++;
+        } else {
+            item.classList.add('hidden');
+            item.style.display = 'none';
+        }
+    });
+    
+    // Show empty state if no visible items
+    const emptyState = document.getElementById('emptyState');
+    if (emptyState) {
+        if (visibleCount === 0 && items.length > 0) {
+            emptyState.classList.remove('hidden');
+            const h3 = emptyState.querySelector('h3');
+            if (h3) {
+                let message = `No ${filter} notifications`;
+                if (window.i18n) {
+                    if (filter === 'critical') {
+                        message = window.i18n.getTranslation('notification.critical') + ' ' + window.i18n.getTranslation('notification.no_filtered');
+                    } else if (filter === 'warning') {
+                        message = window.i18n.getTranslation('notification.warnings') + ' ' + window.i18n.getTranslation('notification.no_filtered');
+                    } else if (filter === 'normal') {
+                        message = window.i18n.getTranslation('notification.normal') + ' ' + window.i18n.getTranslation('notification.no_filtered');
+                    } else if (filter === 'unread') {
+                        message = window.i18n.getTranslation('notification.unread') + ' ' + window.i18n.getTranslation('notification.no_filtered');
+                    }
+                }
+                h3.textContent = message;
+            }
+        } else if (items.length > 0) {
+            emptyState.classList.add('hidden');
+        }
+    }
+    
+    console.log('Filter:', filter, 'Visible:', visibleCount, 'Total:', items.length);
+}
+
+// Mark single notification as read
+async function markAsRead(notificationId) {
+    try {
+        await fetch(`/api/notifications/${notificationId}/read`, {
+            method: 'POST'
+        });
+        
+        // Update UI
+        const item = document.querySelector(`[data-id="${notificationId}"]`);
+        if (item) {
+            item.dataset.read = '1';
+            item.classList.add('opacity-70');
+            const unreadDot = item.querySelector('.unread-dot');
+            if (unreadDot) unreadDot.remove();
+        }
+        
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+    }
+}
+
+// Mark all notifications as read
+async function markAllAsRead() {
+    try {
+        await fetch('/api/notifications/mark-all-read', {
+            method: 'POST'
+        });
+        
+        // Update UI
+        const items = document.querySelectorAll('.notification-item');
+        items.forEach(item => {
+            item.dataset.read = '1';
+            item.classList.add('opacity-70');
+            const unreadDot = item.querySelector('.unread-dot');
+            if (unreadDot) unreadDot.remove();
+        });
+        
+        // Hide unread badge
+        const badge = document.getElementById('unreadBadge');
+        if (badge) badge.classList.add('hidden');
+        
+    } catch (error) {
+        console.error('Error marking all notifications as read:', error);
+    }
+}
+
+// Format relative time
+function formatRelativeTime(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    
+    if (diffSec < 60) {
+        return window.i18n ? window.i18n.getTranslation('notification.just_now') : 'Just now';
+    }
+    if (diffMin < 60) {
+        const text = window.i18n ? window.i18n.getTranslation('notification.min_ago') : 'min ago';
+        return `${diffMin} ${text}`;
+    }
+    if (diffHour < 24) {
+        const text = diffHour > 1 ? (window.i18n ? window.i18n.getTranslation('notification.hours_ago') : 'hours ago') : 
+                     (window.i18n ? window.i18n.getTranslation('notification.hour_ago') : 'hour ago');
+        return `${diffHour} ${text}`;
+    }
+    if (diffDay < 7) {
+        const text = diffDay > 1 ? (window.i18n ? window.i18n.getTranslation('notification.days_ago') : 'days ago') : 
+                     (window.i18n ? window.i18n.getTranslation('notification.day_ago') : 'day ago');
+        return `${diffDay} ${text}`;
+    }
+    return date.toLocaleDateString();
+}
+
+// Update time displays
+function updateTimeDisplays() {
+    const timeElements = document.querySelectorAll('.notification-time');
+    timeElements.forEach(el => {
+        const timeStr = el.dataset.time;
+        if (timeStr) {
+            el.textContent = formatRelativeTime(timeStr);
+        }
+    });
+}
+
+// Add click handlers to notification items
+function setupClickHandlers() {
+    const items = document.querySelectorAll('.notification-item');
+    items.forEach(item => {
+        item.addEventListener('click', function() {
+            const id = this.dataset.id;
+            if (id && this.dataset.read !== '1') {
+                markAsRead(id);
+            }
+        });
+    });
+}
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', function() {
+    updateTimeDisplays();
+    setupClickHandlers();
+    
+    // Update times every minute
+    setInterval(updateTimeDisplays, 60000);
+});
+
+// Listen for language changes
+window.addEventListener('languageChanged', function() {
+    // Update times every minute with new language
+    updateTimeDisplays();
+    
+    // The main translation is already handled by i18n.js translate() function
+    // which now properly preserves child elements (icons, etc.)
+});
+</script>
+
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

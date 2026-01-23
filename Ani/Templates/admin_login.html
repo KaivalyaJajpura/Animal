@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Login - Livestock Health System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#13ec5b 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display transition-colors duration-300">
+<header class="w-full border-b border-solid border-[#dbe6df] dark:border-[#2a3e30] bg-white/80 dark:bg-background-dark/80 backdrop-blur-md z-50">
+<div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-center">
+<div class="flex items-center gap-3 text-[#111813] dark:text-white">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-2xl" data-icon="agriculture">agriculture</span>
+</div>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-tight">Livestock Health Monitoring &amp; Early Disease Detection System</h2>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center relative px-4 py-12">
+<div class="absolute inset-0 bg-pattern pointer-events-none"></div>
+<div class="w-full max-w-[440px] z-10">
+<div class="flex flex-col items-center mb-8">
+<div class="w-20 h-20 bg-white dark:bg-[#1a2e20] rounded-full shadow-xl flex items-center justify-center mb-4 border-4 border-primary/20">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+</div>
+<h1 class="text-[#111813] dark:text-white text-3xl font-bold leading-tight text-center">Admin Portal</h1>
+<p class="text-[#61896f] dark:text-[#a0c4ac] text-sm font-normal leading-normal text-center mt-2">Secure access for university system administrators</p>
+</div>
+<div class="bg-white dark:bg-[#162a1d] rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-[#dbe6df] dark:border-[#2a3e30] p-8">
+<form method="POST" action="/admin_login_submit" class="flex flex-col gap-5">
+<div class="flex flex-col gap-2">
+<label class="text-[#111813] dark:text-white text-sm font-semibold ml-1">Username</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#61896f] text-xl group-focus-within:text-primary" data-icon="person">person</span>
+<input name="username" required class="w-full h-14 pl-12 pr-4 rounded-xl border border-[#dbe6df] dark:border-[#2a3e30] bg-white dark:bg-[#1a2e20] text-[#111813] dark:text-white placeholder:text-[#61896f]/60 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="Enter your username" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center px-1">
+<label class="text-[#111813] dark:text-white text-sm font-semibold">Password</label>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#61896f] text-xl group-focus-within:text-primary" data-icon="lock">lock</span>
+<input name="password" required class="w-full h-14 pl-12 pr-12 rounded-xl border border-[#dbe6df] dark:border-[#2a3e30] bg-white dark:bg-[#1a2e20] text-[#111813] dark:text-white placeholder:text-[#61896f]/60 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#61896f] hover:text-[#111813] dark:hover:text-white" type="button" onclick="togglePassword(this)">
+<span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<button class="mt-4 w-full h-14 bg-primary text-[#111813] font-bold text-base rounded-xl hover:brightness-95 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2" type="submit">
+<span>Sign In</span>
+<span class="material-symbols-outlined text-xl" data-icon="login">login</span>
+</button>
+</form>
+<div class="mt-8 pt-6 border-t border-[#f0f4f2] dark:border-[#2a3e30] text-center">
+<p class="text-[#61896f] dark:text-[#a0c4ac] text-xs">
+                        Don't have administrator access? <br/>
+<a class="text-primary font-bold hover:underline mt-1 inline-block" href="#">Contact University IT Support</a>
+</p>
+</div>
+</div>
+<div class="mt-8 text-center px-4">
+<p class="text-[#61896f] dark:text-[#a0c4ac] text-xs font-medium uppercase tracking-widest opacity-60">
+                    Livestock Early Disease Detection System
+                </p>
+<p class="text-[#61896f] dark:text-[#a0c4ac] text-[10px] mt-2">
+                    © 2024 University Hackathon Project. All rights reserved.
+                </p>
+</div>
+</main>
+<div class="fixed bottom-10 left-10 opacity-20 hidden lg:block">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="monitor_heart">monitor_heart</span>
+<span class="text-xs font-bold text-[#111813] dark:text-white">Real-time Vitals</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+<span class="text-xs font-bold text-[#111813] dark:text-white">Network Status: Stable</span>
+</div>
+</div>
+</div>
+<script>
+{% if show_error %}
+alert('Invalid username or password. Please try again.');
+{% endif %}
+
+function togglePassword(button) {
+    const input = button.parentElement.querySelector('input');
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.querySelector('.material-symbols-outlined').textContent = 'visibility_off';
+    } else {
+        input.type = 'password';
+        button.querySelector('.material-symbols-outlined').textContent = 'visibility';
+    }
+}
+</script>
+</body></html>

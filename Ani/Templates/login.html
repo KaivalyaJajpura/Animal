@@ -1,0 +1,280 @@
+<!-- Login Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livestock Health Monitor - Login</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<div class="w-full border-b border-solid border-b-[#e5ece9] bg-white/80 backdrop-blur-md dark:bg-background-dark/80 dark:border-white/10 sticky top-0 z-50">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-0">
+<div class="layout-content-container flex flex-col max-w-[1280px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap py-3">
+<div class="flex items-center gap-4 text-[#111813] dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Livestock Health Monitor</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+</div>
+</header>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-1 justify-center items-center py-10 px-4 md:px-10 lg:px-40">
+<div class="layout-content-container flex flex-col max-w-[1024px] flex-1 w-full">
+<!-- Login Card Container -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-[#e5ece9] dark:border-[#2a4032]">
+<!-- Left Side: Image/Branding -->
+<div class="w-full md:w-1/2 relative bg-cover bg-center hidden md:block group" data-alt="Healthy cows grazing in a green pasture with sunlight" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC4-Qm0XMMMbJWsn8cdoOo0GpOApiwEkC5daovj-OqqImcBUaIG4XQ0kkkv1-cMuMFHUTq6zhrHOccG2w4ViCZvZKbBqmQx_9P2xfSsnSj3V3h3Etkr3KrBlyOfcK_mh5UFnCIChRRke586sjwb4pJQa_PXbwT2jlam3MCeRRmzaxbA-ulQtGVxu3PmcC1Fi6RAaCpt7alVVEoF-GqJVx5iM2Hgdl9Mqtue-S2riKS2GFVVXa2D-ITc1yYCai59xlYN5nnXefptIOw");'>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-10">
+<h3 class="text-white text-3xl font-bold mb-2" data-i18n="auth.early_detection">Early Disease Detection</h3>
+<p class="text-white/90 text-sm leading-relaxed" data-i18n="auth.early_desc">Ensure the well-being of your livestock with real-time health monitoring and AI-powered analytics.</p>
+</div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+<div class="mb-8">
+<h1 class="text-3xl font-black tracking-tight text-[#111813] dark:text-white mb-2" data-i18n="auth.welcome_back">Welcome Back</h1>
+<p class="text-[#61896f] dark:text-[#a0bgb0] text-sm" data-i18n="auth.signin_prompt">Please enter your details to sign in.</p>
+</div>
+<form id="loginForm" class="flex flex-col gap-5" method="POST" action="{{ url_for('login') }}">
+<!-- Email Input -->
+<label class="flex flex-col gap-2">
+<span class="text-[#111813] dark:text-white text-sm font-semibold" data-i18n="auth.email">Email <span class="text-red-500">*</span></span>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-[#61896f] material-symbols-outlined text-[20px]">mail</span>
+<input id="emailInput" name="email" class="w-full pl-11 pr-4 py-3.5 rounded-lg border border-[#dbe6df] dark:border-[#2a4032] bg-[#f8fcf9] dark:bg-[#102216] text-[#111813] dark:text-white placeholder:text-[#61896f] focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm font-medium" placeholder="vet@agri.com" type="email" required/>
+</div>
+<p id="emailError" class="text-sm font-medium text-red-600 hidden">Invalid email address</p>
+</label>
+<!-- Password Input -->
+<label class="flex flex-col gap-2">
+<span class="text-[#111813] dark:text-white text-sm font-semibold" data-i18n="auth.password">Password <span class="text-red-500">*</span></span>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-[#61896f] material-symbols-outlined text-[20px]">lock</span>
+<input id="passwordInput" name="password" class="w-full pl-11 pr-12 py-3.5 rounded-lg border border-[#dbe6df] dark:border-[#2a4032] bg-[#f8fcf9] dark:bg-[#102216] text-[#111813] dark:text-white placeholder:text-[#61896f] focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm font-medium" placeholder="••••••••" type="password" required/>
+<div id="togglePassword" class="absolute right-4 text-[#61896f] hover:text-primary transition-colors flex items-center cursor-pointer">
+<span class="material-symbols-outlined text-[20px]" id="eyeIcon">visibility</span>
+</div>
+</div>
+</label>
+<!-- Forgot Password Link -->
+<div class="flex justify-end">
+<a class="text-sm font-medium text-[#61896f] hover:text-primary transition-colors hover:underline" href="#" data-i18n="auth.forgot_password">Forgot Password?</a>
+</div>
+<!-- Login Button -->
+<button id="signInBtn" type="submit" class="flex w-full cursor-not-allowed items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-gray-300 text-gray-500 transition-colors text-base font-bold leading-normal tracking-[0.015em] mt-2" disabled>
+<span class="truncate" data-i18n="auth.login_button">Sign In</span>
+</button>
+</form>
+<!-- Sign Up Divider -->
+<div class="mt-8 flex items-center gap-2 justify-center">
+<p class="text-[#61896f] dark:text-[#a0bgb0] text-sm" data-i18n="auth.no_account">Don't have an account?</p>
+<a class="text-primary font-bold text-sm hover:underline" href="{{ url_for('signup') }}" data-i18n="auth.signup_button">Sign Up Now</a>
+</div>
+<!-- Vet Login Divider -->
+<div class="mt-8 pt-8 border-t border-[#dbe6df] dark:border-[#2a4032]">
+<p class="text-[#61896f] dark:text-[#a0bgb0] text-sm text-center mb-4" data-i18n="auth.vet_prompt">Are you a veterinarian?</p>
+<a href="{{ url_for('vetlogin') }}" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-white dark:bg-[#102216] hover:bg-[#f0f4f2] dark:hover:bg-[#1a3a2e] border border-[#dbe6df] dark:border-[#2a4032] transition-colors text-primary text-base font-bold leading-normal tracking-[0.015em]">
+<span class="truncate" data-i18n="auth.vet_login">Veterinarian Login</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+// Password visibility toggle
+document.getElementById('togglePassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    const passwordInput = document.getElementById('passwordInput');
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.innerHTML = '<span style="display:none;"></span><span class="material-symbols-outlined text-[20px]">visibility_off</span>';
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.innerHTML = '<span class="material-symbols-outlined text-[20px]">visibility</span>';
+    }
+});
+
+// Email validation
+const emailInput = document.getElementById('emailInput');
+const emailError = document.getElementById('emailError');
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInput.addEventListener('blur', function() {
+    if (emailInput.value && !emailRegex.test(emailInput.value)) {
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('border-red-500', 'focus:ring-red-500');
+    } else {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+});
+
+emailInput.addEventListener('input', function() {
+    if (emailInput.value && emailRegex.test(emailInput.value)) {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+    validateForm();
+});
+
+const passwordInput = document.getElementById('passwordInput');
+const signInBtn = document.getElementById('signInBtn');
+
+passwordInput.addEventListener('input', function() {
+    validateForm();
+});
+
+function validateForm() {
+    const isEmailValid = emailInput.value && emailRegex.test(emailInput.value);
+    const isPasswordValid = passwordInput.value.length > 0;
+    
+    if (isEmailValid && isPasswordValid) {
+        signInBtn.disabled = false;
+        signInBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        signInBtn.classList.add('bg-primary', 'hover:bg-[#0fd650]', 'cursor-pointer', 'shadow-lg', 'shadow-primary/20');
+    } else {
+        signInBtn.disabled = true;
+        signInBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        signInBtn.classList.remove('bg-primary', 'hover:bg-[#0fd650]', 'cursor-pointer', 'shadow-lg', 'shadow-primary/20');
+    }
+}
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+
+<!-- Popup Notification -->
+<div id="popup" class="fixed top-5 right-5 z-[9999] transform translate-x-full opacity-0 transition-all duration-300 ease-in-out">
+    <div id="popupContent" class="flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]">
+        <span id="popupIcon" class="material-symbols-outlined text-2xl"></span>
+        <span id="popupMessage" class="font-semibold text-sm"></span>
+        <button onclick="closePopup()" class="ml-auto text-current opacity-60 hover:opacity-100 transition-opacity">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
+</div>
+
+<script>
+function showPopup(message, type) {
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+    const popupIcon = document.getElementById('popupIcon');
+    const popupMessage = document.getElementById('popupMessage');
+    
+    popupMessage.textContent = message;
+    
+    // Reset classes
+    popupContent.className = 'flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]';
+    popupIcon.className = 'material-symbols-outlined text-2xl';
+    
+    if (type === 'success') {
+        popupContent.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+        popupIcon.textContent = 'check_circle';
+        popupIcon.classList.add('text-green-500');
+    } else if (type === 'error') {
+        popupContent.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+        popupIcon.textContent = 'error';
+        popupIcon.classList.add('text-red-500');
+    }
+    
+    // Show popup
+    popup.classList.remove('translate-x-full', 'opacity-0');
+    popup.classList.add('translate-x-0', 'opacity-100');
+    
+    // Auto close after 4 seconds
+    setTimeout(closePopup, 4000);
+}
+
+function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.add('translate-x-full', 'opacity-0');
+    popup.classList.remove('translate-x-0', 'opacity-100');
+}
+
+// Handle form submission with AJAX
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{{ url_for("login") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showPopup(data.message, 'success');
+            setTimeout(function() {
+                window.location.href = '{{ url_for("dashboard") }}';
+            }, 1500);
+        } else {
+            showPopup(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showPopup('An error occurred. Please try again.', 'error');
+    });
+});
+
+// Check for flash messages from Flask (for signup success)
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == 'success' and 'Account created' in message %}
+                document.addEventListener('DOMContentLoaded', function() {
+                    showPopup('Account created', 'success');
+                });
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+</script>
+</body></html>

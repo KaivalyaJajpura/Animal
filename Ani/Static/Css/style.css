@@ -1,0 +1,427 @@
+/* ================================
+   SHARED STYLES FOR ALL PAGES
+   ================================ */
+
+/* Body and Font Styling */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.filled-icon {
+    font-variation-settings: 'FILL' 1 !important;
+}
+
+/* ================================
+   CUSTOM SCROLLBAR
+   ================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ================================
+   FORM ELEMENTS
+   ================================ */
+
+/* Hide browser default password reveal button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
+}
+
+/* Hide default select arrow - use HTML icon instead */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none !important;
+}
+
+/* ================================
+   TOGGLE SWITCH STYLING
+   ================================ */
+.toggle-checkbox:checked {
+    right: 0;
+    border-color: #13ec5b;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+    background-color: #13ec5b;
+}
+
+/* ================================
+   RANGE SLIDER STYLING
+   ================================ */
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right, #13ec5b 0%, #13ec5b var(--value), #e5e7eb var(--value), #e5e7eb 100%);
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #13ec5b;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    background: #0fb847;
+    box-shadow: 0 2px 8px rgba(19, 236, 91, 0.3);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #13ec5b;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+    background: #0fb847;
+    box-shadow: 0 2px 8px rgba(19, 236, 91, 0.3);
+}
+
+.slider::-moz-range-track {
+    background: transparent;
+    border: none;
+}
+
+/* ================================
+   CONIC GRADIENT CHART
+   ================================ */
+.conic-chart {
+    background: conic-gradient(#ef4444 0% 10%, #f59e0b 10% 35%, #13ec5b 35% 100%);
+    border-radius: 50%;
+}
+
+/* ================================
+   RADIO BUTTON STYLING
+   ================================ */
+.radio-option {
+    position: relative;
+}
+
+.radio-option input[type="radio"] {
+    display: none;
+}
+
+.radio-option input[type="radio"]:checked + label {
+    background-color: #13ec5b;
+    color: #111813;
+    border-color: #13ec5b;
+    font-weight: 600;
+}
+
+.radio-option label {
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 0.75rem;
+    border: 2px solid #dbe6df;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.radio-option label:hover {
+    border-color: #13ec5b;
+}
+
+/* ================================
+   MODAL AND DIALOG STYLING
+   ================================ */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   BUTTON STYLING
+   ================================ */
+.btn-primary {
+    background-color: #13ec5b;
+    color: #111813;
+    border-radius: 0.75rem;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0fb847;
+    box-shadow: 0 4px 12px rgba(19, 236, 91, 0.3);
+}
+
+.btn-primary:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #111813;
+    border: 2px solid #dbe6df;
+    border-radius: 0.75rem;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    border-color: #13ec5b;
+    color: #13ec5b;
+}
+
+/* ================================
+   CARD AND CONTAINER STYLING
+   ================================ */
+.card {
+    background: white;
+    border: 1px solid #e5ece9;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px -2px rgba(19, 236, 91, 0.15);
+}
+
+/* ================================
+   TABLE STYLING
+   ================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background-color: #f8faf9;
+    color: #637588;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #f0f4f2;
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: #fcfdfc;
+}
+
+table td {
+    padding: 1rem 1.5rem;
+}
+
+table th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+/* ================================
+   BADGE STYLING
+   ================================ */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.badge-warning {
+    background-color: rgba(251, 191, 36, 0.1);
+    color: #ca8a04;
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+.badge-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+}
+
+/* ================================
+   STATUS INDICATORS
+   ================================ */
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.active {
+    background-color: #13ec5b;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.status-dot.inactive {
+    background-color: #cbd5e1;
+}
+
+.status-dot.warning {
+    background-color: #f59e0b;
+}
+
+.status-dot.critical {
+    background-color: #ef4444;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ================================
+   LAYOUT UTILITIES
+   ================================ */
+.layout-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-content-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* ================================
+   TRANSITIONS AND ANIMATIONS
+   ================================ */
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-fast {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================
+   RESPONSIVE BREAKPOINTS
+   ================================ */
+@media (max-width: 768px) {
+    .hidden-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .hidden-desktop {
+        display: none !important;
+    }
+}
+
+/* ================================
+   DARK MODE SUPPORT
+   ================================ */
+.dark body {
+    background-color: #102216;
+    color: #f1f5f3;
+}
+
+.dark .card {
+    background-color: #1a2e22;
+    border-color: #2a4032;
+}
+
+.dark table thead {
+    background-color: #1f3a2a;
+    color: #94a3b8;
+}
+
+.dark table tbody tr {
+    border-color: #2a4032;
+}
+
+/* ================================
+   ACCESSIBILITY
+   ================================ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ================================
+   PRINT STYLES
+   ================================ */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

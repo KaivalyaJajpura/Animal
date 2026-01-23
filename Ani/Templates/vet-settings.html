@@ -1,0 +1,376 @@
+<!-- Vet Settings - Preferences and Profile -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vet Settings - Livestock Health Monitor</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0fb847",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c20",
+                        "text-main": "#111813",
+                        "text-secondary": "#61896f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-[#f6f8f6] text-[#111813] antialiased h-screen flex overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white border-r border-[#f0f4f2] flex flex-col hidden md:flex z-20 shadow-sm">
+<div class="p-6 pb-2">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-[#13ec5b]/20 p-2 rounded-xl">
+<span class="material-symbols-outlined text-[#13ec5b] text-3xl" style="font-variation-settings: 'FILL' 1;">pets</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-[#111813] text-lg font-bold leading-tight" data-i18n="vet.livestock_health">Livestock Health</h1>
+<p class="text-[#637588] text-xs font-medium uppercase tracking-wider">Vet Dashboard</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vetdashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[#637588] font-medium" data-i18n="vet.dashboard">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vet_notifications') }}">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[#637588] font-medium" data-i18n="vet.notifications">Notifications</span>
+<span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vet_history') }}">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[#637588] font-medium" data-i18n="vet.history">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#13ec5b] text-[#111813] border border-[#13ec5b]/20" href="{{ url_for('vet_settings') }}">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[#111813] font-bold" data-i18n="vet.settings">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-[#f0f4f2]">
+<a href="{{ url_for('vet_logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium" data-i18n="vet.logout">Logout</p>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Navigation Bar -->
+<header class="h-16 bg-white border-b border-[#f0f4f2] px-8 py-4 flex items-center justify-between shrink-0 z-10">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button (Hidden on Desktop) -->
+<button class="md:hidden p-2 text-[#111813]"><span class="material-symbols-outlined">menu</span></button>
+<h2 class="text-[#111813] text-xl font-bold" data-i18n="vet.settings">Settings</h2>
+</div>
+<div class="flex items-center gap-4 md:gap-6">
+<div class="hidden sm:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="h-8 w-[1px] bg-[#f0f4f2] hidden sm:block"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden md:flex flex-col">
+<p class="text-sm font-bold text-[#111813]" id="vetDoctorName" data-name="{{ vet_data.full_name if vet_data else vet }}">{{ vet_data.full_name if vet_data else vet }}</p>
+<p class="text-xs font-medium text-[#637588]">ID: {{ vet_data.license_id if vet_data else 'N/A' }}</p>
+</div>
+<a href="{{ url_for('vet_settings') }}" class="size-10 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer hover:opacity-80 transition-opacity" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCndGVYdzAaSugGdYe2j_M7wMD3ZcejVWHENSW9PXjoVc0_MNmKCzr_hPt0YUhtzUCbYJKaWENV9GrxhvUTnmxiDXJkTDIxFHoHcWCtbV8N0JZp0pEPp_Vmv7ED-7DjAFfc4pFOz_cnuHF7Y1ZqlhOZi8z3BM-GNQU5RFmT3OGbqCucmPvpqJWkhzipq4nMJ2iEuLcucTEiZXPriXamK8UPUeyUSkajhUqXadCakX1cEuYqrDi0EFDuARTZ9U_2PqWQ9jzSZ1ECGLE');"></a>
+</div>
+<a href="{{ url_for('vet_logout') }}" class="flex items-center gap-2 text-[#637588] hover:text-red-600 transition-colors px-3 py-2 rounded-lg hover:bg-red-50">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm font-medium hidden sm:inline" data-i18n="vet.logout">Logout</span>
+</a>
+</div>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth">
+<div class="max-w-4xl mx-auto space-y-8 pb-20">
+<!-- Page Heading -->
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl font-black tracking-tight text-text-main" data-i18n="vet.preferences_profile">Preferences &amp; Profile</h1>
+<p class="text-text-secondary text-base" data-i18n="vet.manage_professional_details">Manage your professional details and configure system alert thresholds.</p>
+</div>
+<!-- Section: Profile Information (Read Only) -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-sm border border-[#f0f4f2] overflow-hidden">
+<div class="px-6 py-4 border-b border-[#f0f4f2] flex items-center justify-between bg-gray-50/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-secondary">badge</span>
+<h3 class="font-bold text-lg text-text-main" data-i18n="vet.profile_information">Profile Information</h3>
+</div>
+<span class="text-xs font-semibold bg-gray-200 text-gray-600 px-2 py-1 rounded" data-i18n="vet.read_only">Read-Only</span>
+</div>
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<!-- Avatar -->
+<div class="flex flex-col items-center gap-3 shrink-0 mx-auto md:mx-0">
+<div class="size-32 rounded-full border-4 border-white shadow-md bg-cover bg-center" data-alt="Portrait of veterinarian" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAnqrkeseblstqxslvebX5ZYNkdxRSvgES8kuOrNARK0skX9lx3pmFq9RX8jDczbHnuiJbgp9NWjbeuBYe-9zdMnAU2WHoJRZ42lKqL7FD9JR2JmpHjwKlp_GrQ1AD7FkYi4xWP1-sv1I3uHb4oGzsarFU2BHtuV3PDLW7_AbodELBSiaqagh476s_HZqg8GXjwDhi07qxVlFz_XYx402I3TWMjWN5O21JRnJcQShG7sx7MYfB4ZUa3M9Ef1TDkNjx9t85lQNZ4C0');"></div>
+<div class="text-center">
+<p class="font-bold text-lg">{{ vet_data.full_name if vet_data else vet }}</p>
+<p class="text-primary font-medium text-sm" data-i18n="vet.active_veterinarian">Active Veterinarian</p>
+</div>
+</div>
+<!-- Read-only Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+<div class="space-y-2">
+<label class="text-xs font-bold text-text-secondary uppercase tracking-wider" data-i18n="vet.full_name">Full Name</label>
+<div class="flex items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 cursor-not-allowed">
+                                        {{ vet_data.full_name if vet_data else vet }}
+                                    </div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-text-secondary uppercase tracking-wider" data-i18n="vet.license_id">License ID</label>
+<div class="flex items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 cursor-not-allowed">
+                                        {{ vet_data.license_id if vet_data else 'N/A' }}
+                                    </div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-text-secondary uppercase tracking-wider" data-i18n="vet.email_address">Email Address</label>
+<div class="flex items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 cursor-not-allowed">
+                                        {{ vet_data.email if vet_data else 'N/A' }}
+                                    </div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-text-secondary uppercase tracking-wider" data-i18n="vet.assigned_region">Assigned Region</label>
+<div class="flex items-center px-4 py-3 bg-gray-50 rounded-xl border border-gray-100 text-gray-700 cursor-not-allowed">
+                                        {{ vet_data.region if vet_data else 'N/A' }}
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: System Preferences -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-sm border border-[#f0f4f2] overflow-hidden">
+<div class="px-6 py-4 border-b border-[#f0f4f2] flex items-center gap-2 bg-gray-50/50">
+<span class="material-symbols-outlined text-text-secondary">tune</span>
+<h3 class="font-bold text-lg text-text-main" data-i18n="vet.system_preferences">System Preferences</h3>
+</div>
+<div class="p-6 md:p-8 space-y-8">
+<!-- Notification Sensitivity -->
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold text-text-main" data-i18n="vet.disease_alert_sensitivity">Disease Alert Sensitivity</label>
+<span class="text-xs text-text-secondary bg-gray-100 px-2 py-1 rounded-md" data-i18n="vet.affects_algorithm_threshold">Affects algorithm threshold</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Option 1 -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="sensitivity" type="radio" value="low"/>
+<div class="p-4 rounded-xl border-2 border-gray-100 peer-checked:border-primary peer-checked:bg-primary/5 transition-all hover:border-gray-300 h-full">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-gray-400 peer-checked:text-primary">check_circle</span>
+<span class="font-bold text-gray-700 peer-checked:text-text-main" data-i18n="vet.sensitivity_low">Low</span>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed" data-i18n="vet.low_description">Alerts only for critical vital sign deviations confirmed by multiple sensors.</p>
+</div>
+</label>
+<!-- Option 2 -->
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="sensitivity" type="radio" value="medium"/>
+<div class="p-4 rounded-xl border-2 border-gray-100 peer-checked:border-primary peer-checked:bg-primary/5 transition-all hover:border-gray-300 h-full">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-gray-400 peer-checked:text-primary">check_circle</span>
+<span class="font-bold text-gray-700 peer-checked:text-text-main" data-i18n="vet.sensitivity_standard">Standard</span>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed" data-i18n="vet.standard_description">Balanced monitoring. Recommended for general herd health tracking.</p>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="sensitivity" type="radio" value="high"/>
+<div class="p-4 rounded-xl border-2 border-primary bg-primary/5 transition-all h-full shadow-sm ring-1 ring-primary/20">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="font-bold text-text-main" data-i18n="vet.sensitivity_high">High (Early)</span>
+</div>
+<p class="text-xs text-text-secondary leading-relaxed" data-i18n="vet.high_description">Triggers on minor anomalies. Best for early disease detection and prevention.</p>
+</div>
+</label>
+</div>
+</div>
+<hr class="border-gray-100"/>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Alert Sound Slider -->
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-main">volume_up</span>
+<span class="text-sm font-bold text-text-main" data-i18n="vet.audible_alerts_volume">Audible Alerts Volume</span>
+</div>
+<p class="text-xs text-text-secondary max-w-[200px]" data-i18n="vet.adjust_volume_level">Adjust the volume level for high-priority health alerts.</p>
+</div>
+<div class="flex items-center gap-3 mr-2">
+<input class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider" id="volumeSlider" max="100" min="0" type="range" value="70"/>
+<span class="text-sm font-bold text-text-main w-12 text-right" id="volumeValue">70%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-6 py-4 bg-gray-50 border-t border-[#f0f4f2] flex justify-end">
+<button class="bg-primary hover:bg-primary-dark text-text-main font-bold py-3 px-8 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95 flex items-center gap-2" id="saveButton">
+<span data-i18n="vet.save_settings">Save Settings</span>
+<span class="material-symbols-outlined text-[20px]">save</span>
+</button>
+</div>
+</section>
+<div class="h-10"></div> <!-- Spacer -->
+</div>
+</main>
+</div>
+<!-- Success Toast Notification (Hidden by default) -->
+<div class="fixed bottom-8 right-8 z-50 transform transition-all duration-500 translate-y-20 opacity-0 pointer-events-none" id="toast">
+<div class="bg-white border-l-4 border-primary shadow-xl rounded-lg p-4 flex items-center gap-4 min-w-[320px]">
+<div class="bg-primary/20 rounded-full p-2 text-primary">
+<span class="material-symbols-outlined">check</span>
+</div>
+<div>
+<h4 class="font-bold text-text-main text-sm" data-i18n="vet.settings_saved">Settings Saved</h4>
+<p class="text-text-secondary text-xs" data-i18n="vet.preferences_updated">Your preferences have been updated successfully.</p>
+</div>
+<button class="ml-auto text-gray-400 hover:text-text-main" onclick="hideToast()">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</div>
+<script>
+        // Vanilla JavaScript for basic interactions
+        
+        const saveButton = document.getElementById('saveButton');
+        const toast = document.getElementById('toast');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
+        let toastTimeout;
+
+        // Handle volume slider
+        if (volumeSlider) {
+            volumeSlider.addEventListener('input', function() {
+                const value = this.value;
+                volumeValue.textContent = value + '%';
+                // Update gradient background
+                this.style.setProperty('--value', value + '%');
+            });
+            
+            // Initialize the slider background on page load
+            volumeSlider.style.setProperty('--value', volumeSlider.value + '%');
+        }
+
+        function showToast() {
+            // Reset state
+            clearTimeout(toastTimeout);
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            
+            // Auto hide after 3 seconds
+            toastTimeout = setTimeout(() => {
+                hideToast();
+            }, 3000);
+        }
+
+        function hideToast() {
+            toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }
+
+        saveButton.addEventListener('click', (e) => {
+            // Animate button click slightly (visual feedback handled by CSS active class, but let's add logic)
+            const originalText = saveButton.innerHTML;
+            saveButton.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span><span>Saving...</span>`;
+            saveButton.disabled = true;
+            saveButton.classList.add('opacity-75');
+
+            // Simulate network request
+            setTimeout(() => {
+                saveButton.innerHTML = originalText;
+                saveButton.disabled = false;
+                saveButton.classList.remove('opacity-75');
+                showToast();
+            }, 800);
+        });
+
+        // Add visual feedback to sensitivity cards
+        const radioInputs = document.querySelectorAll('input[name="sensitivity"]');
+        radioInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                // Remove border from all wrappers
+                document.querySelectorAll('input[name="sensitivity"]').forEach(rb => {
+                    const wrapper = rb.nextElementSibling;
+                    wrapper.classList.remove('border-primary', 'bg-primary/5', 'ring-1', 'ring-primary/20');
+                    wrapper.classList.add('border-gray-100');
+                    const icon = wrapper.querySelector('.material-symbols-outlined');
+                    icon.classList.remove('text-primary');
+                    icon.classList.add('text-gray-400');
+                    const title = wrapper.querySelector('.font-bold');
+                    title.classList.remove('text-text-main');
+                    title.classList.add('text-gray-700');
+                });
+
+                // Add active styles to current wrapper
+                const wrapper = this.nextElementSibling;
+                wrapper.classList.remove('border-gray-100');
+                wrapper.classList.add('border-primary', 'bg-primary/5', 'ring-1', 'ring-primary/20');
+                const icon = wrapper.querySelector('.material-symbols-outlined');
+                icon.classList.remove('text-gray-400');
+                icon.classList.add('text-primary');
+                const title = wrapper.querySelector('.font-bold');
+                title.classList.remove('text-gray-700');
+                title.classList.add('text-text-main');
+            });
+        });
+
+        // Helper function to get translation
+        function getTranslation(key) {
+            if (window.i18n) {
+                return window.i18n.getTranslation(key, window.i18n.currentLanguage);
+            }
+            return key;
+        }
+
+        // Function to update doctor name with translated title
+        function updateDoctorNameDisplay() {
+            const doctorNameEl = document.getElementById('vetDoctorName');
+            if (doctorNameEl) {
+                let fullName = doctorNameEl.getAttribute('data-name');
+                // Remove any existing "Dr." or "डॉ." prefix to avoid duplication
+                fullName = fullName.replace(/^(Dr\.\s*|डॉ\.\s*)/, '').trim();
+                const doctorTitle = getTranslation('vet.doctor_title');
+                doctorNameEl.textContent = doctorTitle + ' ' + fullName;
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDoctorNameDisplay();
+            
+            // Update doctor title when language changes
+            window.addEventListener('languageChanged', () => {
+                updateDoctorNameDisplay();
+            });
+        });
+    </script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

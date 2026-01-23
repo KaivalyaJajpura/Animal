@@ -1,0 +1,753 @@
+<!-- History Page -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livestock Health History</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main font-display h-screen flex overflow-hidden selection:bg-primary/30">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden">
+<!-- Top Header -->
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium">History</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- <span class="text-[10px] text-text-muted dark:text-slate-400">Senior Vet</span> -->
+</div>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8">
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<!-- Main Card -->
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<!-- Filters Toolbar -->
+<div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
+<!-- Search -->
+<div class="relative w-full lg:w-96">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-2.5 border-none rounded-xl bg-background-light dark:bg-white/5 text-text-main dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 sm:text-sm font-medium transition-shadow" placeholder="Search by Livestock ID (e.g., #COW-102)..." type="text" data-i18n="[placeholder]history.search_placeholder"/>
+</div>
+<!-- Action Chips -->
+<div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+<div class="relative group">
+<button id="statusBtn" class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-text-main dark:text-slate-200 hover:border-primary/50 transition-all shadow-sm">
+<span class="material-symbols-outlined text-lg text-slate-500">filter_list</span>
+<span id="statusLabel"><span data-i18n="history.filter_status">Status</span>: <span data-i18n="history.all">All</span></span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<div id="statusMenu" class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg hidden z-10">
+<div class="p-2">
+<button class="statusOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="all" data-i18n="history.all">All</button>
+<button class="statusOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="healthy" data-i18n="dashboard.healthy">Healthy</button>
+<button class="statusOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="warning" data-i18n="dashboard.warning">Warning</button>
+<button class="statusOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="critical" data-i18n="dashboard.critical">Critical</button>
+</div>
+</div>
+</div>
+<div class="relative group">
+<button id="dateBtn" class="flex items-center gap-2 px-3 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-text-main dark:text-slate-200 hover:border-primary/50 transition-all shadow-sm">
+<span class="material-symbols-outlined text-lg text-slate-500">calendar_today</span>
+<span id="dateLabel" data-i18n="history.last_30_days">Last 30 Days</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<div id="dateMenu" class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg hidden z-10">
+<div class="p-2">
+<button class="dateOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="7" data-i18n="history.last_7_days">Last 7 Days</button>
+<button class="dateOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="30" data-i18n="history.last_30_days">Last 30 Days</button>
+<button class="dateOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="90" data-i18n="history.last_90_days">Last 90 Days</button>
+<button class="dateOption w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-text-main dark:text-slate-200" data-value="all" data-i18n="history.all_time">All Time</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Health History Table -->
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<!-- Filters Toolbar -->
+<div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
+<h3 class="text-lg font-bold text-text-main dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+<span data-i18n="history.removed_animals">Removed Animals History</span>
+</h3>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="dashboard.animal_id">Animal ID</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.animal_name">Animal Name</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.removed_date">Removed Date &amp; Time</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.last_temperature">Last Temperature</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.last_heart_rate">Last Heart Rate</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="dashboard.status">Status</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.action">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="historyTableBody">
+{% if removed_history and removed_history|length > 0 %}
+{% for record in removed_history %}
+<tr class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-tag="{{ record.animal_tag }}">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-xs">
+{{ record.animal_name[0] | upper if record.animal_name else '?' }}
+</div>
+<span class="text-sm font-medium text-text-main dark:text-white">#{{ record.animal_tag }}</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main dark:text-slate-300">
+{{ record.animal_name }} ({{ record.species }})
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted" data-date="{{ record.removed_date[:10] if record.removed_date else '' }}">
+{{ record.removed_date }}
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium {% if record.last_temp and record.last_temp > 40 %}text-rose-600 dark:text-rose-400{% elif record.last_temp and record.last_temp > 39.5 %}text-amber-600 dark:text-amber-400{% else %}text-text-main dark:text-slate-300{% endif %}">
+{% if record.last_temp %}{{ record.last_temp }}°C{% else %}--{% endif %}
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium {% if record.last_heart_rate and record.last_heart_rate > 90 %}text-rose-600 dark:text-rose-400{% elif record.last_heart_rate and record.last_heart_rate > 85 %}text-amber-600 dark:text-amber-400{% else %}text-text-main dark:text-slate-300{% endif %}">
+{% if record.last_heart_rate %}{{ record.last_heart_rate }} BPM{% else %}--{% endif %}
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+{% if record.last_health_status %}
+<span class="px-2.5 py-1 rounded-full text-xs font-semibold {% if record.last_health_status == 'Healthy' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% elif record.last_health_status == 'Warning' %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% else %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400{% endif %}" data-status="{{ record.last_health_status }}">
+{{ record.last_health_status }}
+</span>
+{% else %}
+<span class="text-sm text-text-muted">--</span>
+{% endif %}
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<button onclick="reactivateAnimal('{{ record.animal_tag }}')" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-green-700 dark:text-green-400 rounded-lg text-xs font-semibold transition-colors">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+Re-add Pet
+</button>
+</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+<td colspan="7" class="px-6 py-8 text-center text-text-muted">
+<span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">history</span>
+<p>No removed animals yet</p>
+<p class="text-sm mt-1">Animals you remove will appear here with their last health data</p>
+</td>
+</tr>
+{% endif %}
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-text-muted">
+Showing <span class="font-semibold text-text-main dark:text-white" id="showingCount">{{ removed_history|length if removed_history else 0 }}</span> records
+</p>
+</div>
+</div>
+
+<!-- Treatment History Table -->
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
+<h3 class="text-lg font-bold text-text-main dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">medical_services</span>
+<span data-i18n="history.treatment_history">Treatment History</span>
+</h3>
+</div>
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.animal">Animal</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.status_when_treated">Status When Treated</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.treatment_given">Treatment Given</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.notes">Notes</th>
+<th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider" data-i18n="history.treated_date">Treated Date</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="treatmentHistoryBody">
+<tr id="treatmentLoadingRow">
+<td colspan="5" class="px-6 py-8 text-center text-text-muted">
+<span class="material-symbols-outlined text-4xl text-gray-300 animate-spin block mb-2">sync</span>
+<p data-i18n="history.loading_treatment">Loading treatment history...</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-text-muted">
+<span data-i18n="history.showing">Showing</span> <span class="font-semibold text-text-main dark:text-white" id="treatmentCount">0</span> <span data-i18n="history.treatment_records">treatment records</span>
+</p>
+</div>
+</div>
+
+<!-- Footer / Extra Info -->
+<div class="flex justify-between items-center text-xs text-text-muted px-2">
+<p>© 2024 AgriHealth Systems. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="hover:text-primary-dark transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary-dark transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Re-add Animal Confirmation Modal -->
+<div id="readdModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-3xl">refresh</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Re-add Animal</h3>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
+                Are you sure you want to re-add <strong class="text-slate-900 dark:text-white" id="readdAnimalTag"></strong> to your active animals? This will restore the animal to your monitoring dashboard.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="closeReaddModal()" class="flex-1 px-5 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                    Cancel
+                </button>
+                <button onclick="confirmReactivate()" class="flex-1 px-5 py-3 bg-gradient-to-r from-primary to-green-600 text-white rounded-xl text-sm font-bold hover:from-green-600 hover:to-green-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/30">
+                    <span class="material-symbols-outlined text-lg">check_circle</span>
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Notification Modal -->
+<div id="successModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all animate-bounce-in">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-3xl">check_circle</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Success!</h3>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6" id="successMessage">
+                The animal has been successfully re-added to your active monitoring list!
+            </p>
+            <button onclick="closeSuccessModal()" class="w-full px-5 py-3 bg-gradient-to-r from-primary to-green-600 text-white rounded-xl text-sm font-bold hover:from-green-600 hover:to-green-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/30">
+                <span class="material-symbols-outlined text-lg">check</span>
+                Great!
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Error Notification Modal -->
+<div id="errorModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-3xl">error</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Error</h3>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6" id="errorMessage">
+                Failed to reactivate animal. Please try again.
+            </p>
+            <button onclick="closeErrorModal()" class="w-full px-5 py-3 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-500/20">
+                <span class="material-symbols-outlined text-lg">close</span>
+                OK
+            </button>
+        </div>
+    </div>
+</div>
+</main>
+<script>
+// Get all table rows
+const tableRows = document.querySelectorAll('#historyTableBody tr');
+
+// Current filter states
+let currentStatus = 'all';
+let currentSearchTerm = '';
+let currentDateRange = '30';
+
+// Filter table function
+function filterTable() {
+  tableRows.forEach(row => {
+    const livestockId = row.querySelector('td:first-child span.text-sm')?.textContent.toLowerCase() || '';
+    const dateAttr = row.querySelector('td:nth-child(3)')?.getAttribute('data-date') || '';
+    
+    // Check search filter
+    const searchMatch = currentSearchTerm === '' || livestockId.includes(currentSearchTerm.toLowerCase());
+    
+    // Check date filter
+    let dateMatch = true;
+    if (currentDateRange !== 'all' && dateAttr) {
+      const recordDate = new Date(dateAttr);
+      const today = new Date();
+      const daysAgo = (today - recordDate) / (1000 * 60 * 60 * 24);
+      dateMatch = daysAgo <= parseInt(currentDateRange);
+    }
+    
+    // Check status filter
+    let statusMatch = true;
+    if (currentStatus !== 'all') {
+      const statusBadge = row.querySelector('td:last-child span');
+      if (statusBadge) {
+        const statusText = statusBadge.textContent.toLowerCase();
+        statusMatch = statusText.includes(currentStatus);
+      }
+    }
+    
+    // Show/hide row based on all filters
+    if (searchMatch && dateMatch && statusMatch) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+  
+  // Update results count
+  updateResultsCount();
+}
+
+// Update results count in pagination
+function updateResultsCount() {
+  const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+  const totalVisible = visibleRows.length;
+  
+  const showingCount = document.getElementById('showingCount');
+  if (showingCount) {
+    showingCount.textContent = totalVisible;
+  }
+}
+
+// Search Input
+const searchInput = document.querySelector('input[placeholder*="Search by Livestock"]');
+if (searchInput) {
+  searchInput.addEventListener('keyup', (e) => {
+    currentSearchTerm = e.target.value;
+    filterTable();
+  });
+}
+
+// Status Dropdown
+const statusBtn = document.getElementById('statusBtn');
+const statusMenu = document.getElementById('statusMenu');
+const statusLabel = document.getElementById('statusLabel');
+const statusOptions = document.querySelectorAll('.statusOption');
+
+if (statusBtn && statusMenu) {
+  statusBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    statusMenu.classList.toggle('hidden');
+    const dateMenu = document.getElementById('dateMenu');
+    if (dateMenu) {
+      dateMenu.classList.add('hidden');
+    }
+  });
+}
+
+if (statusOptions.length > 0) {
+  statusOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const value = option.getAttribute('data-value');
+      const label = option.textContent.trim();
+      if (statusLabel) {
+        statusLabel.textContent = 'Status: ' + label;
+      }
+      if (statusMenu) {
+        statusMenu.classList.add('hidden');
+      }
+      
+      // Update current status and filter
+      currentStatus = value;
+      filterTable();
+    });
+  });
+}
+
+// Date Dropdown
+const dateBtn = document.getElementById('dateBtn');
+const dateMenu = document.getElementById('dateMenu');
+const dateLabel = document.getElementById('dateLabel');
+const dateOptions = document.querySelectorAll('.dateOption');
+
+if (dateBtn && dateMenu) {
+  dateBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dateMenu.classList.toggle('hidden');
+    if (statusMenu) {
+      statusMenu.classList.add('hidden');
+    }
+  });
+}
+
+if (dateOptions.length > 0) {
+  dateOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const value = option.getAttribute('data-value');
+      const label = option.textContent.trim();
+      if (dateLabel) {
+        dateLabel.textContent = label;
+      }
+      if (dateMenu) {
+        dateMenu.classList.add('hidden');
+      }
+      
+      // Update current date range and filter
+      currentDateRange = value;
+      filterTable();
+    });
+  });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', () => {
+  if (statusMenu) {
+    statusMenu.classList.add('hidden');
+  }
+  if (dateMenu) {
+    dateMenu.classList.add('hidden');
+  }
+});
+
+// ========== TREATMENT HISTORY SECTION ==========
+
+// Get avatar color based on name
+function getAvatarColor(name) {
+    const colors = [
+        'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+        'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+        'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
+        'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
+        'bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400',
+        'bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400'
+    ];
+    const index = name ? name.charCodeAt(0) % colors.length : 0;
+    return colors[index];
+}
+
+// Get status badge styling
+function getStatusBadge(status) {
+    if (status === 'Healthy') {
+        return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400';
+    } else if (status === 'Warning') {
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400';
+    } else {
+        return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400';
+    }
+}
+
+// Format date for display
+function formatTreatmentDate(dateStr) {
+    if (!dateStr) return 'N/A';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-GB', { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Load treatment history from API
+async function loadTreatmentHistory() {
+    try {
+        const response = await fetch('/api/user/treatment-history');
+        const data = await response.json();
+        
+        const tbody = document.getElementById('treatmentHistoryBody');
+        const countEl = document.getElementById('treatmentCount');
+        
+        if (data.status === 'success' && data.history.length > 0) {
+            tbody.innerHTML = data.history.map(record => {
+                const avatarColor = getAvatarColor(record.animal_name);
+                const statusBadge = getStatusBadge(record.health_status);
+                
+                return `
+                    <tr class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 rounded-full ${avatarColor} flex items-center justify-center font-bold text-xs">
+                                    ${record.animal_name ? record.animal_name.charAt(0).toUpperCase() : '?'}
+                                </div>
+                                <div>
+                                    <span class="text-sm font-medium text-text-main dark:text-white">${record.animal_name || 'Unknown'}</span>
+                                    <p class="text-xs text-text-muted">#${record.animal_tag} • ${record.species || 'Unknown'}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadge}" data-health-status="${record.health_status || 'N/A'}">
+                                ${record.health_status || 'N/A'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-medium text-text-main dark:text-slate-300">
+                            ${record.treatment || 'N/A'}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-text-muted max-w-xs truncate">
+                            ${record.notes || '-'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
+                            ${formatTreatmentDate(record.treated_date)}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            countEl.textContent = data.history.length;
+            // Translate status badges for treatment history
+            translateTreatmentStatusBadges();
+        } else {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-text-muted">
+                        <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">medical_services</span>
+                        <p>No treatment history yet</p>
+                        <p class="text-sm mt-1">Treatment records from vet visits will appear here</p>
+                    </td>
+                </tr>
+            `;
+            countEl.textContent = '0';
+        }
+    } catch (error) {
+        console.error('Error loading treatment history:', error);
+        const tbody = document.getElementById('treatmentHistoryBody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-8 text-center text-text-muted">
+                    <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">error</span>
+                    <p>Failed to load treatment history</p>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Modal management
+let currentReactivateTag = null;
+
+function reactivateAnimal(tag) {
+    currentReactivateTag = tag;
+    document.getElementById('readdAnimalTag').textContent = `#${tag}`;
+    const modal = document.getElementById('readdModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeReaddModal() {
+    const modal = document.getElementById('readdModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    currentReactivateTag = null;
+}
+
+function closeSuccessModal() {
+    const modal = document.getElementById('successModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function closeErrorModal() {
+    const modal = document.getElementById('errorModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function showSuccessModal(message) {
+    document.getElementById('successMessage').textContent = message;
+    const modal = document.getElementById('successModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function showErrorModal(message) {
+    document.getElementById('errorMessage').textContent = message;
+    const modal = document.getElementById('errorModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+// Reactivate animal - add back to active list
+async function confirmReactivate() {
+    if (!currentReactivateTag) return;
+    
+    const tag = currentReactivateTag;
+    closeReaddModal();
+    
+    try {
+        const response = await fetch(`/api/animals/${tag}/reactivate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            showSuccessModal(`Animal #${tag} has been successfully re-added to your active animals!`);
+            // Remove the row from the table
+            const row = document.querySelector(`tr[data-tag="${tag}"]`);
+            if (row) {
+                row.remove();
+            }
+            // Update count
+            updateResultsCount();
+        } else {
+            showErrorModal(data.message || 'Failed to reactivate animal. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error reactivating animal:', error);
+        showErrorModal('An error occurred while reactivating the animal. Please try again.');
+    }
+}
+
+// Load treatment history on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadTreatmentHistory();
+    translateStatusBadges();
+});
+
+// Function to translate status badges in removed animals table
+function translateStatusBadges() {
+    document.querySelectorAll('[data-status]').forEach(badge => {
+        const status = badge.getAttribute('data-status');
+        if (window.i18n) {
+            const translatedStatus = window.i18n.getTranslation('status.' + status.toLowerCase());
+            badge.textContent = translatedStatus || status;
+        }
+    });
+}
+
+// Function to translate status badges in treatment history
+function translateTreatmentStatusBadges() {
+    document.querySelectorAll('[data-health-status]').forEach(badge => {
+        const status = badge.getAttribute('data-health-status');
+        if (window.i18n && status !== 'N/A') {
+            const translatedStatus = window.i18n.getTranslation('status.' + status.toLowerCase());
+            badge.textContent = translatedStatus || status;
+        }
+    });
+}
+
+// Listen for language change
+if (typeof window !== 'undefined') {
+    window.addEventListener('languageChanged', function() {
+        translateStatusBadges();
+        translateTreatmentStatusBadges();
+    });
+}
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

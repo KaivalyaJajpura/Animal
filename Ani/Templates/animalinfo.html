@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Animal Information - Livestock Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display transition-colors duration-200 h-screen flex overflow-hidden">
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined">pets</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium">Animal Info</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10">
+<div class="mx-auto max-w-5xl space-y-6">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex items-center justify-between">
+<ol class="flex items-center space-x-2">
+<li><a class="text-slate-500 hover:text-primary dark:text-slate-400 text-sm font-medium" href="#" data-i18n="header.dashboard">Dashboard</a></li>
+<li><span class="text-slate-400 text-sm">/</span></li>
+<li><a class="text-slate-500 hover:text-primary dark:text-slate-400 text-sm font-medium" href="#" data-i18n="animal.my_herd">My Herd</a></li>
+<li><span class="text-slate-400 text-sm">/</span></li>
+<li><span aria-current="page" class="text-slate-900 dark:text-white text-sm font-medium" id="breadcrumbAnimal">Animal #C-101</span></li>
+</ol>
+<div class="flex items-center gap-2">
+<button type="button" id="addNewPetBtn" class="flex items-center gap-2 bg-primary hover:bg-green-600 text-slate-900 dark:text-white font-bold py-2 px-4 rounded-lg shadow-sm transition-colors text-sm">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span data-i18n="animal.add_new_pet">Add New Pet</span>
+</button>
+<button type="button" id="bulkUploadBtn" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition-colors text-sm">
+<span class="material-symbols-outlined text-[16px]">upload_file</span>
+<span data-i18n="animal.bulk_upload">Bulk Upload</span>
+</button>
+</div>
+</nav>
+<!-- Profile Header Card -->
+<div class="overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-slate-100 dark:border-slate-800 transition-colors">
+<div class="relative h-32 bg-gradient-to-r from-green-50 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30">
+<!-- Background decoration -->
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(#13ec5b_1px,transparent_1px)] [background-size:16px_16px]"></div>
+</div>
+<div class="px-6 pb-6">
+<div class="relative flex items-end justify-between -mt-12 sm:-mt-16 flex-wrap gap-4">
+<div class="flex items-end gap-6">
+<div class="relative h-32 w-32 rounded-xl border-4 border-white dark:border-surface-dark bg-white dark:bg-surface-dark shadow-md overflow-hidden">
+<div class="h-full w-full bg-center bg-cover" data-alt="Close up photo of a dairy cow with tag 1024" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDb_WBr83m2Fb_exyOfVev0rh2UZIM4mfZ1R7yG5yoEXhay1tW2LPbiZu4mRuKxA5ydhp-vHCQSJGoAVKTrr6XkerSGH4qeUotO2Z7u7yYtyb1_36lS9Ui7ua4ptI4MluH85jHIyFePaprXi-bqj5QlLGxfALJND4OpqI7Pz6IFzckLapd2Wb5cK9zCdtD-csbAVQrPFWz5Wk2d_wLAKccmqX4MTPW1l15Yd8oVrvL3O8VBBjO98dBHaG-cOK1JQgfT1Rl8CEGusxY");'></div>
+</div>
+<div class="mb-1">
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white" id="animalName">Daisy #C-101</h1>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span id="animalDate"><span data-i18n="animal.added">Added</span>: Jan 5, 2022</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3 items-end">
+<div class="flex items-center gap-3 mb-1">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 dark:bg-green-900/50 px-3 py-1 text-sm font-semibold text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20">
+<span class="h-1.5 w-1.5 rounded-full bg-green-600 dark:bg-green-400"></span>
+                                        Healthy
+                                    </span>
+</div>
+<div class="relative">
+<select id="animalSelector" class="appearance-none rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-surface-dark py-2 pl-3 pr-10 text-slate-900 dark:text-white text-sm font-medium shadow-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer">
+{% for animal in animals %}
+<option value="{{ animal.tag }}">{{ animal.species }} #{{ animal.tag }} - {{ animal.name }}</option>
+{% endfor %}
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-slate-400">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Form Section -->
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-slate-100 dark:border-slate-800 p-6 lg:p-8 transition-colors">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-lg font-semibold text-slate-900 dark:text-white" data-i18n="animal.details">Animal Details</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1" data-i18n="animal.details_desc">View and update specific metrics for this livestock entry.</p>
+</div>
+<div class="hidden sm:block">
+<span class="text-xs font-mono text-slate-400 dark:text-slate-500"><span data-i18n="animal.last_updated">Last updated</span>: 2 <span data-i18n="animal.hours_ago">hours ago</span></span>
+</div>
+</div>
+<form action="#" class="space-y-8">
+<!-- Identification Section -->
+<div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="col-span-1 sm:col-span-2 lg:col-span-1">
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200" for="animal-id" data-i18n="animal.animal_id_tag">Animal ID (Tag)</label>
+<div class="mt-2 flex rounded-md shadow-sm">
+<span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 px-3 text-slate-500 dark:text-slate-400 sm:text-sm">
+                                            #
+                                        </span>
+<input class="block w-full flex-1 rounded-none rounded-r-lg border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 py-2.5 text-slate-500 dark:text-slate-400 focus:ring-primary focus:border-primary sm:text-sm" id="animal-id" name="animal-id" readonly="" type="text" value="C-101"/>
+</div>
+<p class="mt-1 text-xs text-slate-500 dark:text-slate-500" data-i18n="animal.unique_identifier">Unique identifier, read-only.</p>
+</div>
+<div class="col-span-1 sm:col-span-1">
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200" for="animal-name" data-i18n="animal.animal_name">Animal Name</label>
+<div class="mt-2">
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 text-slate-900 dark:text-white shadow-sm focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" id="animal-name" name="animal-name" type="text" value="Daisy"/>
+</div>
+</div>
+<div class="col-span-1 sm:col-span-1">
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200" for="species" data-i18n="animal.species">Species</label>
+<div class="mt-2 relative">
+<select class="block w-full appearance-none rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 pl-3 pr-10 text-slate-900 dark:text-white shadow-sm focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" id="species" name="species">
+<option data-i18n="animal.cow">Cow</option>
+<option data-i18n="animal.buffalo">Buffalo</option>
+<option data-i18n="animal.sheep">Sheep</option>
+<option data-i18n="animal.goat">Goat</option>
+<option data-i18n="animal.horse">Horse</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-100 dark:border-slate-800"></div>
+<!-- Physical Metrics -->
+<div>
+<h3 class="text-sm font-medium text-slate-900 dark:text-white mb-4" data-i18n="animal.physical_attributes">Physical Attributes</h3>
+<div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+<div>
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200" for="weight" data-i18n="animal.weight">Weight</label>
+<div class="relative mt-2 rounded-md shadow-sm">
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 pl-3 pr-12 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" id="weight" name="weight" placeholder="0.00" type="number" value="680"/>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="text-slate-500 dark:text-slate-400 sm:text-sm" data-i18n="animal.kg">kg</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200" for="age" data-i18n="animal.age">Age</label>
+<div class="relative mt-2 rounded-md shadow-sm">
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 pl-3 pr-16 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" id="age" name="age" placeholder="0" type="number" value="5"/>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="text-slate-500 dark:text-slate-400 sm:text-sm" data-i18n="animal.years">years</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200 mb-2" data-i18n="animal.gender">Gender</label>
+<div class="flex gap-4 mt-2">
+<label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-surface-dark dark:border-slate-600 p-2.5 shadow-sm focus:outline-none ring-1 ring-slate-300 border-transparent">
+<input checked="" class="sr-only peer" name="gender" type="radio" value="female"/>
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-pink-500 text-[20px]">female</span>
+<span class="text-sm font-medium text-slate-900 dark:text-white" data-i18n="animal.female">Female</span>
+</span>
+<span aria-hidden="true" class="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent peer-checked:border-primary"></span>
+</label>
+<label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-surface-dark dark:border-slate-600 p-2.5 shadow-sm focus:outline-none ring-1 ring-slate-300 border-transparent hover:ring-primary">
+<input class="sr-only peer" name="gender" type="radio" value="male"/>
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500 text-[20px]">male</span>
+<span class="text-sm font-medium text-slate-900 dark:text-white" data-i18n="animal.male">Male</span>
+</span>
+<span aria-hidden="true" class="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent peer-checked:border-primary"></span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-slate-100 dark:border-slate-800"></div>
+<!-- Medical History -->
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+<div>
+<h3 class="text-sm font-medium text-slate-900 dark:text-white" data-i18n="animal.disease_history">Previous Disease History</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Has this animal suffered from any major diseases?</p>
+</div>
+<!-- Yes/No Toggle Custom Component -->
+<label class="inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="relative w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+<span class="ms-3 text-sm font-medium text-slate-900 dark:text-slate-300" data-i18n="animal.yes_record_found">Yes, record found</span>
+</label>
+</div>
+<div class="mt-4 rounded-xl bg-slate-50 dark:bg-white/5 p-4 border border-slate-100 dark:border-slate-800">
+<label class="block text-sm font-medium leading-6 text-slate-900 dark:text-slate-200 mb-2" for="disease-notes" data-i18n="animal.disease_notes">Disease Notes &amp; Observations</label>
+<textarea class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white shadow-sm focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" id="disease-notes" name="disease-notes" placeholder="Enter details about previous conditions..." rows="3">Treated for Mastitis in early 2022. Recovered fully after antibiotic course. Routine monitoring advised.</textarea>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center justify-end gap-x-4 pt-4">
+                <button class="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600" type="button" data-i18n="common.cancel">Cancel</button>
+<button class="rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-[#102216] shadow-md hover:bg-[#0fd652] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors" type="submit" data-i18n="animal.save_changes">Save Changes</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- Success Popup Modal - Placed before scripts so elements exist when JS runs -->
+<div id="animalSuccessPopup" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-8 flex flex-col items-center gap-6">
+<div class="bg-green-100 dark:bg-green-900/30 p-4 rounded-full">
+<span class="material-symbols-outlined text-4xl text-green-600 dark:text-green-400">check_circle</span>
+</div>
+<div class="text-center flex flex-col gap-2">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white" data-i18n="animal.success">Success!</h3>
+<p id="successMessage" class="text-slate-500 dark:text-gray-300" data-i18n="animal.saved_successfully">Animal saved successfully.</p>
+</div>
+<button id="animalPopupOkBtn" class="w-full h-12 px-6 rounded-xl bg-primary text-black font-bold hover:bg-[#0fd651] transition-colors shadow-lg shadow-primary/25" onclick="closePopupAndReload()" data-i18n="animal.ok">
+OK
+</button>
+</div>
+</div>
+
+<script>
+function closePopupAndReload() {
+    document.getElementById('animalSuccessPopup').classList.add('hidden');
+    window.location.reload();
+}
+</script>
+
+<script>
+    // Animal data loaded from database
+    const animalData = {
+        {% for animal in animals %}
+        '{{ animal.tag }}': { 
+            name: '{{ animal.name }}', 
+            id: '{{ animal.tag }}', 
+            species: '{{ animal.species }}', 
+            date: '{{ animal.date_added }}', 
+            weight: {{ animal.weight or 0 }}, 
+            age: {{ animal.age or 0 }},
+            gender: '{{ animal.gender or "Female" }}'
+        },
+        {% endfor %}
+    };
+
+    let isNewAnimal = false;
+    
+    // Function to set up form for new animal
+    function setupNewAnimalForm() {
+        isNewAnimal = true;
+        document.getElementById('animalName').textContent = 'New Animal';
+        document.getElementById('animalDate').textContent = 'Adding new animal...';
+        document.getElementById('animal-id').value = 'Auto-generated';
+        document.getElementById('animal-name').value = '';
+        document.getElementById('species').value = 'Cow';
+        document.getElementById('weight').value = '';
+        document.getElementById('age').value = '';
+        document.getElementById('breadcrumbAnimal').textContent = 'New Animal';
+        document.querySelector('input[name="gender"][value="female"]').checked = true;
+        document.getElementById('animalSelector').value = 'add-new';
+    }
+    
+    // Handle Add New Pet button
+    document.getElementById('addNewPetBtn').addEventListener('click', function() {
+        setupNewAnimalForm();
+        // Scroll to form
+        document.getElementById('animal-name').focus();
+    });
+
+    // Handle animal selector change
+    document.getElementById('animalSelector').addEventListener('change', function() {
+        const selectedId = this.value;
+        
+        if (selectedId === 'add-new') {
+            setupNewAnimalForm();
+            localStorage.removeItem('selectedDashboardAnimal');
+        } else if (selectedId && animalData[selectedId]) {
+            isNewAnimal = false;
+            const animal = animalData[selectedId];
+            document.getElementById('animalName').textContent = animal.name + ' #' + animal.id;
+            document.getElementById('animalDate').textContent = 'Added: ' + animal.date;
+            document.getElementById('animal-id').value = animal.id;
+            document.getElementById('animal-name').value = animal.name;
+            document.getElementById('weight').value = animal.weight;
+            document.getElementById('age').value = animal.age;
+            document.getElementById('breadcrumbAnimal').textContent = 'Animal #' + animal.id;
+            
+            // Set species dropdown
+            const speciesSelect = document.getElementById('species');
+            for (let option of speciesSelect.options) {
+                if (option.value === animal.species) {
+                    option.selected = true;
+                    break;
+                }
+            }
+            
+            // Set gender
+            const genderValue = animal.gender.toLowerCase();
+            const genderRadio = document.querySelector(`input[name="gender"][value="${genderValue}"]`);
+            if (genderRadio) genderRadio.checked = true;
+            
+            // Save selected animal to localStorage (shared with dashboard)
+            localStorage.setItem('selectedDashboardAnimal', selectedId);
+        }
+    });
+
+    // Load animal from URL parameter or localStorage
+    window.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const animalId = urlParams.get('animal');
+        const action = urlParams.get('action');
+        
+        if (action === 'add') {
+            // User wants to add a new animal
+            setupNewAnimalForm();
+        } else if (animalId && animalData[animalId]) {
+            const selector = document.getElementById('animalSelector');
+            selector.value = animalId;
+            // Trigger the change event to update the display
+            selector.dispatchEvent(new Event('change'));
+        } else {
+            // Try to load from localStorage (shared with dashboard)
+            const savedAnimal = localStorage.getItem('selectedDashboardAnimal');
+            if (savedAnimal && animalData[savedAnimal]) {
+                const selector = document.getElementById('animalSelector');
+                selector.value = savedAnimal;
+                selector.dispatchEvent(new Event('change'));
+            }
+        }
+        
+        // Handle Save Changes button
+        const form = document.querySelector('form');
+        const saveButton = form.querySelector('button[type="submit"]');
+        
+        saveButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('animal-name').value.trim();
+            const species = document.getElementById('species').value;
+            const weight = document.getElementById('weight').value;
+            const age = document.getElementById('age').value;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || 'female';
+            
+            if (!name) {
+                alert('Please enter an animal name');
+                return;
+            }
+            
+            // Show loading
+            saveButton.disabled = true;
+            saveButton.textContent = 'Saving...';
+            
+            try {
+                let response;
+                if (isNewAnimal) {
+                    // Add new animal
+                    response = await fetch('/api/animals', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            species: species,
+                            weight: parseFloat(weight) || 0,
+                            age: parseInt(age) || 0,
+                            gender: gender.charAt(0).toUpperCase() + gender.slice(1)
+                        })
+                    });
+                } else {
+                    // Update existing animal
+                    const animalId = document.getElementById('animal-id').value;
+                    response = await fetch(`/api/animals/${animalId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            species: species,
+                            weight: parseFloat(weight) || 0,
+                            age: parseInt(age) || 0,
+                            gender: gender.charAt(0).toUpperCase() + gender.slice(1)
+                        })
+                    });
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Show success popup
+                    document.getElementById('animalSuccessPopup').classList.remove('hidden');
+                    document.getElementById('successMessage').textContent = isNewAnimal 
+                        ? `Animal "${name}" added successfully with tag #${data.animal.tag}!` 
+                        : `Animal "${name}" updated successfully!`;
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Changes';
+            }
+        });
+    });
+</script>
+
+<!-- Bulk Upload Modal -->
+<div id="bulkUploadModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white" data-i18n="bulk.bulk_upload_animals">Bulk Upload Animals</h3>
+<button type="button" onclick="closeBulkUploadModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+
+<div class="space-y-4">
+<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+<p class="text-sm text-blue-800 dark:text-blue-200 mb-2">
+<strong data-i18n="bulk.excel_format">Excel Format:</strong> Your file should have columns: Name, Species, Weight (kg), Age (years), Gender
+</p>
+<p class="text-xs text-blue-700 dark:text-blue-300">
+<strong data-i18n="bulk.valid_species">Valid Species:</strong> Cow, Buffalo, Sheep, Goat, Horse, Pig
+</p>
+</div>
+
+<div class="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-8 text-center cursor-pointer hover:border-primary hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" id="dropZone">
+<span class="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-500 mx-auto block mb-2">upload_file</span>
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1" data-i18n="bulk.drag_drop">Drag and drop your Excel file here</p>
+<p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="bulk.or_click">or click to select</p>
+<input type="file" id="bulkUploadInput" class="hidden" accept=".xlsx,.xls,.csv" />
+</div>
+
+<div id="uploadProgress" class="hidden space-y-2">
+<div class="flex items-center justify-between">
+<p class="text-sm font-medium text-slate-700 dark:text-slate-300" data-i18n="bulk.uploading">Uploading...</p>
+<span id="progressPercent" class="text-sm text-slate-500">0%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+<div id="progressBar" class="bg-primary h-2 rounded-full transition-all" style="width: 0%"></div>
+</div>
+</div>
+
+<div id="uploadResults" class="hidden space-y-3">
+<div class="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
+<p class="text-sm text-green-800 dark:text-green-200">
+<strong id="successCount">0</strong> <span data-i18n="bulk.animals_added">animals added successfully</span>
+</p>
+</div>
+<div id="errorResultsContainer" class="hidden bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+<p class="text-sm font-medium text-red-800 dark:text-red-200 mb-2" data-i18n="bulk.failed_rows">Failed rows:</p>
+<div id="errorResults" class="text-xs text-red-700 dark:text-red-300 space-y-1 max-h-48 overflow-y-auto"></div>
+</div>
+</div>
+</div>
+
+<div class="flex items-center gap-3 pt-4 flex-wrap">
+<button type="button" onclick="downloadTemplate()" class="flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-transparent px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-i18n="bulk.template">
+<span class="material-symbols-outlined text-[16px]">download</span>
+Template
+</button>
+<button type="button" onclick="closeBulkUploadModal()" class="flex-1 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-transparent px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors" data-i18n="bulk.close">
+Close
+</button>
+<button type="button" id="submitBulkUpload" class="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-slate-900 hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="bulk.upload">
+Upload
+</button>
+</div>
+</div>
+</div>
+
+<script>
+// Bulk Upload Functionality
+let selectedBulkFile = null;
+
+document.getElementById('bulkUploadBtn').addEventListener('click', function() {
+    document.getElementById('bulkUploadModal').classList.remove('hidden');
+});
+
+function closeBulkUploadModal() {
+    document.getElementById('bulkUploadModal').classList.add('hidden');
+    selectedBulkFile = null;
+    document.getElementById('bulkUploadInput').value = '';
+    document.getElementById('uploadProgress').classList.add('hidden');
+    document.getElementById('uploadResults').classList.add('hidden');
+    document.getElementById('submitBulkUpload').disabled = false;
+}
+
+function downloadTemplate() {
+    // Create a sample Excel file with the correct format
+    const link = document.createElement('a');
+    const csv = 'Name,Species,Weight,Age,Gender\nDaisy,Cow,680,5,Female\nBilly,Goat,85,2,Male\nWoolly,Sheep,65,3,Male';
+    const blob = new Blob([csv], { type: 'text/csv' });
+    link.href = URL.createObjectURL(blob);
+    link.download = 'animal_template.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+const dropZone = document.getElementById('dropZone');
+const bulkUploadInput = document.getElementById('bulkUploadInput');
+
+// Click to select file
+dropZone.addEventListener('click', function() {
+    bulkUploadInput.click();
+});
+
+// Handle file selection
+bulkUploadInput.addEventListener('change', function(e) {
+    handleFileSelect(e.target.files[0]);
+});
+
+// Drag and drop
+dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropZone.classList.add('border-primary', 'bg-slate-50', 'dark:bg-white/5');
+});
+
+dropZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    dropZone.classList.remove('border-primary', 'bg-slate-50', 'dark:bg-white/5');
+});
+
+dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropZone.classList.remove('border-primary', 'bg-slate-50', 'dark:bg-white/5');
+    if (e.dataTransfer.files.length > 0) {
+        handleFileSelect(e.dataTransfer.files[0]);
+    }
+});
+
+function handleFileSelect(file) {
+    if (!file) return;
+    
+    // Validate file type
+    const validTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                        'application/vnd.ms-excel', 
+                        'text/csv'];
+    if (!validTypes.includes(file.type)) {
+        alert('Please select a valid Excel (.xlsx, .xls) or CSV file');
+        return;
+    }
+    
+    selectedBulkFile = file;
+    dropZone.innerHTML = `<span class="material-symbols-outlined text-4xl text-green-600 mx-auto block mb-2">check_circle</span>
+                         <p class="text-sm font-medium text-green-700 dark:text-green-300">${file.name}</p>
+                         <p class="text-xs text-green-600 dark:text-green-400">Ready to upload</p>`;
+}
+
+document.getElementById('submitBulkUpload').addEventListener('click', async function() {
+    if (!selectedBulkFile) {
+        alert('Please select a file first');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', selectedBulkFile);
+    
+    document.getElementById('uploadProgress').classList.remove('hidden');
+    document.getElementById('submitBulkUpload').disabled = true;
+    
+    try {
+        const response = await fetch('/api/animals/bulk/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        document.getElementById('uploadProgress').classList.add('hidden');
+        document.getElementById('uploadResults').classList.remove('hidden');
+        
+        document.getElementById('successCount').textContent = data.success_count || 0;
+        
+        if (data.errors && data.errors.length > 0) {
+            document.getElementById('errorResultsContainer').classList.remove('hidden');
+            const errorDiv = document.getElementById('errorResults');
+            errorDiv.innerHTML = data.errors.map(err => 
+                `<div>Row ${err.row}: ${err.message}</div>`
+            ).join('');
+        }
+        
+        if (data.status === 'success' && data.success_count > 0) {
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('uploadProgress').classList.add('hidden');
+        alert('An error occurred during upload. Please try again.');
+        document.getElementById('submitBulkUpload').disabled = false;
+    }
+});
+</script>
+
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

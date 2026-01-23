@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin User &amp; Livestock (No Language Toggle)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: #f0f4f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white">
+<div class="flex h-screen overflow-hidden">
+<aside class="flex w-72 flex-col bg-white dark:bg-[#1a2e1f] border-r border-[#dbe6df] dark:border-[#2a3a2e]">
+<div class="flex flex-col h-full p-6 justify-between">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="University hackathon project logo for livestock health" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnAQb1ektGN2gpfSvBaQiQ7EUbcTVKcr3V9PWTTCvn_ugP3GogvTrhmAQRX9QxKugicrBNKWe4oDLYF5Naeef9IvWD_ys3AIyoOzRdBrDxrpwvYjZITVtBoqVsdlBQXDlpI2WLuz54qGT4lIBkp4uYE4bMTiZRuovgPiUjetdfrNymiJtxr8hIuoF4CJgJU8J-OPaMQ4azu6wkK7e7uDuEh7FLAqV61NkQChqnHgHNpXJ4qwveOqnQfW98ZSSs2rQC85mpMfPSzZY");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Livestock Health</h1>
+<p class="text-[#61896f] dark:text-primary text-xs font-medium uppercase tracking-wider">Early Detection</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_dashboard">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#f0f4f2] dark:bg-primary/20 transition-colors" href="/admin_user">
+<span class="material-symbols-outlined text-[#111813] dark:text-white" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-sm font-bold text-[#111813] dark:text-white">User &amp; Livestock</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_vet">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">medical_services</span>
+<span class="text-sm font-medium">Vet Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_logout">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</nav>
+</nav>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="flex items-center justify-between sticky top-0 z-10 bg-white/80 dark:bg-[#1a2e1f]/80 backdrop-blur-md border-b border-[#f0f4f2] dark:border-[#2a3a2e] px-8 py-4">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">admin_panel_settings</span>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold tracking-tight">Admin Console</h2>
+</div>
+<label class="flex items-center bg-[#f0f4f2] dark:bg-[#243d2a] rounded-xl px-4 py-2 w-64">
+<span class="material-symbols-outlined text-[#61896f] mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-[#61896f]" placeholder="Search farmers, email, or species..." type="text"/>
+</label>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-2 rounded-xl bg-[#f0f4f2] dark:bg-[#243d2a] text-[#111813] dark:text-white hover:bg-[#e2e8e5] transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#243d2a]"></span>
+</button>
+<div class="h-10 w-px bg-[#f0f4f2] dark:bg-[#2a3a2e]"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold leading-none mb-1">{{ admin or 'Admin' }}</p>
+<p class="text-[10px] text-[#61896f] uppercase font-bold tracking-tighter">System Administrator</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-[#dbe6df] bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">admin_panel_settings</span>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8 flex flex-col gap-6 max-w-7xl mx-auto w-full">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h1 class="text-[#111813] dark:text-white text-3xl font-black leading-tight tracking-tight">User &amp; Livestock Management</h1>
+<p class="text-[#61896f] dark:text-[#a1b9a9] text-base font-normal">Monitor registered farmers and detailed breakdown of their livestock assets.</p>
+</div>
+<button class="flex items-center gap-2 cursor-pointer rounded-xl h-11 px-5 bg-primary text-[#111813] text-sm font-bold shadow-sm hover:shadow-md transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+<span>Export User Analytics</span>
+</button>
+</div>
+<div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#fcfdfc] dark:bg-[#213526] border-b border-[#dbe6df] dark:border-[#2a3a2e]">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">User Email</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Farmer Name</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Contact Info</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Total Animals</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Species Owned</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f] text-center">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a3a2e]">
+{% for user in users %}
+<tr class="hover:bg-[#f6fbf7] dark:hover:bg-[#243d2a] transition-colors cursor-default">
+<td class="px-6 py-5 text-sm font-medium text-primary">{{ user.email }}</td>
+<td class="px-6 py-5">
+<div class="font-bold text-[#111813] dark:text-white">{{ user.full_name }}</div>
+<div class="text-xs text-[#61896f]">Verified Farmer</div>
+</td>
+<td class="px-6 py-5 text-sm text-[#61896f] dark:text-[#a1b9a9]">{{ user.mobile or 'N/A' }}</td>
+<td class="px-6 py-5">
+<div class="inline-flex items-center justify-center px-3 py-1 bg-[#f0f4f2] dark:bg-[#2a3a2e] rounded-lg text-sm font-bold">{{ user.animal_count or 0 }}</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+{% for species in user.species_list %}
+<span class="px-2 py-1 bg-primary/10 text-primary border border-primary/20 text-[10px] font-bold uppercase rounded">{{ species.species }}: {{ species.count }}</span>
+{% endfor %}
+{% if not user.species_list %}
+<span class="text-[#61896f] text-[10px]">No animals</span>
+{% endif %}
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="size-2.5 rounded-full bg-primary inline-block"></span>
+</td>
+</tr>
+{% else %}
+<tr>
+<td colspan="6" class="px-6 py-8 text-center text-[#61896f] dark:text-[#a1b9a9]">
+No users found.
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 flex items-center justify-between bg-[#fcfdfc] dark:bg-[#213526] border-t border-[#dbe6df] dark:border-[#2a3a2e]">
+<p class="text-sm text-[#61896f]">Showing 1 to 5 of 1,240 results</p>
+<div class="flex gap-2">
+<button class="p-1 rounded bg-white dark:bg-[#1a2e1f] border border-[#dbe6df] dark:border-[#2a3a2e] hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="p-1 rounded bg-primary text-[#111813] font-bold text-sm px-3 border border-primary">1</button>
+<button class="p-1 rounded bg-white dark:bg-[#1a2e1f] border border-[#dbe6df] dark:border-[#2a3a2e] hover:bg-gray-50 transition-colors px-3 text-sm">2</button>
+<button class="p-1 rounded bg-white dark:bg-[#1a2e1f] border border-[#dbe6df] dark:border-[#2a3a2e] hover:bg-gray-50 transition-colors px-3 text-sm">3</button>
+<button class="p-1 rounded bg-white dark:bg-[#1a2e1f] border border-[#dbe6df] dark:border-[#2a3a2e] hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-6 mb-8">
+<div class="flex min-w-[240px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-[#1a2e1f] border border-[#dbe6df] dark:border-[#2a3a2e] shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/20 rounded-lg">
+<span class="material-symbols-outlined text-primary">medical_services</span>
+</div>
+<p class="text-[#61896f] dark:text-[#a1b9a9] text-sm font-medium uppercase tracking-widest">Total Animals Treated</p>
+</div>
+<div class="flex items-end justify-between">
+<p class="text-[#111813] dark:text-white tracking-tight text-3xl font-black">4,582</p>
+<p class="text-[#078829] text-sm font-bold flex items-center bg-[#078829]/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                            8.7%
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto py-6 px-8 border-t border-[#f0f4f2] dark:border-[#2a3a2e] text-center">
+<p class="text-[#61896f] text-xs font-medium">© 2024 Livestock Health University Hackathon Project. All rights reserved.</p>
+</footer>
+</main>
+</div>
+
+</body></html>

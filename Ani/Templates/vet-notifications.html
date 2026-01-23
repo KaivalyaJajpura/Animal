@@ -1,0 +1,427 @@
+<!-- Vet Notifications - Alerts and Reminders -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vet Notifications - Livestock Health Monitor</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "primary-dark": "#0ea641",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c20",
+                        "text-main": "#111813",
+                        "text-secondary": "#61896f",
+                        "border-color": "#dbe6df",
+                        "alert-critical": "#ef4444",
+                        "alert-warning": "#f59e0b",
+                        "alert-info": "#3b82f6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col w-72 bg-white border-r border-[#f0f4f2] h-full shrink-0">
+<div class="flex items-center gap-3 px-2 pt-4 pb-2">
+<div class="bg-[#13ec5b]/20 flex items-center justify-center rounded-xl size-10 text-[#13ec5b]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pets</span>
+</div>
+<h1 class="text-[#111813] text-lg font-bold leading-normal" data-i18n="vet.livestock_health">Livestock Health</h1>
+</div>
+<nav class="flex-1 flex flex-col gap-2 px-4 py-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vetdashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium" data-i18n="vet.dashboard">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#13ec5b] text-[#111813] shadow-sm shadow-[#13ec5b]/20" href="{{ url_for('vet_notifications') }}">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<p class="text-sm font-bold" data-i18n="vet.notifications">Notifications</p>
+<span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vet_history') }}">
+<span class="material-symbols-outlined">history</span>
+<p class="text-sm font-medium" data-i18n="vet.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vet_settings') }}">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium" data-i18n="vet.settings">Settings</p>
+</a>
+</nav>
+<div class="p-4 border-t border-[#f0f4f2]">
+<a href="{{ url_for('vet_logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium" data-i18n="vet.logout">Logout</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Navigation -->
+<header class="h-16 bg-white border-b border-[#f0f4f2] px-6 py-4 flex items-center justify-between shrink-0 z-10">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-[#111813]"><span class="material-symbols-outlined">menu</span></button>
+<h2 class="text-[#111813] text-xl font-bold leading-tight" data-i18n="vet.notifications">Notifications</h2>
+</div>
+<div class="flex items-center gap-4 md:gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="h-8 w-[1px] bg-[#f0f4f2] hidden md:block"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-[#111813]" id="vetDoctorName" data-name="{{ vet_data.full_name if vet_data else vet }}">{{ vet_data.full_name if vet_data else vet }}</p>
+<p class="text-xs font-medium text-[#637588]">ID: {{ vet_data.license_id if vet_data else 'N/A' }}</p>
+</div>
+<a href="{{ url_for('vet_settings') }}" class="size-10 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer hover:opacity-80 transition-opacity" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCndGVYdzAaSugGdYe2j_M7wMD3ZcejVWHENSW9PXjoVc0_MNmKCzr_hPt0YUhtzUCbYJKaWENV9GrxhvUTnmxiDXJkTDIxFHoHcWCtbV8N0JZp0pEPp_Vmv7ED-7DjAFfc4pFOz_cnuHF7Y1ZqlhOZi8z3BM-GNQU5RFmT3OGbqCucmPvpqJWkhzipq4nMJ2iEuLcucTEiZXPriXamK8UPUeyUSkajhUqXadCakX1cEuYqrDi0EFDuARTZ9U_2PqWQ9jzSZ1ECGLE');"></a>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 bg-[#f6f8f6]">
+<div class="max-w-5xl mx-auto flex flex-col gap-6">
+<!-- Page Heading & Stats -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-3xl font-black text-text-main tracking-tight mb-1" data-i18n="vet.notifications">Notifications</h2>
+<p class="text-text-secondary" data-i18n="vet.notifications_desc">Review critical alerts and upcoming medical reminders.</p>
+</div>
+</div>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-color shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-alert-critical">gpp_maybe</span>
+</div>
+<p class="text-text-secondary text-sm font-medium mb-1" data-i18n="vet.critical_alerts">Critical Alerts</p>
+<p class="text-3xl font-bold text-text-main" id="criticalCount">0</p>
+<div class="mt-2 text-xs text-alert-critical font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">priority_high</span>
+<span data-i18n="vet.critical_alerts_desc">Requires immediate attention</span>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-color shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-alert-warning">warning</span>
+</div>
+<p class="text-text-secondary text-sm font-medium mb-1" data-i18n="vet.warnings_label">Warnings</p>
+<p class="text-3xl font-bold text-text-main" id="warningCount">0</p>
+<div class="mt-2 text-xs text-alert-warning font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">notification_important</span>
+<span data-i18n="vet.warnings_desc">Requires attention</span>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-border-color shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-text-secondary">notifications_active</span>
+</div>
+<p class="text-text-secondary text-sm font-medium mb-1" data-i18n="vet.total_notifications">Total Notifications</p>
+<p class="text-3xl font-bold text-text-main" id="totalCount">0</p>
+<div class="mt-2 text-xs text-text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">bar_chart</span>
+<span data-i18n="vet.all_notifications_desc">All notifications</span>
+</div>
+</div>
+</div>
+<!-- Chips Filter -->
+<div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+<button id="filterAll" class="flex-shrink-0 px-4 py-1.5 rounded-full bg-text-main text-white text-sm font-medium border border-transparent cursor-pointer" onclick="filterNotifications('all')" data-i18n="vet.all">All</button>
+<button id="filterCritical" class="flex-shrink-0 px-4 py-1.5 rounded-full bg-white dark:bg-surface-dark text-text-main text-sm font-medium border border-border-color hover:bg-red-50 hover:text-red-700 cursor-pointer transition-colors" onclick="filterNotifications('critical')"><span data-i18n="vet.critical_label">Critical</span> <span class="ml-1 bg-red-100 text-red-700 px-1.5 rounded text-xs font-bold" id="criticalBadge">0</span></button>
+<button id="filterWarning" class="flex-shrink-0 px-4 py-1.5 rounded-full bg-white dark:bg-surface-dark text-text-main text-sm font-medium border border-border-color hover:bg-orange-50 hover:text-orange-700 cursor-pointer transition-colors" onclick="filterNotifications('warning')"><span data-i18n="vet.warning_label">Warning</span> <span class="ml-1 bg-orange-100 text-orange-700 px-1.5 rounded text-xs font-bold" id="warningBadge">0</span></button>
+<button id="filterNormal" class="flex-shrink-0 px-4 py-1.5 rounded-full bg-white dark:bg-surface-dark text-text-main text-sm font-medium border border-border-color hover:bg-green-50 hover:text-green-700 cursor-pointer transition-colors" onclick="filterNotifications('normal')"><span data-i18n="vet.normal_label">Normal</span> <span class="ml-1 bg-green-100 text-green-700 px-1.5 rounded text-xs font-bold" id="normalBadge">0</span></button>
+<button id="markAllRead" class="flex-shrink-0 px-4 py-1.5 rounded-full bg-primary text-text-main text-sm font-medium border border-transparent cursor-pointer ml-auto" onclick="markAllAsRead()" data-i18n="vet.mark_all_read">Mark All as Read</button>
+</div>
+<!-- Notifications List -->
+<div id="notificationsList" class="flex flex-col gap-3">
+<!-- Loading state -->
+<div id="loadingState" class="text-center py-8">
+<span class="material-symbols-outlined text-4xl text-gray-300 animate-spin">sync</span>
+<p class="text-text-secondary mt-2" data-i18n="vet.loading_notifications">Loading notifications...</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+let allNotifications = [];
+
+// Get relative time string
+function getRelativeTime(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    
+    if (diffSec < 60) return 'Just now';
+    if (diffMin < 60) return `${diffMin} min${diffMin > 1 ? 's' : ''} ago`;
+    if (diffHour < 24) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+    return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+}
+
+// Get icon based on notification type
+function getNotificationIcon(type) {
+    const icons = {
+        'critical': 'medical_services',
+        'warning': 'schedule',
+        'info': 'notifications'
+    };
+    return icons[type] || 'notifications';
+}
+
+// Render notification item
+function renderNotification(notification) {
+    const typeClass = notification.notification_type === 'critical' ? 'critical' : 
+                      notification.notification_type === 'warning' ? 'warning' : 'info';
+    const borderColor = typeClass === 'critical' ? 'border-red-500' : 
+                        typeClass === 'warning' ? 'border-orange-500' : 'border-blue-500';
+    const bgColor = typeClass === 'critical' ? 'bg-red-50 text-red-600' : 
+                    typeClass === 'warning' ? 'bg-orange-50 text-orange-600' : 'bg-blue-50 text-blue-600';
+    const labelColor = typeClass === 'critical' ? 'bg-red-100 text-red-700' : 
+                       typeClass === 'warning' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700';
+    const icon = getNotificationIcon(notification.notification_type);
+    const isUnread = !notification.is_read;
+    
+    return `
+        <div class="notification-item ${typeClass} bg-white dark:bg-surface-dark rounded-xl p-4 sm:p-5 border-l-4 ${borderColor} border-y border-r border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row gap-4 relative ${isUnread ? 'ring-2 ring-primary/20' : ''}">
+            <div class="${bgColor} p-3 rounded-full h-fit w-fit flex-shrink-0">
+                <span class="material-symbols-outlined">${icon}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide ${labelColor}">${notification.notification_type}</span>
+                    <span class="text-xs text-text-secondary">• ${getRelativeTime(notification.created_at)}</span>
+                    ${isUnread && typeClass === 'critical' ? '<span class="h-2 w-2 rounded-full bg-red-500 animate-pulse ml-auto sm:ml-0"></span>' : ''}
+                    ${isUnread && typeClass === 'warning' ? '<span class="h-2 w-2 rounded-full bg-orange-500 animate-pulse ml-auto sm:ml-0"></span>' : ''}
+                    ${isUnread && typeClass === 'info' ? '<span class="h-2 w-2 rounded-full bg-primary ml-auto sm:ml-0"></span>' : ''}
+                </div>
+                <h3 class="font-bold text-lg text-text-main mb-1">${notification.title}</h3>
+                <p class="text-text-secondary text-sm mb-3">${notification.message}</p>
+                ${notification.owner_name ? `<p class="text-xs text-text-secondary mb-3"><strong>Owner:</strong> ${notification.owner_name} (${notification.owner_mobile || 'N/A'})</p>` : ''}
+                <div class="flex flex-wrap gap-2">
+                    <a href="/vetdashboard" class="px-3 py-1.5 bg-primary text-text-main text-xs font-bold rounded-lg shadow-sm hover:bg-primary-dark hover:text-white transition-colors">View Patient Queue</a>
+                    ${!notification.is_read ? '<button onclick="markAsRead(' + notification.id + ')" class="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-text-main text-xs font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Mark as Read</button>' : ''}
+                </div>
+            </div>
+            <div class="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 sm:flex sm:flex-col sm:justify-between sm:items-end">
+                ${notification.is_read ? '<span class="text-xs text-gray-400">Read</span>' : '<span class="text-xs text-primary font-medium">New</span>'}
+            </div>
+        </div>
+    `;
+}
+
+// Load notifications from API
+async function loadNotifications() {
+    try {
+        const response = await fetch('/api/vet/notifications');
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            allNotifications = data.notifications;
+            renderNotifications();
+            updateStats();
+        }
+    } catch (error) {
+        console.error('Error loading notifications:', error);
+        document.getElementById('loadingState').innerHTML = `
+            <span class="material-symbols-outlined text-4xl text-gray-300">error</span>
+            <p class="text-text-secondary mt-2">Failed to load notifications</p>
+        `;
+    }
+}
+
+// Render notifications list
+function renderNotifications() {
+    const container = document.getElementById('notificationsList');
+    
+    if (allNotifications.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <span class="material-symbols-outlined text-6xl text-gray-300">notifications_off</span>
+                <p class="text-text-secondary mt-2 text-lg">No notifications yet</p>
+                <p class="text-text-secondary text-sm">New appointment requests will appear here</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = allNotifications.map(n => renderNotification(n)).join('');
+}
+
+// Update stats
+function updateStats() {
+    const critical = allNotifications.filter(n => n.notification_type === 'critical' && !n.is_read).length;
+    const warning = allNotifications.filter(n => n.notification_type === 'warning' && !n.is_read).length;
+    const normal = allNotifications.filter(n => (n.notification_type === 'normal' || n.notification_type === 'info') && !n.is_read).length;
+    const total = allNotifications.length;
+    
+    document.getElementById('criticalCount').textContent = critical;
+    document.getElementById('warningCount').textContent = warning;
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('criticalBadge').textContent = critical;
+    document.getElementById('warningBadge').textContent = warning;
+    
+    const normalBadge = document.getElementById('normalBadge');
+    if (normalBadge) normalBadge.textContent = normal;
+}
+
+// Mark notification as read
+async function markAsRead(notificationId) {
+    try {
+        const response = await fetch(`/api/vet/notifications/${notificationId}/read`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            // Update local state
+            const notification = allNotifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.is_read = 1;
+            }
+            renderNotifications();
+            updateStats();
+        }
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+    }
+}
+
+// Mark all as read
+async function markAllAsRead() {
+    try {
+        const response = await fetch('/api/vet/notifications/mark-all-read', {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            allNotifications.forEach(n => n.is_read = 1);
+            renderNotifications();
+            updateStats();
+        }
+    } catch (error) {
+        console.error('Error marking all as read:', error);
+    }
+}
+
+// Filter notifications
+function filterNotifications(type) {
+    const notifications = document.querySelectorAll('.notification-item');
+    const filterButtons = document.querySelectorAll('[id^="filter"]');
+    
+    // Update button styles - reset all first
+    filterButtons.forEach(btn => {
+        if (btn.id === 'markAllRead') return;
+        btn.classList.remove('bg-text-main', 'text-white', 'bg-red-100', 'text-red-700', 
+                           'bg-orange-100', 'text-orange-700', 'bg-green-100', 'text-green-700', 'font-semibold');
+        btn.classList.add('bg-white', 'dark:bg-surface-dark', 'text-text-main', 'border', 'border-border-color');
+    });
+    
+    // Map filter type to button ID
+    const filterMap = {
+        'all': 'filterAll',
+        'critical': 'filterCritical',
+        'warning': 'filterWarning',
+        'normal': 'filterNormal',
+        'info': 'filterNormal'
+    };
+    
+    const activeBtn = document.getElementById(filterMap[type] || 'filterAll');
+    if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'dark:bg-surface-dark', 'text-text-main', 'border', 'border-border-color');
+        
+        if (type === 'critical') {
+            activeBtn.classList.add('bg-red-100', 'text-red-700', 'font-semibold');
+        } else if (type === 'warning') {
+            activeBtn.classList.add('bg-orange-100', 'text-orange-700', 'font-semibold');
+        } else if (type === 'normal' || type === 'info') {
+            activeBtn.classList.add('bg-green-100', 'text-green-700', 'font-semibold');
+        } else {
+            activeBtn.classList.add('bg-text-main', 'text-white');
+        }
+    }
+    
+    // Filter notifications
+    let visibleCount = 0;
+    notifications.forEach(notification => {
+        const notificationType = notification.classList.contains('critical') ? 'critical' : 
+                                notification.classList.contains('warning') ? 'warning' : 'normal';
+        
+        let show = false;
+        if (type === 'all') {
+            show = true;
+        } else if (type === 'normal' || type === 'info') {
+            show = (notificationType === 'info' || notificationType === 'normal' || 
+                   (!notification.classList.contains('critical') && !notification.classList.contains('warning')));
+        } else {
+            show = (notificationType === type);
+        }
+        
+        notification.style.display = show ? 'flex' : 'none';
+        if (show) visibleCount++;
+    });
+    
+    console.log('Vet Filter:', type, 'Visible:', visibleCount);
+}
+
+// Helper function to get translation
+function getTranslation(key) {
+    if (window.i18n) {
+        return window.i18n.getTranslation(key, window.i18n.currentLanguage);
+    }
+    return key;
+}
+
+// Function to update doctor name with translated title
+function updateDoctorNameDisplay() {
+    const doctorNameEl = document.getElementById('vetDoctorName');
+    if (doctorNameEl) {
+        let fullName = doctorNameEl.getAttribute('data-name');
+        // Remove any existing "Dr." or "डॉ." prefix to avoid duplication
+        fullName = fullName.replace(/^(Dr\.\s*|डॉ\.\s*)/, '').trim();
+        const doctorTitle = getTranslation('vet.doctor_title');
+        doctorNameEl.textContent = doctorTitle + ' ' + fullName;
+    }
+}
+
+// Load on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadNotifications();
+    updateDoctorNameDisplay();
+    
+    // Update doctor title when language changes
+    window.addEventListener('languageChanged', () => {
+        updateDoctorNameDisplay();
+    });
+});
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+</body></html>

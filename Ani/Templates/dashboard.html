@@ -1,0 +1,2060 @@
+<!-- User Home Dashboard -->
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Livestock Health Monitoring Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-dark h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">agriculture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium" data-i18n="header.dashboard">Dashboard</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-6">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-[#111813] dark:text-white text-3xl font-bold leading-tight" data-i18n="dashboard.page_title">Dashboard Overview</h1>
+<p class="text-gray-500 dark:text-gray-400 mt-1" data-i18n="dashboard.page_desc">Monitor real-time health metrics of your livestock.</p>
+</div>
+<div class="flex items-center gap-3 bg-white dark:bg-[#1a2e22] p-1.5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="px-3 flex items-center gap-2 border-r border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-gray-400">filter_alt</span>
+<span class="text-sm font-medium text-gray-600 dark:text-gray-300" data-i18n="dashboard.filter_pet">Filter Pet:</span>
+</div>
+<div class="relative flex items-center">
+<select id="petFilter" class="bg-transparent border-none text-sm font-semibold text-text-dark dark:text-white focus:ring-0 cursor-pointer pr-8 py-1 appearance-none" data-i18n-placeholder="dashboard.select_species">
+<option value="" disabled selected data-i18n="dashboard.select_species">Select Species</option>
+{% for animal in animals %}
+<option value="{{ animal.tag }}">{{ animal.species }} #{{ animal.tag }} - {{ animal.name }}</option>
+{% endfor %}
+</select>
+<span class="material-symbols-outlined text-gray-500 text-[18px] pointer-events-none absolute right-1">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Biometric Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Heart Rate Card -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-xl p-5 border border-border-color shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-2px_rgba(19,236,91,0.15)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-500">
+<span class="material-symbols-outlined">ecg_heart</span>
+</div>
+<span class="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full flex items-center gap-1" id="hrTrend">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> --
+                            </span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium" data-i18n="dashboard.heart_rate">Heart Rate</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-text-dark dark:text-white" id="hrValue">-- <span class="text-lg font-normal text-gray-400">bpm</span></h3>
+</div>
+<!-- Mini chart visualization using CSS gradients -->
+<div class="h-10 mt-4 w-full bg-[linear-gradient(to_right,transparent_0%,rgba(239,68,68,0.1)_100%)] relative overflow-hidden rounded-md flex items-end">
+<svg class="w-full h-full text-red-400" preserveaspectratio="none" viewbox="0 0 100 40">
+<path d="M0 30 Q 10 25 20 30 T 40 20 T 60 25 T 80 15 T 100 25" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Blood Pressure Card -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-xl p-5 border border-border-color shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-2px_rgba(19,236,91,0.15)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-500">
+<span class="material-symbols-outlined">cardiology</span>
+</div>
+<span class="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full" id="bpStatus">--</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium" data-i18n="dashboard.blood_pressure">Blood Pressure</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-text-dark dark:text-white" id="bpValue">--/--</h3>
+<span class="text-xs text-gray-400">mmHg</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full mt-6 overflow-hidden">
+<div class="bg-blue-500 h-full rounded-full" style="width: 75%"></div>
+</div>
+<p class="text-xs text-gray-400 mt-2" data-i18n="dashboard.systolic_range">Systolic within range</p>
+</div>
+<!-- Body Movement Card -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-xl p-5 border border-border-color shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-2px_rgba(19,236,91,0.15)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-orange-500">
+<span class="material-symbols-outlined">run_circle</span>
+</div>
+<span class="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full" id="movementStatus">--</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium" data-i18n="dashboard.body_movement">Body Movement</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-text-dark dark:text-white" id="movementValue">--</h3>
+</div>
+<div class="h-10 mt-4 w-full flex items-end gap-1">
+<div class="w-1/6 bg-orange-200 dark:bg-orange-900 rounded-sm h-[40%]"></div>
+<div class="w-1/6 bg-orange-300 dark:bg-orange-800 rounded-sm h-[60%]"></div>
+<div class="w-1/6 bg-orange-400 dark:bg-orange-700 rounded-sm h-[30%]"></div>
+<div class="w-1/6 bg-orange-500 dark:bg-orange-600 rounded-sm h-[80%]"></div>
+<div class="w-1/6 bg-orange-400 dark:bg-orange-700 rounded-sm h-[50%]"></div>
+<div class="w-1/6 bg-orange-300 dark:bg-orange-800 rounded-sm h-[70%]"></div>
+</div>
+</div>
+<!-- Temperature Card -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-xl p-5 border border-border-color shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_-2px_rgba(19,236,91,0.15)] transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-teal-50 dark:bg-teal-900/20 rounded-lg text-teal-500">
+<span class="material-symbols-outlined">thermometer</span>
+</div>
+<span class="text-xs font-bold text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full" id="tempStatus">--</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium" data-i18n="dashboard.temperature">Body Temperature</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-3xl font-bold text-text-dark dark:text-white" id="tempValue">-- <span class="text-lg font-normal text-gray-400">°C</span></h3>
+</div>
+<div class="mt-5 flex items-center gap-2">
+<span class="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+<div class="h-full bg-teal-400" id="tempBar" style="width: 60%"></div>
+</span>
+</div>
+<p class="text-xs text-gray-400 mt-2" id="tempAvg">Select an animal</p>
+</div>
+</div>
+<!-- Charts & Trends Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto">
+<!-- Main Trend Graph -->
+<div class="lg:col-span-2 bg-white dark:bg-[#1a2e22] p-6 rounded-xl border border-border-color shadow-sm">
+<div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+<div>
+<h3 class="text-lg font-bold text-text-dark dark:text-white" data-i18n="dashboard.health_index_trend">Health Index Trend</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="dashboard.overall_herd_vitality">Overall herd vitality over time</p>
+</div>
+<div class="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+<button id="trend1day" class="px-3 py-1 text-xs font-bold bg-white dark:bg-gray-600 text-text-dark dark:text-white shadow-sm rounded-md transition-all active-period" onclick="loadTrendData('1day')" data-i18n="dashboard.1_day">1 Day</button>
+<button id="trend1week" class="px-3 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-text-dark transition-all" onclick="loadTrendData('7days')" data-i18n="dashboard.1_week">1 Week</button>
+</div>
+</div>
+<!-- Chart Placeholder Area -->
+<div class="w-full h-[300px] relative bg-[linear-gradient(to_bottom,rgba(19,236,91,0.03),rgba(255,255,255,0))] dark:bg-none rounded-lg border border-dashed border-gray-200 dark:border-gray-700 flex items-end px-4 pb-8">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between py-8 px-8 pointer-events-none">
+<div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
+<div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
+<div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
+<div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
+<div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
+</div>
+<!-- SVG Chart Line -->
+<svg id="trendChart" class="w-full h-full absolute inset-0 text-primary drop-shadow-md z-10" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0 70 Q 10 65 20 50 T 40 45 T 60 30 T 80 40 T 100 20" fill="none" stroke="currentColor" stroke-width="0.8" vector-effect="non-scaling-stroke"></path>
+<defs>
+<lineargradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#13ec5b" stop-opacity="0.5"></stop>
+<stop offset="100%" stop-color="#13ec5b" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 70 Q 10 65 20 50 T 40 45 T 60 30 T 80 40 T 100 20 V 100 H 0 Z" fill="url(#gradient)" opacity="0.2" stroke="none"></path>
+</svg>
+<!-- X-Axis Labels -->
+<div id="xAxisLabels" class="absolute bottom-2 left-4 right-4 flex justify-between text-xs text-gray-400">
+<span>Mon</span>
+<span>Tue</span>
+<span>Wed</span>
+<span>Thu</span>
+<span>Fri</span>
+<span>Sat</span>
+<span>Sun</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Quick Status or Notifications -->
+<div class="bg-primary text-text-dark p-6 rounded-xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+<!-- Decorative background circle -->
+<div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white opacity-20 blur-2xl"></div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-3xl">medical_services</span>
+<h3 class="text-xl font-bold" data-i18n="dashboard.health_summary">Health Summary</h3>
+</div>
+<p class="text-sm font-medium opacity-80 mb-6" id="summaryDescription" data-i18n="dashboard.no_readings">No health readings recorded yet. Readings will appear here after the first health check.</p>
+<div class="space-y-4">
+<div class="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex items-center justify-between">
+<span class="text-sm font-bold" data-i18n="dashboard.temperature_label">Avg Temperature</span>
+<span class="text-lg font-bold" id="summaryTempCard">--</span>
+</div>
+<div class="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex items-center justify-between">
+<span class="text-sm font-bold" data-i18n="dashboard.heart_rate_label">Avg Heart Rate</span>
+<span class="text-lg font-bold" id="summaryHRCard">--</span>
+</div>
+<div class="bg-white/20 backdrop-blur-sm rounded-lg p-3 flex items-center justify-between">
+<span class="text-sm font-bold" data-i18n="dashboard.health_index">Health Index</span>
+<span class="text-lg font-bold" id="summaryIndexCard">--</span>
+</div>
+</div>
+</div>
+<a href="#" id="viewDetailedReportBtn" onclick="goToExportWithAnimal()" class="mt-6 w-full py-3 bg-white text-green-700 font-bold rounded-lg shadow-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-center cursor-pointer">
+                            <span data-i18n="dashboard.view_detailed_report">View Detailed Report</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Single Animal Live Health Status Section -->
+<div class="bg-white dark:bg-[#1a2e22] rounded-xl border border-border-color shadow-sm overflow-hidden">
+<div class="p-6 border-b border-border-color flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<h3 class="text-lg font-bold text-text-dark dark:text-white" data-i18n="dashboard.live_health_status">Live Health Status</h3>
+<div class="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span data-i18n="dashboard.live">Live</span>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+<div class="flex flex-col">
+<span class="text-xs text-gray-500 dark:text-gray-400">Next Reading</span>
+<span class="text-sm font-bold text-gray-900 dark:text-white" id="nextReadingCountdown">5:00</span>
+</div>
+</div>
+</div>
+
+<!-- Current Animal Summary -->
+<div class="p-6">
+<div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+<!-- Animal ID -->
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2" data-i18n="dashboard.animal_id">Animal ID</p>
+<p class="text-lg font-bold text-gray-900 dark:text-white" id="animalId">#---</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="animalSpecies">Select an animal</p>
+</div>
+
+<!-- Temperature -->
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2" data-i18n="dashboard.temperature_label">Temperature (Avg)</p>
+<p class="text-lg font-bold text-gray-900 dark:text-white" id="temperature">--</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">No readings yet</p>
+</div>
+
+<!-- Heart Rate -->
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2" data-i18n="dashboard.heart_rate_label">Heart Rate (Avg)</p>
+<p class="text-lg font-bold text-gray-900 dark:text-white" id="heartRate">--</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">No readings yet</p>
+</div>
+
+<!-- Health Status -->
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2" data-i18n="dashboard.status">Status</p>
+<p class="text-lg font-bold text-gray-500" id="healthStatus">--</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="lastUpdate">No data</p>
+</div>
+
+<!-- Health Index -->
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2" data-i18n="dashboard.health_index">Health Index</p>
+<p class="text-lg font-bold text-gray-500" id="healthIndex">--</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1" data-i18n="dashboard.overall">Overall</p>
+</div>
+
+<!-- Book Appointment Button / Appointment Booked Status -->
+<div class="hidden" id="bookAppointmentContainer">
+<button class="w-full bg-primary text-text-dark font-bold py-3 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2 h-full" id="bookAppointmentBtn">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span data-i18n="dashboard.book_appointment">Book Appointment</span>
+</button>
+</div>
+<div class="hidden" id="appointmentBookedContainer">
+<div class="w-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold py-3 px-4 rounded-lg flex flex-col items-center justify-center gap-1 h-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span data-i18n="dashboard.appointment_booked">Appointment Booked</span>
+</div>
+<p class="text-xs font-normal text-green-600 dark:text-green-500" id="appointmentTime">--</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Last 10 Readings Table -->
+<div class="border-t border-border-color">
+<div class="p-6">
+<h4 class="text-md font-bold text-text-dark dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">table_chart</span>
+<span data-i18n="dashboard.readings_table">Last 10 Readings</span>
+</h4>
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+<thead>
+<tr class="border-b border-gray-200 dark:border-gray-700">
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.time">Time</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.temperature_label">Temperature</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.heart_rate_label">Heart Rate</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.bp_label">Blood Pressure</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.movement">Movement</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.health_index">Health Index</th>
+<th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="dashboard.status">Status</th>
+</tr>
+</thead>
+<tbody id="readingsTable" class="divide-y divide-gray-100 dark:divide-gray-800">
+<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">No readings yet</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom spacing -->
+<div class="h-10"></div>
+</main>
+</div>
+
+<!-- Notification Popup Modal -->
+<div id="notificationPopup" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+    <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform transition-all">
+        <div class="p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div id="notificationIcon" class="bg-yellow-50 dark:bg-yellow-900/20 text-yellow-500 flex items-center justify-center rounded-xl shrink-0 size-14">
+                    <span class="material-symbols-outlined text-3xl">warning</span>
+                </div>
+                <div>
+                    <h3 id="notificationTitle" class="text-xl font-bold text-gray-900 dark:text-white">Health Alert</h3>
+                    <p id="notificationTime" class="text-sm text-gray-500 dark:text-gray-400">Just now</p>
+                </div>
+            </div>
+            <p id="notificationMessage" class="text-gray-600 dark:text-gray-300 text-base mb-6">
+                Your animal has shown consistent health readings for the last 3 hours.
+            </p>
+            <div id="notificationDetails" class="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6">
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold" data-i18n="notification.popup_status">Status</p>
+                        <p id="notificationStatus" class="text-lg font-bold text-yellow-600">Warning</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold" data-i18n="notification.popup_avg_temp">Avg Temp</p>
+                        <p id="notificationTemp" class="text-lg font-bold text-gray-900 dark:text-white">38.5°C</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold" data-i18n="notification.popup_health_index">Health Index</p>
+                        <p id="notificationIndex" class="text-lg font-bold text-gray-900 dark:text-white">75%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeNotificationPopup()" class="flex-1 py-3 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-i18n="notification.dismiss">
+                    Dismiss
+                </button>
+                <a href="{{ url_for('notifications') }}" class="flex-1 py-3 px-4 bg-primary text-white font-semibold rounded-xl hover:bg-green-600 transition-colors text-center" data-i18n="notification.view_all">
+                    View All
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer" class="fixed top-20 right-4 z-40 flex flex-col gap-3 max-w-sm">
+</div>
+
+<script>
+// Current user email from session (to detect user changes)
+const currentUserEmail = '{{ session.get("user_email", "") }}';
+
+// Clear localStorage data when user changes
+const storedUserEmail = localStorage.getItem('dashboardUserEmail');
+if (storedUserEmail && storedUserEmail !== currentUserEmail) {
+    console.log(`User changed from ${storedUserEmail} to ${currentUserEmail} - clearing stored data`);
+    localStorage.removeItem('selectedDashboardAnimal');
+    // Clear notification status for all animals
+    Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('last_notified_status_')) {
+            localStorage.removeItem(key);
+        }
+    });
+}
+// Store current user email
+localStorage.setItem('dashboardUserEmail', currentUserEmail);
+
+// Animal data from database
+const dashboardAnimals = {
+    {% for animal in animals %}
+    '{{ animal.tag }}': { 
+        name: '{{ animal.name }}', 
+        tag: '{{ animal.tag }}', 
+        species: '{{ animal.species }}',
+        weight: {{ animal.weight or 0 }},
+        age: {{ animal.age or 0 }},
+        gender: '{{ animal.gender or "Unknown" }}'
+    },
+    {% endfor %}
+};
+
+// Health status colors
+const statusColors = {
+    'Healthy': 'text-green-600',
+    'Warning': 'text-yellow-600',
+    'Ill': 'text-red-600'
+};
+
+const statusBgColors = {
+    'Healthy': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+    'Warning': 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400',
+    'Ill': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+};
+
+// Store readings for ALL animals (keyed by animal tag)
+let allAnimalReadings = {};
+const MAX_READINGS = 10;
+const AVG_READINGS_COUNT = 3;
+
+// Cache key for sessionStorage
+const READINGS_CACHE_KEY = 'dashboardReadingsCache';
+const CACHE_TIMESTAMP_KEY = 'dashboardReadingsCacheTime';
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes cache validity
+
+// Currently selected animal tag
+let selectedAnimalTag = null;
+
+// Movement score mapping for averaging
+const movementScores = {
+    'Active': 100,
+    'Normal': 75,
+    'Inactive': 50,
+    'Lying Down': 25,
+    'Low': 40
+};
+
+const movementFromScore = (score) => {
+    if (score >= 90) return 'Active';
+    if (score >= 60) return 'Normal';
+    if (score >= 40) return 'Inactive';
+    return 'Low';
+};
+
+// Save readings to sessionStorage cache
+function saveReadingsToCache() {
+    try {
+        const cacheData = {};
+        Object.keys(allAnimalReadings).forEach(tag => {
+            if (allAnimalReadings[tag] && allAnimalReadings[tag].length > 0) {
+                cacheData[tag] = allAnimalReadings[tag].map(r => ({
+                    heart_rate: r.heart_rate,
+                    body_temp: r.body_temp,
+                    blood_pressure: r.blood_pressure,
+                    movement: r.movement,
+                    health_index: r.health_index,
+                    status: r.status,
+                    timestamp: r.timestamp.toISOString()
+                }));
+            }
+        });
+        sessionStorage.setItem(READINGS_CACHE_KEY, JSON.stringify(cacheData));
+        sessionStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+        console.log('Saved readings to cache');
+    } catch (e) {
+        console.log('Could not save to cache:', e);
+    }
+}
+
+// Load readings from sessionStorage cache
+function loadReadingsFromCache() {
+    try {
+        const cacheTime = parseInt(sessionStorage.getItem(CACHE_TIMESTAMP_KEY) || '0');
+        const now = Date.now();
+        
+        // Check if cache is still valid (within 5 minutes)
+        if (now - cacheTime > CACHE_DURATION_MS) {
+            console.log('Cache expired, will load from database');
+            return false;
+        }
+        
+        const cacheData = sessionStorage.getItem(READINGS_CACHE_KEY);
+        if (!cacheData) {
+            return false;
+        }
+        
+        const parsed = JSON.parse(cacheData);
+        Object.keys(parsed).forEach(tag => {
+            // Only load for animals that exist in current dashboard
+            if (dashboardAnimals[tag]) {
+                allAnimalReadings[tag] = parsed[tag].map(r => ({
+                    heart_rate: r.heart_rate,
+                    body_temp: r.body_temp,
+                    blood_pressure: r.blood_pressure,
+                    movement: r.movement,
+                    health_index: r.health_index,
+                    status: r.status,
+                    timestamp: new Date(r.timestamp)
+                }));
+            }
+        });
+        
+        console.log('Loaded readings from cache, age:', Math.round((now - cacheTime) / 1000), 'seconds');
+        return true;
+    } catch (e) {
+        console.log('Could not load from cache:', e);
+        return false;
+    }
+}
+
+// Initialize readings storage for all animals
+function initializeAllAnimalReadings() {
+    Object.keys(dashboardAnimals).forEach(tag => {
+        if (!allAnimalReadings[tag]) {
+            allAnimalReadings[tag] = [];
+        }
+    });
+}
+
+// Function to detect outliers using IQR method
+function isOutlier(value, values) {
+    if (values.length < 3) return false;
+    
+    const sorted = [...values].sort((a, b) => a - b);
+    
+    // Calculate quartiles using proper method
+    let q1, q3;
+    if (sorted.length === 3) {
+        q1 = sorted[0];
+        q3 = sorted[2];
+    } else if (sorted.length === 4) {
+        q1 = (sorted[0] + sorted[1]) / 2;
+        q3 = (sorted[2] + sorted[3]) / 2;
+    } else {
+        // For 5+ values, use standard quartile calculation
+        const q1Index = Math.ceil(sorted.length * 0.25) - 1;
+        const q3Index = Math.ceil(sorted.length * 0.75) - 1;
+        q1 = sorted[q1Index];
+        q3 = sorted[q3Index];
+    }
+    
+    const iqr = q3 - q1;
+    
+    // For very small IQR (all values similar), don't mark as outlier
+    if (iqr === 0) return false;
+    
+    const lowerBound = q1 - 1.5 * iqr;
+    const upperBound = q3 + 1.5 * iqr;
+    
+    return value < lowerBound || value > upperBound;
+}
+
+// Function to calculate averages from last 3 readings, ignoring outliers
+function calculateAverages(animalTag) {
+    const readings = allAnimalReadings[animalTag] || [];
+    if (readings.length === 0) return null;
+    
+    // Use only last 3 readings
+    const readingsForAvg = readings.slice(0, AVG_READINGS_COUNT);
+    
+    // Extract heart rates, body temps, and blood pressures
+    const heartRates = readingsForAvg.map(r => r.heart_rate);
+    const bodyTemps = readingsForAvg.map(r => r.body_temp);
+    const bloodPressures = readingsForAvg.map(r => r.blood_pressure);
+    const movements = readingsForAvg.map(r => r.movement);
+    const healthIndices = readingsForAvg.map(r => r.health_index);
+    
+    // Filter outliers for numeric values ONLY if we have more than 2 readings
+    const validHeartRates = readingsForAvg.length > 2
+        ? heartRates.filter(v => !isOutlier(v, heartRates))
+        : heartRates;
+    const validBodyTemps = readingsForAvg.length > 2
+        ? bodyTemps.filter(v => !isOutlier(v, bodyTemps))
+        : bodyTemps;
+    const validBPs = readingsForAvg.length > 2
+        ? bloodPressures.filter(v => !isOutlier(v, bloodPressures))
+        : bloodPressures;
+    const validHealthIndices = readingsForAvg.length > 2
+        ? healthIndices.filter(v => !isOutlier(v, healthIndices))
+        : healthIndices;
+    
+    // Calculate averages using non-outlier values (fallback to all if all filtered)
+    const avgHeartRate = validHeartRates.length > 0 
+        ? validHeartRates.reduce((a, b) => a + b, 0) / validHeartRates.length 
+        : heartRates.reduce((a, b) => a + b, 0) / heartRates.length;
+    
+    const avgBodyTemp = validBodyTemps.length > 0
+        ? validBodyTemps.reduce((a, b) => a + b, 0) / validBodyTemps.length
+        : bodyTemps.reduce((a, b) => a + b, 0) / bodyTemps.length;
+    
+    const avgBP = validBPs.length > 0
+        ? validBPs.reduce((a, b) => a + b, 0) / validBPs.length
+        : bloodPressures.reduce((a, b) => a + b, 0) / bloodPressures.length;
+    
+    const avgHealthIndex = validHealthIndices.length > 0
+        ? validHealthIndices.reduce((a, b) => a + b, 0) / validHealthIndices.length
+        : healthIndices.reduce((a, b) => a + b, 0) / healthIndices.length;
+    
+    // For movement, use most common value (mode)
+    const movementCounts = {};
+    movements.forEach(m => {
+        movementCounts[m] = (movementCounts[m] || 0) + 1;
+    });
+    const avgMovement = Object.keys(movementCounts).reduce((a, b) => 
+        movementCounts[a] > movementCounts[b] ? a : b
+    );
+    
+    const avgMovementScore = movementScores[avgMovement] || 50;
+    
+    return {
+        heart_rate: Math.round(avgHeartRate),
+        body_temp: avgBodyTemp.toFixed(1),
+        blood_pressure: Math.round(avgBP),
+        movement: avgMovement,
+        movement_score: avgMovementScore.toFixed(0),
+        health_index: avgHealthIndex.toFixed(1),
+        readings_count: readings.length,
+        outliers_removed: (readingsForAvg.length - validHeartRates.length)
+    };
+}
+
+// Function to update overview cards with averages
+function updateOverviewCards(averages) {
+    if (!averages) return;
+    
+    // Update Heart Rate card
+    document.getElementById('hrValue').innerHTML = `${averages.heart_rate} <span class="text-lg font-normal text-gray-400">bpm</span>`;
+    const hrNextEl = document.querySelector('[id="hrValue"]').parentElement.nextElementSibling;
+    if (hrNextEl) {
+        hrNextEl.textContent = window.i18n ? window.i18n.getTranslation('dashboard.avg_of_last_3') : `Avg of last 3`;
+    }
+    
+    // Update Blood Pressure card
+    document.getElementById('bpValue').textContent = `${averages.blood_pressure}/80`;
+    const bpNextEl = document.querySelector('[id="bpValue"]').parentElement.nextElementSibling;
+    if (bpNextEl) {
+        bpNextEl.textContent = window.i18n ? window.i18n.getTranslation('dashboard.avg_of_last_3') : `Avg of last 3`;
+    }
+    
+    // Update Movement card
+    const avgMovement = averages.movement || 'Normal';
+    let translatedMovement = window.i18n ? window.i18n.getTranslation(`movement.${avgMovement.toLowerCase().replace(/\s+/g, '_')}`) : avgMovement;
+    document.getElementById('movementValue').textContent = translatedMovement;
+    const movementStatusEl = document.getElementById('movementStatus');
+    if (avgMovement === 'Active') {
+        movementStatusEl.textContent = window.i18n ? window.i18n.getTranslation('movement.active') : 'Active';
+        movementStatusEl.className = 'text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-full';
+    } else if (avgMovement === 'Normal' || avgMovement === 'Resting') {
+        movementStatusEl.textContent = window.i18n ? window.i18n.getTranslation(`movement.${avgMovement.toLowerCase().replace(/\s+/g, '_')}`) : avgMovement;
+        movementStatusEl.className = 'text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded-full';
+    } else {
+        movementStatusEl.textContent = window.i18n ? window.i18n.getTranslation(`movement.${avgMovement.toLowerCase().replace(/\s+/g, '_')}`) : avgMovement;
+        movementStatusEl.className = 'text-xs font-bold text-yellow-600 bg-yellow-50 dark:bg-yellow-900/30 px-2 py-1 rounded-full';
+    }
+    
+    // Update Temperature card
+    document.getElementById('tempValue').innerHTML = `${averages.body_temp} <span class="text-lg font-normal text-gray-400">°C</span>`;
+    document.getElementById('tempAvg').textContent = window.i18n ? window.i18n.getTranslation('dashboard.avg_of_last_3_readings') : `Avg of last 3 readings`;
+}
+
+// Function to add reading for a specific animal
+function addReadingForAnimal(animalTag, healthData) {
+    if (!allAnimalReadings[animalTag]) {
+        allAnimalReadings[animalTag] = [];
+    }
+    
+    // Add new reading to beginning
+    allAnimalReadings[animalTag].unshift({
+        heart_rate: healthData.heart_rate,
+        body_temp: healthData.body_temp,
+        blood_pressure: healthData.blood_pressure,
+        movement: healthData.movement,
+        health_index: healthData.health_index,
+        status: healthData.status,
+        timestamp: new Date()
+    });
+    
+    // Keep only last 10 readings in memory
+    if (allAnimalReadings[animalTag].length > MAX_READINGS) {
+        allAnimalReadings[animalTag] = allAnimalReadings[animalTag].slice(0, MAX_READINGS);
+    }
+    
+    // Save to database
+    saveReadingToDatabase(animalTag, healthData);
+    
+    // Update cache with new reading
+    saveReadingsToCache();
+    
+    // If this is the currently selected animal, update the display
+    if (animalTag === selectedAnimalTag) {
+        const averages = calculateAverages(animalTag);
+        updateOverviewCards(averages);
+        updateReadingsTable(animalTag);
+        updateLiveHealthDisplay(animalTag);
+    }
+    
+    // Always update health summary
+    updateHealthSummary();
+}
+
+// Function to save reading to database
+async function saveReadingToDatabase(animalTag, healthData) {
+    try {
+        const response = await fetch(`/api/health-readings/${animalTag}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                heart_rate: healthData.heart_rate,
+                body_temp: healthData.body_temp,
+                blood_pressure: healthData.blood_pressure,
+                movement: healthData.movement,
+                health_index: healthData.health_index,
+                status: healthData.status,
+                timestamp: new Date().toISOString()
+            })
+        });
+        
+        const data = await response.json();
+        if (data.status === 'success') {
+            console.log(`Reading saved to database for ${animalTag}`);
+        }
+    } catch (error) {
+        console.error(`Error saving reading to database for ${animalTag}:`, error);
+    }
+}
+
+// Function to load readings from database for a specific animal
+async function loadReadingsFromDatabase(animalTag, limit = 10) {
+    try {
+        const response = await fetch(`/api/health-readings/${animalTag}?limit=${limit}`);
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.readings.length > 0) {
+            // Convert stored readings to display format
+            allAnimalReadings[animalTag] = data.readings.map(r => ({
+                heart_rate: r.heart_rate,
+                body_temp: r.body_temp,
+                blood_pressure: r.blood_pressure,
+                movement: r.movement,
+                health_index: r.health_index,
+                status: r.status,
+                timestamp: new Date(r.timestamp)
+            }));
+            
+            console.log(`Loaded ${data.readings.length} readings from database for ${animalTag}`);
+        } else {
+            allAnimalReadings[animalTag] = [];
+        }
+    } catch (error) {
+        console.error(`Error loading readings from database for ${animalTag}:`, error);
+        allAnimalReadings[animalTag] = [];
+    }
+}
+
+// Function to load all readings from database for all user's animals
+async function loadAllReadingsFromDatabase() {
+    try {
+        const response = await fetch(`/api/health-readings/all?limit=${MAX_READINGS}`);
+        
+        if (!response.ok) {
+            console.error('API response not ok:', response.status);
+            return false;
+        }
+        
+        const data = await response.json();
+        
+        console.log('API response:', data);
+        
+        if (data.status === 'success') {
+            // Convert stored readings to display format for each animal
+            // Only include animals that exist in dashboardAnimals (user's actual animals)
+            let loadedCount = 0;
+            Object.keys(data.readings).forEach(tag => {
+                // Skip if this animal is not in the user's dashboard
+                if (!dashboardAnimals[tag]) {
+                    console.log(`Skipping readings for ${tag} - not in user's animals`);
+                    return;
+                }
+                
+                if (data.readings[tag] && data.readings[tag].length > 0) {
+                    allAnimalReadings[tag] = data.readings[tag].map(r => ({
+                        heart_rate: r.heart_rate,
+                        body_temp: r.body_temp,
+                        blood_pressure: r.blood_pressure,
+                        movement: r.movement,
+                        health_index: r.health_index,
+                        status: r.status,
+                        timestamp: new Date(r.timestamp)
+                    }));
+                    loadedCount++;
+                    console.log(`Loaded ${data.readings[tag].length} readings for ${tag}`);
+                }
+            });
+            
+            console.log(`Total animals with readings: ${loadedCount}`);
+            
+            // Save to cache for faster page loads
+            saveReadingsToCache();
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error loading all readings from database:', error);
+        return false;
+    }
+}
+
+// Function to update the health summary for the selected animal
+function updateHealthSummaryForSelectedAnimal(animalTag) {
+    if (!animalTag) {
+        // No animal selected - show empty state
+        document.getElementById('summaryTempCard').textContent = '--';
+        document.getElementById('summaryHRCard').textContent = '--';
+        document.getElementById('summaryIndexCard').textContent = '--';
+        document.getElementById('summaryDescription').textContent = window.i18n ? window.i18n.getTranslation('dashboard.select_animal') : 'Select an animal to view health details.';
+        return;
+    }
+    
+    const readings = allAnimalReadings[animalTag] || [];
+    
+    if (readings.length === 0) {
+        // No readings yet - show empty state
+        document.getElementById('summaryTempCard').textContent = '--';
+        document.getElementById('summaryHRCard').textContent = '--';
+        document.getElementById('summaryIndexCard').textContent = '--';
+        document.getElementById('summaryDescription').textContent = window.i18n ? window.i18n.getTranslation('dashboard.no_readings') : 'No health readings recorded yet. Readings will appear here after the first health check.';
+        return;
+    }
+    
+    // Calculate averages for the selected animal
+    const averages = calculateAverages(animalTag);
+    if (!averages) {
+        document.getElementById('summaryTempCard').textContent = '--';
+        document.getElementById('summaryHRCard').textContent = '--';
+        document.getElementById('summaryIndexCard').textContent = '--';
+        document.getElementById('summaryDescription').textContent = window.i18n ? window.i18n.getTranslation('dashboard.unable_calculate') : 'Unable to calculate health summary.';
+        return;
+    }
+    
+    // Update Health Summary with selected animal's averages
+    document.getElementById('summaryTempCard').textContent = averages.body_temp + '°C';
+    document.getElementById('summaryHRCard').textContent = averages.heart_rate + ' bpm';
+    document.getElementById('summaryIndexCard').textContent = Math.round(averages.health_index) + '%';
+    
+    // Generate description based on health index
+    const healthIndex = Math.round(averages.health_index);
+    const condition = healthIndex >= 90 ? 'excellent' : healthIndex >= 70 ? 'good' : 'concerning';
+    const animal = dashboardAnimals[animalTag];
+    const animalName = animal ? animal.name : animalTag;
+    
+    let conditionKey = `dashboard.health_condition_${condition}`;
+    let message = window.i18n ? window.i18n.getTranslation(conditionKey) : `'s health condition is ${condition}. Averages calculated from last 3 readings.`;
+    document.getElementById('summaryDescription').textContent = animalName + message;
+}
+
+// Function to update the health summary at the top of the page (for all animals overview)
+function updateHealthSummary() {
+    // Get all animals' readings and calculate overall health using averages
+    let totalTemp = 0, totalHR = 0, totalHealthIndex = 0, count = 0;
+    
+    console.log('updateHealthSummary called, allAnimalReadings:', Object.keys(allAnimalReadings).length, 'animals');
+    
+    Object.keys(allAnimalReadings).forEach(tag => {
+        const readings = allAnimalReadings[tag] || [];
+        console.log(`Animal ${tag}: ${readings.length} readings`);
+        if (readings.length > 0) {
+            // Use average of last 3 readings for each animal
+            const averages = calculateAverages(tag);
+            if (averages) {
+                totalTemp += averages.body_temp;
+                totalHR += averages.heart_rate;
+                // Average health index from last 2 readings
+                const last2 = readings.slice(0, 2);
+                const avgIndex = last2.length === 2 
+                    ? (last2[0].health_index + last2[1].health_index) / 2 
+                    : last2[0].health_index;
+                totalHealthIndex += avgIndex;
+                count++;
+            }
+        }
+    });
+    
+    console.log(`Health summary: count=${count}, avgTemp=${count > 0 ? (totalTemp/count).toFixed(1) : 0}, avgHR=${count > 0 ? Math.round(totalHR/count) : 0}`);
+    
+    // After updating overall summary, also update for currently selected animal
+    if (selectedAnimalTag) {
+        updateHealthSummaryForSelectedAnimal(selectedAnimalTag);
+    }
+}
+
+// Function to update the live health status display with averages
+async function updateLiveHealthDisplay(animalTag) {
+    const readings = allAnimalReadings[animalTag] || [];
+    
+    // If no readings, show empty state
+    if (readings.length === 0) {
+        document.getElementById('temperature').textContent = '--';
+        document.getElementById('heartRate').textContent = '--';
+        document.getElementById('healthStatus').textContent = '--';
+        document.getElementById('healthStatus').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('healthIndex').textContent = '--';
+        document.getElementById('healthIndex').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('lastUpdate').textContent = 'No data';
+        document.getElementById('bookAppointmentContainer').classList.add('hidden');
+        document.getElementById('appointmentBookedContainer').classList.add('hidden');
+        return;
+    }
+    
+    // Get the latest reading for status
+    const latestReading = readings[0];
+    
+    // Calculate averages using the same function as the top cards
+    const averages = calculateAverages(animalTag);
+    if (!averages) return;
+    
+    // Update Live Health Status section with the SAME average values as the top cards
+    document.getElementById('temperature').textContent = averages.body_temp + '°C';
+    document.getElementById('heartRate').textContent = averages.heart_rate + ' bpm';
+    
+    // Update health index from average
+    const healthIndexEl = document.getElementById('healthIndex');
+    healthIndexEl.textContent = Math.round(averages.health_index) + '%';
+    
+    // Color the health index based on value
+    if (averages.health_index >= 85) {
+        healthIndexEl.className = 'text-lg font-bold text-green-600';
+    } else if (averages.health_index >= 70) {
+        healthIndexEl.className = 'text-lg font-bold text-yellow-600';
+    } else {
+        healthIndexEl.className = 'text-lg font-bold text-red-600';
+    }
+    
+    // Update health status from latest reading
+    const healthStatusEl = document.getElementById('healthStatus');
+    let statusKey = `status.${latestReading.status.toLowerCase()}`;
+    let translatedStatus = window.i18n ? window.i18n.getTranslation(statusKey) : latestReading.status;
+    healthStatusEl.textContent = translatedStatus;
+    healthStatusEl.className = 'text-lg font-bold ' + (statusColors[latestReading.status] || 'text-gray-600');
+    
+    // Update last update time
+    const lastUpdateEl = document.getElementById('lastUpdate');
+    lastUpdateEl.textContent = getRelativeTime(latestReading.timestamp);
+    
+    // Check if there's an existing appointment for this animal
+    const appointmentContainer = document.getElementById('bookAppointmentContainer');
+    const appointmentBookedContainer = document.getElementById('appointmentBookedContainer');
+    
+    try {
+        const response = await fetch(`/api/appointments/check/${animalTag}`);
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.has_appointment) {
+            // Show "Appointment Booked" status
+            appointmentContainer.classList.add('hidden');
+            appointmentBookedContainer.classList.remove('hidden');
+            
+            // Format and display the appointment time
+            const appointmentTime = new Date(data.appointment.appointment_time);
+            const timeStr = appointmentTime.toLocaleString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                day: 'numeric',
+                month: 'short'
+            });
+            document.getElementById('appointmentTime').textContent = `Booked: ${timeStr}`;
+        } else {
+            // Show book appointment button if status is Warning, Ill or Critical
+            appointmentBookedContainer.classList.add('hidden');
+            if (latestReading.status === 'Warning' || latestReading.status === 'Ill' || latestReading.status === 'Critical') {
+                appointmentContainer.classList.remove('hidden');
+            } else {
+                appointmentContainer.classList.add('hidden');
+            }
+        }
+    } catch (error) {
+        console.error('Error checking appointment status:', error);
+        // Fallback: show button based on status only
+        appointmentBookedContainer.classList.add('hidden');
+        if (latestReading.status === 'Warning' || latestReading.status === 'Ill' || latestReading.status === 'Critical') {
+            appointmentContainer.classList.remove('hidden');
+        } else {
+            appointmentContainer.classList.add('hidden');
+        }
+    }
+}
+
+// Helper function to get relative time string
+function getRelativeTime(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+    
+    if (diffSec < 60) return 'Just now';
+    if (diffMin < 60) return `${diffMin} min ago`;
+    if (diffHour < 24) return `${diffHour} hour${diffHour > 1 ? 's' : ''} ago`;
+    return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
+}
+
+// Function to update the readings table for a specific animal
+function updateReadingsTable(animalTag) {
+    const tbody = document.getElementById('readingsTable');
+    tbody.innerHTML = '';
+    
+    const readings = allAnimalReadings[animalTag] || [];
+    
+    // Sort readings by timestamp descending (newest first)
+    readings.sort((a, b) => b.timestamp - a.timestamp);
+    
+    readings.forEach((reading, index) => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors';
+        
+        const statusBadgeClass = statusBgColors[reading.status] || 'bg-gray-100 text-gray-700';
+        const timeStr = getRelativeTime(reading.timestamp);
+        const label = index === 0 ? ' (Latest)' : '';
+        
+        // Health index bar color
+        let indexColor = 'bg-green-500';
+        if (reading.health_index < 70) {
+            indexColor = 'bg-red-500';
+        } else if (reading.health_index < 85) {
+            indexColor = 'bg-yellow-500';
+        }
+        
+        row.innerHTML = `
+            <td class="px-6 py-4 text-gray-900 dark:text-white font-medium">${timeStr}${label}</td>
+            <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${reading.body_temp}°C</td>
+            <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${reading.heart_rate} bpm</td>
+            <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${reading.blood_pressure}/80</td>
+            <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${window.i18n ? window.i18n.getTranslation(`movement.${reading.movement.toLowerCase().replace(/\s+/g, '_')}`) : reading.movement}</td>
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full ${indexColor}" style="width: ${reading.health_index}%"></div>
+                    </div>
+                    <span class="text-gray-700 dark:text-gray-300">${reading.health_index}%</span>
+                </div>
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${statusBadgeClass}">
+                    ${window.i18n ? window.i18n.getTranslation(`status.${reading.status.toLowerCase()}`) : reading.status}
+                </span>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+    
+    // Show message if no readings yet
+    if (readings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Waiting for first reading...</td></tr>';
+    }
+}
+
+// Function to fetch health data for a single animal (used internally)
+async function fetchHealthForAnimal(animalTag) {
+    try {
+        const response = await fetch(`/api/health/${animalTag}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            addReadingForAnimal(animalTag, data.health);
+            
+            // Show alert if consecutive abnormal readings
+            if (data.health.alert) {
+                showHealthAlert(data.health.alert, animalTag);
+            }
+        }
+    } catch (error) {
+        console.error(`Error fetching health data for ${animalTag}:`, error);
+    }
+}
+
+// Function to fetch health data for ALL animals simultaneously
+async function fetchAllAnimalsHealth() {
+    console.log('Fetching health data for all animals at:', new Date().toLocaleTimeString());
+    
+    const animalTags = Object.keys(dashboardAnimals);
+    
+    // Fetch all animals in parallel
+    const promises = animalTags.map(tag => fetchHealthForAnimal(tag));
+    await Promise.all(promises);
+    
+    console.log(`Updated health data for ${animalTags.length} animals`);
+}
+
+// Function to show health alert notification
+function showHealthAlert(alertType, animalTag) {
+    const alertMessages = {
+        'Alert': `⚠️ Warning: Animal ${animalTag} has had 3 consecutive warning readings!`,
+        'Critical': `🚨 Critical: Animal ${animalTag} has had 3 consecutive critical readings! Immediate attention required.`
+    };
+    
+    // You can implement a toast notification here
+    console.warn(alertMessages[alertType]);
+}
+
+// Function to display selected animal's data
+async function displaySelectedAnimal(animalTag) {
+    selectedAnimalTag = animalTag;
+    
+    if (!animalTag || !dashboardAnimals[animalTag]) {
+        // Show default message
+        document.getElementById('animalId').textContent = '#---';
+        document.getElementById('animalSpecies').textContent = 'Select an animal';
+        document.getElementById('readingsTable').innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Select a specific animal to view health data</td></tr>';
+        
+        // Reset overview cards
+        document.getElementById('hrValue').innerHTML = `-- <span class="text-lg font-normal text-gray-400">bpm</span>`;
+        document.getElementById('bpValue').textContent = `--/--`;
+        document.getElementById('movementValue').textContent = '--';
+        document.getElementById('tempValue').innerHTML = `-- <span class="text-lg font-normal text-gray-400">°C</span>`;
+        document.getElementById('tempAvg').textContent = 'Select an animal';
+        
+        // Reset Live Health Status section
+        document.getElementById('temperature').textContent = '--';
+        document.getElementById('heartRate').textContent = '--';
+        document.getElementById('healthStatus').textContent = '--';
+        document.getElementById('healthStatus').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('healthIndex').textContent = '--';
+        document.getElementById('healthIndex').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('lastUpdate').textContent = 'No data';
+        document.getElementById('bookAppointmentContainer').classList.add('hidden');
+        document.getElementById('appointmentBookedContainer').classList.add('hidden');
+        
+        // Reset Health Summary section
+        updateHealthSummaryForSelectedAnimal(null);
+        return;
+    }
+    
+    const animal = dashboardAnimals[animalTag];
+    
+    // Update animal ID and species
+    document.getElementById('animalId').textContent = '#' + animal.tag;
+    document.getElementById('animalSpecies').textContent = animal.species + ' - ' + animal.name;
+    
+    // Check if we have readings in memory, if not try to load from database
+    let readings = allAnimalReadings[animalTag] || [];
+    
+    if (readings.length === 0) {
+        // Try loading from database for this specific animal
+        console.log(`No readings in memory for ${animalTag}, loading from database...`);
+        await loadReadingsFromDatabase(animalTag, MAX_READINGS);
+        readings = allAnimalReadings[animalTag] || [];
+        console.log(`After loading: ${readings.length} readings for ${animalTag}`);
+    }
+    
+    if (readings.length > 0) {
+        // Show existing data
+        console.log(`Displaying ${readings.length} readings for ${animalTag}`);
+        const averages = calculateAverages(animalTag);
+        if (averages) {
+            updateOverviewCards(averages);
+        }
+        updateReadingsTable(animalTag);
+        // Show averages of last 3 readings in Live Health Status section
+        await updateLiveHealthDisplay(animalTag);
+        // Update Health Summary for selected animal
+        updateHealthSummaryForSelectedAnimal(animalTag);
+    } else {
+        // No data yet - try to trigger an initial reading generation
+        console.log(`No readings found for ${animalTag}, triggering initial reading...`);
+        try {
+            const triggerResponse = await fetch('/api/trigger-reading', { method: 'POST' });
+            const triggerData = await triggerResponse.json();
+            if (triggerData.status === 'success') {
+                // Reload readings after trigger
+                await loadReadingsFromDatabase(animalTag, MAX_READINGS);
+                readings = allAnimalReadings[animalTag] || [];
+                if (readings.length > 0) {
+                    console.log(`Got ${readings.length} readings after trigger`);
+                    const averages = calculateAverages(animalTag);
+                    if (averages) {
+                        updateOverviewCards(averages);
+                    }
+                    updateReadingsTable(animalTag);
+                    await updateLiveHealthDisplay(animalTag);
+                    updateHealthSummaryForSelectedAnimal(animalTag);
+                    return; // Exit early since we have data now
+                }
+            }
+        } catch (err) {
+            console.log('Could not trigger reading:', err);
+        }
+        
+        // Still no data, show waiting message with empty values
+        document.getElementById('hrValue').innerHTML = `-- <span class="text-lg font-normal text-gray-400">bpm</span>`;
+        document.getElementById('bpValue').textContent = `--/--`;
+        document.getElementById('movementValue').textContent = '--';
+        document.getElementById('tempValue').innerHTML = `-- <span class="text-lg font-normal text-gray-400">°C</span>`;
+        document.getElementById('tempAvg').textContent = 'Waiting for readings...';
+        document.getElementById('readingsTable').innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center text-gray-500">Waiting for first reading...</td></tr>';
+        
+        // Also reset Live Health Status section when no readings
+        document.getElementById('temperature').textContent = '--';
+        document.getElementById('heartRate').textContent = '--';
+        document.getElementById('healthStatus').textContent = '--';
+        document.getElementById('healthStatus').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('healthIndex').textContent = '--';
+        document.getElementById('healthIndex').className = 'text-lg font-bold text-gray-500';
+        document.getElementById('lastUpdate').textContent = 'No data';
+        document.getElementById('bookAppointmentContainer').classList.add('hidden');
+        document.getElementById('appointmentBookedContainer').classList.add('hidden');
+        
+        // Update Health Summary for selected animal (will show empty state)
+        updateHealthSummaryForSelectedAnimal(animalTag);
+    }
+}
+
+// Auto-refresh health data - synced with server-side scheduler (runs every 5 minutes on server)
+let countdownInterval = null;
+let secondsUntilNextReading = 300; // 5 minutes default
+
+// Fetch the next reading time from server
+async function syncWithServerTimer() {
+    console.log('syncWithServerTimer called');
+    try {
+        const response = await fetch('/api/next-reading-time');
+        const data = await response.json();
+        console.log('Server timer response:', data);
+        
+        if (data.status === 'success' && data.seconds_until_next !== null) {
+            if (data.seconds_until_next > 0) {
+                secondsUntilNextReading = data.seconds_until_next;
+                console.log(`Synced with server: next reading in ${secondsUntilNextReading} seconds`);
+            } else {
+                // Timer expired, trigger a new reading and reset
+                console.log('Timer expired, triggering new reading...');
+                await triggerNewReading();
+                secondsUntilNextReading = 300;
+            }
+        } else {
+            console.log('Using default 5 minutes (no server data)');
+            secondsUntilNextReading = 300;
+        }
+    } catch (error) {
+        console.error('Error syncing with server timer:', error);
+        secondsUntilNextReading = 300;
+    }
+}
+
+// Trigger a new reading on the server
+async function triggerNewReading() {
+    try {
+        const response = await fetch('/api/trigger-reading', { method: 'POST' });
+        const data = await response.json();
+        if (data.status === 'success') {
+            console.log('New reading triggered successfully');
+            // Reload data after triggering
+            await loadAllReadingsFromDatabase();
+            updateHealthSummary();
+            if (selectedAnimalTag) {
+                displaySelectedAnimal(selectedAnimalTag);
+            }
+            // Check for consecutive readings after new data arrives
+            console.log('Checking for consecutive readings after new reading...');
+            await checkConsecutiveReadings();
+        }
+    } catch (error) {
+        console.error('Error triggering new reading:', error);
+    }
+}
+
+function updateCountdown() {
+    const countdownEl = document.getElementById('nextReadingCountdown');
+    
+    if (!countdownEl) {
+        return;
+    }
+    
+    // Decrement first
+    secondsUntilNextReading--;
+    
+    // If timer reached zero or below, reset and trigger reading
+    if (secondsUntilNextReading < 0) {
+        secondsUntilNextReading = 300;
+        console.log('Timer expired, triggering new reading...');
+        triggerNewReading();
+    }
+    
+    // Calculate time display (format M:SS)
+    const minutes = Math.floor(secondsUntilNextReading / 60);
+    const seconds = secondsUntilNextReading % 60;
+    
+    // Format with leading zeros for seconds
+    const m = String(minutes);
+    const s = String(seconds).padStart(2, '0');
+    
+    countdownEl.textContent = `${m}:${s}`;
+}
+
+function startHealthRefresh() {
+    console.log('🔄 startHealthRefresh called');
+    
+    // Clear existing interval
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        console.log('Cleared existing interval');
+    }
+    
+    // Start countdown timer (updates every second) - using named function reference
+    countdownInterval = setInterval(updateCountdown, 1000);
+    console.log('⏰ Countdown interval started, ID:', countdownInterval);
+
+    // Sync timer with server in background to get accurate time without blocking
+    syncWithServerTimer().then(() => {
+        console.log('✅ Synced with server, seconds until next:', secondsUntilNextReading);
+    });
+}
+
+// Handle pet filter change
+document.getElementById('petFilter').addEventListener('change', async function() {
+    const selectedTag = this.value;
+    if (selectedTag) {
+        localStorage.setItem('selectedDashboardAnimal', selectedTag);
+        await displaySelectedAnimal(selectedTag);
+    }
+});
+
+// Load selected animal from localStorage on page load and start background refresh
+window.addEventListener('DOMContentLoaded', async function() {
+    const filterSelect = document.getElementById('petFilter');
+    const userAnimalTags = Object.keys(dashboardAnimals);
+    
+    // Clear any saved animal that doesn't exist in current dashboard
+    const savedAnimal = localStorage.getItem('selectedDashboardAnimal');
+    if (savedAnimal && !dashboardAnimals[savedAnimal]) {
+        console.log(`Clearing invalid saved animal: ${savedAnimal}`);
+        localStorage.removeItem('selectedDashboardAnimal');
+    }
+    
+    // Check if there's a valid saved animal selection
+    const validSavedAnimal = localStorage.getItem('selectedDashboardAnimal');
+    
+    // Initialize readings storage for all animals
+    initializeAllAnimalReadings();
+    
+    // Restore the saved animal selection to the dropdown FIRST
+    if (validSavedAnimal && dashboardAnimals[validSavedAnimal]) {
+        filterSelect.value = validSavedAnimal;
+        console.log('Restored filter to saved animal:', validSavedAnimal);
+    } else {
+        filterSelect.value = '';
+    }
+    
+    // Try to load from cache first for instant display while database loads
+    const hasCachedData = loadReadingsFromCache();
+    if (hasCachedData && validSavedAnimal && dashboardAnimals[validSavedAnimal]) {
+        console.log('Displaying cached data immediately...');
+        await displaySelectedAnimal(validSavedAnimal);
+        updateHealthSummary();
+    }
+    
+    // Always load readings from database to ensure fresh data
+    console.log('Loading all readings from database...');
+    await loadAllReadingsFromDatabase();
+    
+    // Update health summary with loaded data
+    updateHealthSummary();
+    
+    // Now display the selected animal's data (refresh with database data)
+    if (validSavedAnimal && dashboardAnimals[validSavedAnimal]) {
+        console.log('Displaying saved animal:', validSavedAnimal);
+        await displaySelectedAnimal(validSavedAnimal);
+    } else if (userAnimalTags.length === 0) {
+        await displaySelectedAnimal(null);
+    } else {
+        await displaySelectedAnimal(null);
+    }
+    
+    // Start countdown timer (syncs with server-side scheduler)
+    startHealthRefresh();
+    
+    // Force a delayed update to ensure UI is fully rendered with data
+    setTimeout(async () => {
+        const currentAnimal = localStorage.getItem('selectedDashboardAnimal');
+        if (currentAnimal && dashboardAnimals[currentAnimal]) {
+            // Reload data from database to ensure we have fresh data
+            if (!allAnimalReadings[currentAnimal] || allAnimalReadings[currentAnimal].length === 0) {
+                console.log('Delayed: No data found, reloading from database...');
+                await loadAllReadingsFromDatabase();
+            }
+            if (allAnimalReadings[currentAnimal] && allAnimalReadings[currentAnimal].length > 0) {
+                console.log('Delayed refresh for animal:', currentAnimal);
+                const averages = calculateAverages(currentAnimal);
+                if (averages) {
+                    updateOverviewCards(averages);
+                }
+                updateReadingsTable(currentAnimal);
+                await updateLiveHealthDisplay(currentAnimal);
+                updateHealthSummaryForSelectedAnimal(currentAnimal);
+            }
+        }
+    }, 500);
+
+    // Second retry at 1.5 seconds for cases where first load didn't complete
+    setTimeout(async () => {
+        const currentAnimal = localStorage.getItem('selectedDashboardAnimal');
+        if (currentAnimal && dashboardAnimals[currentAnimal]) {
+            // Check if data is still empty
+            if (!allAnimalReadings[currentAnimal] || allAnimalReadings[currentAnimal].length === 0) {
+                console.log('Second retry: Still no data, trying individual animal load...');
+                await loadReadingsFromDatabase(currentAnimal, MAX_READINGS);
+                
+                if (allAnimalReadings[currentAnimal] && allAnimalReadings[currentAnimal].length > 0) {
+                    console.log('Second retry: Got data, updating display');
+                    await displaySelectedAnimal(currentAnimal);
+                    updateHealthSummary();
+                }
+            }
+        }
+    }, 1500);
+
+    // Check for consecutive readings and show notifications
+    setTimeout(async () => {
+        // For testing: clear all notification status from localStorage
+        // This ensures notifications will show for any consecutive warnings
+        Object.keys(dashboardAnimals).forEach(tag => {
+            const statusKey = `last_notified_status_${tag}`;
+            const currentStatus = localStorage.getItem(statusKey);
+            console.log(`Clearing notification status for ${tag}: was ${currentStatus}`);
+            // Comment out the next line to stop clearing (for production)
+            // localStorage.removeItem(statusKey);
+        });
+        
+        await checkConsecutiveReadings();
+        await checkUnreadNotifications();
+    }, 1000);
+});
+
+// Clean up interval on page unload
+window.addEventListener('beforeunload', function() {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+});
+
+// ===== NOTIFICATION FUNCTIONS =====
+
+// Show notification popup modal
+function showNotificationPopup(notification) {
+    const popup = document.getElementById('notificationPopup');
+    const icon = document.getElementById('notificationIcon');
+    const title = document.getElementById('notificationTitle');
+    const time = document.getElementById('notificationTime');
+    const message = document.getElementById('notificationMessage');
+    const status = document.getElementById('notificationStatus');
+    const temp = document.getElementById('notificationTemp');
+    const index = document.getElementById('notificationIndex');
+    
+    // Set notification content
+    title.textContent = notification.title;
+    message.textContent = notification.message;
+    time.textContent = notification.time || 'Just now';
+    
+    // Set status with color
+    status.textContent = notification.status || '--';
+    if (notification.status === 'Healthy') {
+        status.className = 'text-lg font-bold text-green-600';
+        icon.className = 'bg-green-50 dark:bg-green-900/20 text-green-500 flex items-center justify-center rounded-xl shrink-0 size-14';
+        icon.innerHTML = '<span class="material-symbols-outlined text-3xl">check_circle</span>';
+    } else if (notification.status === 'Warning') {
+        status.className = 'text-lg font-bold text-orange-600';
+        icon.className = 'bg-orange-50 dark:bg-orange-900/20 text-orange-500 flex items-center justify-center rounded-xl shrink-0 size-14';
+        icon.innerHTML = '<span class="material-symbols-outlined text-3xl">warning</span>';
+    } else if (notification.status === 'Ill' || notification.status === 'Critical') {
+        status.className = 'text-lg font-bold text-red-600';
+        icon.className = 'bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center rounded-xl shrink-0 size-14';
+        icon.innerHTML = '<span class="material-symbols-outlined text-3xl">error</span>';
+    }
+    
+    temp.textContent = notification.avgTemp ? `${notification.avgTemp}°C` : '--';
+    index.textContent = notification.avgIndex ? `${notification.avgIndex}%` : '--';
+    
+    // Show popup with animation
+    popup.classList.remove('hidden');
+    popup.classList.add('flex');
+}
+
+// Close notification popup
+function closeNotificationPopup() {
+    const popup = document.getElementById('notificationPopup');
+    popup.classList.add('hidden');
+    popup.classList.remove('flex');
+}
+
+// Show toast notification (small popup in corner)
+function showToast(message, type = 'info', duration = 5000) {
+    const container = document.getElementById('toastContainer');
+    
+    const colors = {
+        'info': 'bg-blue-500',
+        'success': 'bg-green-500',
+        'warning': 'bg-yellow-500',
+        'error': 'bg-red-500'
+    };
+    
+    const icons = {
+        'info': 'info',
+        'success': 'check_circle',
+        'warning': 'warning',
+        'error': 'error'
+    };
+    
+    const toast = document.createElement('div');
+    toast.className = `${colors[type]} text-white p-4 rounded-xl shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-x-full`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined">${icons[type]}</span>
+        <p class="font-medium flex-1">${message}</p>
+        <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white">
+            <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// Check for consecutive same readings for all animals
+async function checkConsecutiveReadings() {
+    console.log('🔍 Checking for consecutive readings...');
+    
+    const animalTags = Object.keys(dashboardAnimals);
+    const alertsToShow = [];
+    
+    for (const tag of animalTags) {
+        try {
+            console.log(`Checking animal ${tag}...`);
+            const response = await fetch(`/api/check-consecutive-readings/${tag}`);
+            const data = await response.json();
+            console.log(`Response for ${tag}:`, data);
+            
+            // Key for storing last notified status
+            const statusKey = `last_notified_status_${tag}`;
+            const lastNotifiedStatus = localStorage.getItem(statusKey);
+            console.log(`Last notified status for ${tag}: ${lastNotifiedStatus}`);
+            
+            if (data.status === 'success' && data.has_consecutive) {
+                const animal = dashboardAnimals[tag];
+                const consecutiveStatus = data.consecutive_status;
+                console.log(`✅ Found consecutive ${consecutiveStatus} readings for ${tag}`);
+                
+                // Only alert for Warning or Ill status
+                if (consecutiveStatus === 'Warning' || consecutiveStatus === 'Ill') {
+                    // Only show notification if status is different from last notified status
+                    // This prevents repeated notifications until status changes
+                    if (lastNotifiedStatus !== consecutiveStatus) {
+                        console.log(`🚨 Adding alert for ${tag} - status changed from ${lastNotifiedStatus} to ${consecutiveStatus}`);
+                        alertsToShow.push({
+                            tag: tag,
+                            animal: animal,
+                            status: consecutiveStatus,
+                            avgTemp: data.avg_temp,
+                            avgHeartRate: data.avg_heart_rate,
+                            avgIndex: data.avg_health_index
+                        });
+                        
+                        // Save notification to database
+                        await saveNotificationToDatabase(tag, animal, consecutiveStatus, data);
+                        
+                        // Store current status as last notified
+                        localStorage.setItem(statusKey, consecutiveStatus);
+                    }
+                } else if (consecutiveStatus === 'Healthy') {
+                    // If status is now Healthy, clear the last notified status
+                    // So next Warning/Ill will trigger a new notification
+                    localStorage.removeItem(statusKey);
+                }
+            } else if (data.status === 'success' && !data.has_consecutive) {
+                // No consecutive same readings - clear stored status if animal is now healthy
+                // Check current readings to see if animal recovered
+                const readings = allAnimalReadings[tag] || [];
+                if (readings.length > 0 && readings[0].status === 'Healthy') {
+                    localStorage.removeItem(statusKey);
+                }
+            }
+        } catch (error) {
+            console.error(`Error checking consecutive readings for ${tag}:`, error);
+        }
+    }
+    
+    // Show alerts
+    console.log(`📢 Total alerts to show: ${alertsToShow.length}`);
+    if (alertsToShow.length > 0) {
+        // Show popup for the first/most critical alert
+        const criticalAlert = alertsToShow.find(a => a.status === 'Ill') || alertsToShow[0];
+        console.log('Showing notification popup for:', criticalAlert);
+        
+        showNotificationPopup({
+            title: `Health Alert - ${criticalAlert.animal.species} #${criticalAlert.tag}`,
+            message: `${criticalAlert.animal.name} has shown ${criticalAlert.status.toLowerCase()} readings for the last 3 consecutive readings. Please check on your animal.`,
+            status: criticalAlert.status,
+            avgTemp: criticalAlert.avgTemp,
+            avgIndex: criticalAlert.avgIndex,
+            time: 'Just now'
+        });
+        
+        // Show toasts for any additional alerts
+        for (let i = 1; i < alertsToShow.length; i++) {
+            const alert = alertsToShow[i];
+            showToast(
+                `${alert.animal.name} (#${alert.tag}) has 3 consecutive ${alert.status} readings`,
+                alert.status === 'Ill' ? 'error' : 'warning'
+            );
+        }
+    }
+}
+
+// Save notification to database
+async function saveNotificationToDatabase(tag, animal, status, data) {
+    try {
+        const notificationType = status === 'Ill' ? 'critical' : 'warning';
+        const title = `Consecutive ${status} Readings - ${animal.species} #${tag}`;
+        const message = `${animal.name} has shown ${status.toLowerCase()} health status for 3 consecutive readings (15 minutes). ` +
+            `Average values - Temperature: ${data.avg_temp}°C, Heart Rate: ${data.avg_heart_rate} bpm, Health Index: ${data.avg_health_index}%. ` +
+            `Please check on your animal${status === 'Ill' ? ' immediately' : ''}.`;
+        
+        await fetch('/api/notifications', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                animal_tag: tag,
+                title: title,
+                message: message,
+                notification_type: notificationType
+            })
+        });
+        
+        console.log(`Notification saved for ${tag}`);
+    } catch (error) {
+        console.error('Error saving notification:', error);
+    }
+}
+
+// Check for unread notifications on login and show popup
+async function checkUnreadNotifications() {
+    try {
+        const response = await fetch('/api/notifications/unread');
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.count > 0) {
+            // Update notification badge
+            const badges = document.querySelectorAll('.notification-badge');
+            badges.forEach(badge => {
+                badge.textContent = data.count;
+                badge.classList.remove('hidden');
+            });
+            
+            // Show toast about unread notifications
+            if (data.count > 0) {
+                showToast(`You have ${data.count} unread notification${data.count > 1 ? 's' : ''}`, 'info');
+            }
+        }
+        
+        return data.notifications || [];
+    } catch (error) {
+        console.error('Error checking unread notifications:', error);
+        return [];
+    }
+}
+
+// Book Appointment Function
+async function bookAppointment() {
+    if (!selectedAnimalTag) {
+        showToast('Please select an animal first', 'error');
+        return;
+    }
+    
+    // Get the CURRENTLY DISPLAYED values (not cached readings)
+    const displayedStatus = document.getElementById('healthStatus').textContent.trim();
+    const displayedIndexText = document.getElementById('healthIndex').textContent.trim();
+    const displayedIndex = parseFloat(displayedIndexText.replace('%', '')) || 0;
+    
+    console.log('Booking with displayed values:', displayedStatus, displayedIndex);
+    
+    try {
+        const response = await fetch('/api/appointments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                animal_tag: selectedAnimalTag,
+                health_status: displayedStatus,
+                health_index: Math.round(displayedIndex)
+            })
+        });
+        
+        const data = await response.json();
+        console.log('Booking response:', response.status, data); // Debug log
+        
+        if (data.status === 'success') {
+            // Hide book button and show "Appointment Booked" status
+            document.getElementById('bookAppointmentContainer').classList.add('hidden');
+            document.getElementById('appointmentBookedContainer').classList.remove('hidden');
+            
+            // Update the appointment time display
+            const now = new Date();
+            const timeStr = now.toLocaleString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                day: 'numeric',
+                month: 'short'
+            });
+            document.getElementById('appointmentTime').textContent = `Booked: ${timeStr}`;
+            
+            // Show notification popup for appointment confirmation
+            const displayedTemp = document.getElementById('temperature').textContent.trim();
+            showNotificationPopup({
+                title: data.notification.title,
+                message: data.notification.message,
+                status: displayedStatus,
+                avgTemp: displayedTemp,
+                avgIndex: displayedIndex,
+                time: 'Just now'
+            });
+            
+            // Also show a toast
+            showToast(`Appointment booked for ${dashboardAnimals[selectedAnimalTag].name}! Vet will review your request.`, 'success');
+        } else {
+            showToast('Failed to book appointment: ' + data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error booking appointment:', error);
+        showToast('Error booking appointment', 'error');
+    }
+}
+
+// Add event listener to Book Appointment button
+document.addEventListener('DOMContentLoaded', () => {
+    const bookAppointmentBtn = document.getElementById('bookAppointmentBtn');
+    if (bookAppointmentBtn) {
+        bookAppointmentBtn.addEventListener('click', bookAppointment);
+    }
+}, { once: true });
+
+// Function to redirect to export page with selected animal
+function goToExportWithAnimal() {
+    if (selectedAnimalTag) {
+        window.location.href = `/export?animal=${encodeURIComponent(selectedAnimalTag)}`;
+    } else {
+        window.location.href = '/export';
+    }
+}
+
+// ===== TREND CHART FUNCTIONS =====
+
+// Current trend period
+let currentTrendPeriod = '1day';
+
+// Load trend data from API and render chart
+async function loadTrendData(period) {
+    if (!selectedAnimalTag) {
+        console.log('No animal selected for trend data');
+        renderEmptyChart(period);
+        return;
+    }
+    
+    currentTrendPeriod = period;
+    
+    // Update button styles
+    const btn1day = document.getElementById('trend1day');
+    const btn1week = document.getElementById('trend1week');
+    
+    if (period === '1day') {
+        btn1day.classList.add('bg-white', 'dark:bg-gray-600', 'font-bold', 'shadow-sm');
+        btn1day.classList.remove('font-medium', 'text-gray-500', 'dark:text-gray-400');
+        btn1week.classList.remove('bg-white', 'dark:bg-gray-600', 'font-bold', 'shadow-sm');
+        btn1week.classList.add('font-medium', 'text-gray-500', 'dark:text-gray-400');
+    } else {
+        btn1week.classList.add('bg-white', 'dark:bg-gray-600', 'font-bold', 'shadow-sm');
+        btn1week.classList.remove('font-medium', 'text-gray-500', 'dark:text-gray-400');
+        btn1day.classList.remove('bg-white', 'dark:bg-gray-600', 'font-bold', 'shadow-sm');
+        btn1day.classList.add('font-medium', 'text-gray-500', 'dark:text-gray-400');
+    }
+    
+    try {
+        const response = await fetch(`/api/trend-data/${selectedAnimalTag}?period=${period}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            renderTrendChart(data.labels, data.data, period);
+        } else {
+            console.error('Error loading trend data:', data.message);
+            renderEmptyChart(period);
+        }
+    } catch (error) {
+        console.error('Error fetching trend data:', error);
+        renderEmptyChart(period);
+    }
+}
+
+// Render the trend chart with real data
+function renderTrendChart(labels, dataPoints, period) {
+    const chartSvg = document.getElementById('trendChart');
+    const xAxisLabels = document.getElementById('xAxisLabels');
+    
+    if (!chartSvg || !xAxisLabels) return;
+    
+    // Extract values (health index) - filter out nulls for path calculation
+    const values = dataPoints.map(d => d.value);
+    const validIndices = [];
+    values.forEach((v, i) => {
+        if (v !== null) validIndices.push(i);
+    });
+    
+    if (validIndices.length === 0) {
+        renderEmptyChart(period);
+        return;
+    }
+    
+    // Calculate min and max for scaling
+    const validValues = validIndices.map(i => values[i]);
+    const minVal = Math.min(...validValues, 0);
+    const maxVal = Math.max(...validValues, 100);
+    const range = maxVal - minVal || 1;
+    
+    // Build SVG path
+    let pathPoints = [];
+    let circleElements = [];
+    let prevX = null, prevY = null;
+    
+    validIndices.forEach((idx, i) => {
+        const val = values[idx];
+        const x = (idx / Math.max(values.length - 1, 1)) * 100;
+        // Invert Y (0 = top, 100 = bottom) and scale value
+        const y = 100 - ((val - minVal) / range) * 80 - 10; // Leave 10% padding
+        
+        if (i === 0) {
+            pathPoints.push(`M${x.toFixed(1)} ${y.toFixed(1)}`);
+        } else {
+            // Use smooth curves
+            const midX = (prevX + x) / 2;
+            pathPoints.push(`Q ${midX.toFixed(1)} ${prevY.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`);
+        }
+        
+        // Add data point circle
+        circleElements.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#13ec5b" stroke="white" stroke-width="1.5"/>`);
+        
+        prevX = x;
+        prevY = y;
+    });
+    
+    const pathD = pathPoints.join(' ');
+    
+    // Create filled area path - close to bottom
+    const firstIdx = validIndices[0];
+    const lastIdx = validIndices[validIndices.length - 1];
+    const firstX = (firstIdx / Math.max(values.length - 1, 1)) * 100;
+    const lastX = (lastIdx / Math.max(values.length - 1, 1)) * 100;
+    const filledPath = pathD + ` L${lastX.toFixed(1)} 100 L${firstX.toFixed(1)} 100 Z`;
+    
+    // Update SVG
+    chartSvg.innerHTML = `
+        <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#13ec5b" stop-opacity="0.5"></stop>
+                <stop offset="100%" stop-color="#13ec5b" stop-opacity="0"></stop>
+            </linearGradient>
+        </defs>
+        <path d="${filledPath}" fill="url(#gradient)" opacity="0.3" stroke="none"></path>
+        <path d="${pathD}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path>
+        ${circleElements.join('')}
+    `;
+    
+    // Update X-axis labels
+    if (period === '1day') {
+        // Show every 4th hour for 24 hours
+        const hourLabels = labels.filter((_, i) => i % 4 === 0 || i === labels.length - 1);
+        xAxisLabels.innerHTML = hourLabels.map(l => `<span>${l}</span>`).join('');
+    } else {
+        // Show all 7 days
+        xAxisLabels.innerHTML = labels.map(l => `<span>${l}</span>`).join('');
+    }
+}
+
+// Render empty chart with placeholder
+function renderEmptyChart(period) {
+    const chartSvg = document.getElementById('trendChart');
+    const xAxisLabels = document.getElementById('xAxisLabels');
+    
+    if (!chartSvg || !xAxisLabels) return;
+    
+    // Show a flat line with "No Data" indication
+    chartSvg.innerHTML = `
+        <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#9ca3af" stop-opacity="0.3"></stop>
+                <stop offset="100%" stop-color="#9ca3af" stop-opacity="0"></stop>
+            </linearGradient>
+        </defs>
+        <path d="M0 50 L100 50" fill="none" stroke="#9ca3af" stroke-width="1" stroke-dasharray="4,4" vector-effect="non-scaling-stroke"></path>
+        <text x="50" y="45" text-anchor="middle" fill="#9ca3af" font-size="3" font-family="Inter, sans-serif">No data available</text>
+    `;
+    
+    if (period === '1day') {
+        xAxisLabels.innerHTML = '<span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>Now</span>';
+    } else {
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        xAxisLabels.innerHTML = days.map(d => `<span>${d}</span>`).join('');
+    }
+}
+
+// Override displaySelectedAnimal to also load trend data
+const originalDisplaySelectedAnimal = displaySelectedAnimal;
+displaySelectedAnimal = async function(animalTag) {
+    await originalDisplaySelectedAnimal(animalTag);
+    // Load trend data for the selected animal
+    if (animalTag) {
+        loadTrendData(currentTrendPeriod);
+    } else {
+        renderEmptyChart(currentTrendPeriod);
+    }
+};
+
+// Function to translate species in the filter dropdown
+function translateSpeciesInFilter() {
+    const petFilter = document.getElementById('petFilter');
+    if (!petFilter || !window.i18n) return;
+    
+    // Get all options
+    const options = petFilter.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value === '') return; // Skip the placeholder option
+        
+        // Extract species name from the option text
+        const text = option.textContent;
+        const match = text.match(/^([^#]+)\s#(\d+)\s-\s(.+)$/);
+        if (match) {
+            const speciesName = match[1].trim();
+            const animalId = match[2];
+            const animalName = match[3];
+            
+            // Translate the species name
+            const speciesKey = `animal.${speciesName.toLowerCase()}`;
+            const translatedSpecies = window.i18n.getTranslation(speciesKey);
+            
+            // Update the option text: translated species + id + english name
+            option.textContent = `${translatedSpecies} #${animalId} - ${animalName}`;
+        }
+    });
+}
+
+// Listen for language change event
+window.addEventListener('languageChanged', function() {
+    translateSpeciesInFilter();
+});
+
+// Initial translation when page loads and i18n is ready
+if (window.i18n) {
+    translateSpeciesInFilter();
+} else {
+    // If i18n isn't ready yet, try again after a short delay
+    setTimeout(() => {
+        if (window.i18n) {
+            translateSpeciesInFilter();
+        }
+    }, 500);
+}
+</script>
+
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js?v=8"></script>
+</body>
+</html>

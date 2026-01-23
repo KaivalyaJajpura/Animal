@@ -1,0 +1,270 @@
+<!-- Vet Login Page -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vet Login Page - Livestock Health Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display text-[#111813] dark:text-white">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e5ece8] dark:border-b-[#1f3b2d] px-6 md:px-10 py-3 bg-white dark:bg-[#102216] z-10 relative">
+<div class="flex items-center gap-4 text-[#111813] dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Livestock Health Monitor</h2>
+</div>
+<div class="flex items-center gap-4 md:gap-8">
+<div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<a href="{{ url_for('login') }}" class="flex items-center gap-2 px-4 py-2 bg-primary text-text-dark font-semibold rounded-lg hover:bg-green-600 transition-colors" data-i18n="vet.user_login">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span>User Login</span>
+</a>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-200" data-alt="University logo placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB62HI1oeFhgoNfck8bVp6-ZBrO3J_1d0T8PpXxCl3awhzm6ADitmUdszn82OMNX31aPFjdHFLLA2_hrEBCL68hJogHkXSn5hnD8os3DsdYotMTl2jDob6HuHM-OE_fUTkzLbhaxZCvF6r2VPtb9vmYULzi-w8TWCCmeLctwzWVbIli0Aq4TYHUOX62uHLmQI0oaJu-YVXx4FItmNmIVBXOEcCkY6jx3MlcDUi6NW8eemkFoi1CGVFc2V_xIUNefg0pZRnnbrIVt1Y");'></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex w-full relative overflow-hidden">
+<!-- Left Side - Form Container -->
+<div class="flex-1 flex flex-col justify-center items-center p-6 md:p-12 lg:p-24 z-10 relative">
+<div class="w-full max-w-[480px] bg-white dark:bg-[#1a2e22] rounded-xl shadow-lg border border-[#e5ece8] dark:border-[#2a4536] p-8 md:p-10">
+<!-- Headline & Intro -->
+<div class="flex flex-col gap-2 mb-8 text-center md:text-left">
+<h1 class="text-[#111813] dark:text-white tracking-light text-[32px] font-bold leading-tight" data-i18n="vet.portal_title">Veterinarian Portal</h1>
+<p class="text-[#637588] dark:text-[#aab3b8] text-base font-normal leading-normal" data-i18n="vet.portal_desc">Please sign in to access livestock health records.</p>
+</div>
+<!-- Login Form -->
+<form id="vetLoginForm" class="flex flex-col gap-6" method="POST" action="{{ url_for('vetlogin') }}">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="text-[#111813] dark:text-white text-base font-medium leading-normal" data-i18n="vet.email_label">Email or User ID <span class="text-red-500">*</span></label>
+<div class="relative flex items-center">
+<input id="emailInput" name="email" class="form-input flex w-full resize-none overflow-hidden rounded-xl text-[#111813] dark:text-white border border-[#dbe6df] dark:border-[#405648] bg-white dark:bg-[#102216] h-14 placeholder:text-[#61896f] p-[15px] text-base font-normal leading-normal focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Enter your email or ID" data-i18n="vet.email_placeholder" type="email" required/>
+<span class="material-symbols-outlined absolute right-4 text-[#61896f]">mail</span>
+</div>
+<p id="emailError" class="text-sm font-medium text-red-600 hidden" data-i18n="vet.invalid_email">Invalid email address</p>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="text-[#111813] dark:text-white text-base font-medium leading-normal" data-i18n="vet.password_label">Password <span class="text-red-500">*</span></label>
+<a class="text-sm font-medium text-[#111813] hover:text-primary dark:text-[#aab3b8] transition-colors" href="#" data-i18n="vet.forgot_password">Forgot Password?</a>
+</div>
+<div class="relative flex w-full items-stretch rounded-xl">
+<input id="passwordInput" name="password" class="form-input flex w-full resize-none overflow-hidden rounded-xl text-[#111813] dark:text-white border border-[#dbe6df] dark:border-[#405648] bg-white dark:bg-[#102216] h-14 placeholder:text-[#61896f] p-[15px] pr-12 text-base font-normal leading-normal focus:outline-0 focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Enter your password" data-i18n="vet.password_placeholder" type="password" required/>
+<div id="togglePassword" class="absolute right-0 top-0 bottom-0 flex items-center justify-center pr-[15px] text-[#61896f] cursor-pointer hover:text-primary transition-colors">
+<span class="material-symbols-outlined" id="eyeIcon">visibility</span>
+</div>
+</div>
+</div>
+<!-- Keep me logged in -->
+<div class="flex items-center gap-3 py-2">
+<input checked="" class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" id="keep-logged-in" type="checkbox"/>
+<label class="text-sm font-medium text-[#111813] dark:text-[#aab3b8] cursor-pointer select-none" for="keep-logged-in" data-i18n="vet.keep_logged_in">Keep me logged in on this device</label>
+</div>
+<!-- Submit Button -->
+<button id="loginBtn" type="submit" class="flex w-full cursor-not-allowed items-center justify-center overflow-hidden rounded-xl h-12 px-5 bg-gray-300 text-gray-500 text-base font-bold leading-normal tracking-[0.015em] mt-2" disabled data-i18n="vet.login_button">
+<span class="truncate">Secure Login</span>
+<span class="material-symbols-outlined ml-2 text-sm">lock</span>
+</button>
+<div class="text-center mt-4">
+<p class="text-sm text-[#637588] dark:text-[#aab3b8]"><span data-i18n="vet.new_system">New to the system?</span> <a class="font-bold text-[#111813] dark:text-primary hover:underline" href="#" data-i18n="vet.request_access">Request Access</a></p>
+</div>
+</form>
+</div>
+<footer class="mt-8 text-center text-xs text-[#9aa7b1] dark:text-[#637588]" data-i18n="vet.copyright">
+                © 2024 Livestock Health Systems. University Hackathon Project.
+            </footer>
+</div>
+<!-- Right Side - Hero Image (Visible on Desktop) -->
+<div class="hidden lg:flex lg:flex-1 relative bg-[#f0f4f2] dark:bg-[#0a160e]">
+<div class="absolute inset-0 bg-cover bg-center opacity-90 dark:opacity-60" data-alt="Veterinarian checking a cow in a green field" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAF4BDJqYXnIaIWdU5d7AsQSaSYJ2NImfkpHH0HeAogEEA9XMevy42knYHhBgE5wZH1CKooxMwY2ZFsEaZnNI3VT7rXiKhwDxM92k7dxFGvuYlQuuSWM5Z9_O8tDb0EP1IL93g-qd5ydb8wHzn5RPGEPMtTSIZGxvsgvtlsKRouhhjp9Gy83_uutnS7MUvJEq4wCXpc1nvu7AvLP5vUS3BIBg7DyM-pYdTWDAPqIEZgR0h_6og4i0cEDBuSlcqZxAvYH0UYZHA4-v8");'>
+</div>
+<!-- Overlay Gradient -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-12 right-12 text-white">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary/20 backdrop-blur-md border border-primary/30 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider" data-i18n="vet.early_detection">Early Detection</span>
+<span class="bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider" data-i18n="vet.real_time_data">Real-time Data</span>
+</div>
+<h3 class="text-3xl font-bold leading-tight mb-2 shadow-sm drop-shadow-md" data-i18n="vet.empowering_vets">Empowering Vets with Data</h3>
+<p class="text-lg text-white/90 drop-shadow-sm max-w-md" data-i18n="vet.monitor_herd">Seamlessly monitor herd health metrics and receive instant alerts for potential disease outbreaks.</p>
+</div>
+</div>
+</main>
+<script>
+// Password visibility toggle
+document.getElementById('togglePassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    const passwordInput = document.getElementById('passwordInput');
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+    }
+});
+
+// Email validation
+const emailInput = document.getElementById('emailInput');
+const emailError = document.getElementById('emailError');
+const passwordInput = document.getElementById('passwordInput');
+const loginBtn = document.getElementById('loginBtn');
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+emailInput.addEventListener('blur', function() {
+    if (emailInput.value && !emailRegex.test(emailInput.value)) {
+        emailError.classList.remove('hidden');
+        emailInput.classList.add('border-red-500', 'focus:ring-red-500');
+    } else {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+});
+
+emailInput.addEventListener('input', function() {
+    if (emailInput.value && emailRegex.test(emailInput.value)) {
+        emailError.classList.add('hidden');
+        emailInput.classList.remove('border-red-500', 'focus:ring-red-500');
+    }
+    validateForm();
+});
+
+passwordInput.addEventListener('input', function() {
+    validateForm();
+});
+
+function validateForm() {
+    const isEmailValid = emailInput.value && emailRegex.test(emailInput.value);
+    const isPasswordValid = passwordInput.value.length > 0;
+    
+    if (isEmailValid && isPasswordValid) {
+        loginBtn.disabled = false;
+        loginBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        loginBtn.classList.add('bg-primary', 'hover:bg-[#0fd650]', 'cursor-pointer', 'shadow-md', 'text-[#111813]');
+    } else {
+        loginBtn.disabled = true;
+        loginBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+        loginBtn.classList.remove('bg-primary', 'hover:bg-[#0fd650]', 'cursor-pointer', 'shadow-md', 'text-[#111813]');
+    }
+}
+
+// Update placeholders when language changes
+window.addEventListener('languageChanged', function() {
+    if (window.i18n) {
+        emailInput.placeholder = window.i18n.getTranslation('vet.email_placeholder') || emailInput.placeholder;
+        passwordInput.placeholder = window.i18n.getTranslation('vet.password_placeholder') || passwordInput.placeholder;
+    }
+});
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script src="../Static/JS/script.js"></script>
+
+<!-- Popup Notification -->
+<div id="popup" class="fixed top-5 right-5 z-[9999] transform translate-x-full opacity-0 transition-all duration-300 ease-in-out">
+    <div id="popupContent" class="flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]">
+        <span id="popupIcon" class="material-symbols-outlined text-2xl"></span>
+        <span id="popupMessage" class="font-semibold text-sm"></span>
+        <button onclick="closePopup()" class="ml-auto text-current opacity-60 hover:opacity-100 transition-opacity">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+    </div>
+</div>
+
+<script>
+function showPopup(message, type) {
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+    const popupIcon = document.getElementById('popupIcon');
+    const popupMessage = document.getElementById('popupMessage');
+    
+    popupMessage.textContent = message;
+    
+    // Reset classes
+    popupContent.className = 'flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md min-w-[300px]';
+    popupIcon.className = 'material-symbols-outlined text-2xl';
+    
+    if (type === 'success') {
+        popupContent.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+        popupIcon.textContent = 'check_circle';
+        popupIcon.classList.add('text-green-500');
+    } else if (type === 'error') {
+        popupContent.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+        popupIcon.textContent = 'error';
+        popupIcon.classList.add('text-red-500');
+    }
+    
+    // Show popup
+    popup.classList.remove('translate-x-full', 'opacity-0');
+    popup.classList.add('translate-x-0', 'opacity-100');
+    
+    // Auto close after 4 seconds
+    setTimeout(closePopup, 4000);
+}
+
+function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.add('translate-x-full', 'opacity-0');
+    popup.classList.remove('translate-x-0', 'opacity-100');
+}
+
+// Handle form submission with AJAX
+document.getElementById('vetLoginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{{ url_for("vetlogin") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showPopup(data.message, 'success');
+            setTimeout(function() {
+                window.location.href = '{{ url_for("vetdashboard") }}';
+            }, 1500);
+        } else {
+            showPopup(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showPopup('An error occurred. Please try again.', 'error');
+    });
+});
+</script>
+</body></html>

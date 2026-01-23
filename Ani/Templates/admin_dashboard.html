@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard Overview (Updated)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: #f0f4f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111813] dark:text-white">
+<div class="flex h-screen overflow-hidden">
+<aside class="flex w-72 flex-col bg-white dark:bg-[#1a2e1f] border-r border-[#dbe6df] dark:border-[#2a3a2e]">
+<div class="flex flex-col h-full p-6">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnAQb1ektGN2gpfSvBaQiQ7EUbcTVKcr3V9PWTTCvn_ugP3GogvTrhmAQRX9QxKugicrBNKWe4oDLYF5Naeef9IvWD_ys3AIyoOzRdBrDxrpwvYjZITVtBoqVsdlBQXDlpI2WLuz54qGT4lIBkp4uYE4bMTiZRuovgPiUjetdfrNymiJtxr8hIuoF4CJgJU8J-OPaMQ4azu6wkK7e7uDuEh7FLAqV61NkQChqnHgHNpXJ4qwveOqnQfW98ZSSs2rQC85mpMfPSzZY");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Livestock Health</h1>
+<p class="text-[#61896f] dark:text-primary text-xs font-medium uppercase tracking-wider">Early Detection</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#f0f4f2] dark:bg-primary/20 transition-colors" href="/admin_dashboard">
+<span class="material-symbols-outlined text-[#111813] dark:text-white" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-sm font-bold text-[#111813] dark:text-white">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_user">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">group</span>
+<span class="text-sm font-medium">User &amp; Livestock</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_vet">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">medical_services</span>
+<span class="text-sm font-medium">Vet Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#f0f4f2] dark:hover:bg-[#243d2a] transition-colors" href="/admin_logout">
+<span class="material-symbols-outlined text-[#111813] dark:text-white">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</nav>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto">
+<header class="flex items-center justify-between sticky top-0 z-10 bg-white/80 dark:bg-[#1a2e1f]/80 backdrop-blur-md border-b border-[#f0f4f2] dark:border-[#2a3a2e] px-8 py-4">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">admin_panel_settings</span>
+<h2 class="text-[#111813] dark:text-white text-lg font-bold tracking-tight">Admin Console</h2>
+</div>
+<label class="flex items-center bg-[#f0f4f2] dark:bg-[#243d2a] rounded-xl px-4 py-2 w-64">
+<span class="material-symbols-outlined text-[#61896f] mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-[#61896f]" placeholder="Search health records..." type="text"/>
+</label>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-2 rounded-xl bg-[#f0f4f2] dark:bg-[#243d2a] text-[#111813] dark:text-white hover:bg-[#e2e8e5] transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#243d2a]"></span>
+</button>
+<div class="h-10 w-px bg-[#f0f4f2] dark:bg-[#2a3a2e]"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold leading-none mb-1">{{ admin or 'Admin' }}</p>
+<p class="text-[10px] text-[#61896f] uppercase font-bold tracking-tighter">System Administrator</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-[#dbe6df] bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-2xl">admin_panel_settings</span>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8 flex flex-col gap-8 max-w-7xl mx-auto w-full">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-primary">
+<span class="material-symbols-outlined text-2xl">groups</span>
+</div>
+<div>
+<p class="text-xs font-bold text-[#61896f] uppercase tracking-wider">Total Users</p>
+<h3 class="text-2xl font-black text-[#111813] dark:text-white">{{ stats.total_users }}</h3>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-2xl">pets</span>
+</div>
+<div>
+<p class="text-xs font-bold text-[#61896f] uppercase tracking-wider">Total Animals</p>
+<h3 class="text-2xl font-black text-[#111813] dark:text-white">{{ stats.total_animals }}</h3>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined text-2xl">medical_services</span>
+</div>
+<div>
+<p class="text-xs font-bold text-[#61896f] uppercase tracking-wider">Total Vets</p>
+<h3 class="text-2xl font-black text-[#111813] dark:text-white">{{ stats.total_vets }}</h3>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-xl text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined text-2xl">health_metrics</span>
+</div>
+<div>
+<p class="text-xs font-bold text-[#61896f] uppercase tracking-wider">Health Readings</p>
+<h3 class="text-2xl font-black text-[#111813] dark:text-white">{{ stats.total_readings }}</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-1 bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6 flex flex-col gap-4">
+<h3 class="text-lg font-bold text-[#111813] dark:text-white">System Overview</h3>
+<p class="text-sm text-[#61896f] leading-relaxed">
+                        The Livestock Health Monitoring system is currently operating at optimal capacity. Real-time data sync is active across all 12 regions. Recent updates include enhanced AI diagnostics for early-stage bovine respiratory disease.
+                    </p>
+<div class="mt-auto pt-4 border-t border-[#f0f4f2] dark:border-[#2a3a2e] flex flex-col gap-3">
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#61896f]">Server Uptime</span>
+<span class="font-bold text-primary">99.98%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#61896f]">Active Sensors</span>
+<span class="font-bold">4,120</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-[#111813] dark:text-white">Platform Statistics</h3>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold px-2 py-1 bg-primary/10 text-primary rounded border border-primary/20">WEEKLY</span>
+<span class="text-[10px] font-bold px-2 py-1 bg-[#f0f4f2] dark:bg-[#2a3a2e] text-[#61896f] rounded border border-[#dbe6df] dark:border-[#2a3a2e]">MONTHLY</span>
+</div>
+</div>
+<div class="h-48 flex items-end justify-around gap-2 px-4">
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-16 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">MON</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-20 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">TUE</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-14 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">WED</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-22 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">THU</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-18 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">FRI</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-10 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">SAT</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full">
+<div class="w-full bg-primary/20 rounded-t-md h-24 relative group">
+<div class="absolute bottom-0 w-full bg-primary h-8 rounded-t-md transition-all group-hover:brightness-110"></div>
+</div>
+<span class="text-[10px] font-bold text-[#61896f]">SUN</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-auto py-6 px-8 border-t border-[#f0f4f2] dark:border-[#2a3a2e] text-center">
+<p class="text-[#61896f] text-xs font-medium">© 2024 Livestock Health University Hackathon Project. All rights reserved.</p>
+</footer>
+</main>
+</div>
+
+</body></html>
