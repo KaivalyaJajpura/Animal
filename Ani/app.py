@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for, jsonify, Response, send_from_directory
 import sqlite3
+import traceback
+import sys
 from werkzeug.security import generate_password_hash
 from login import login_user, login_vet, get_user_by_email, get_vet_by_email
 from admin import login_admin, get_all_users, get_all_vets, get_user_statistics, delete_user, delete_vet, update_user, update_vet
@@ -23,7 +25,14 @@ from PIL import Image
 # Keras will be imported lazily when needed (avoid Python 3.13 compatibility issues)
 
 app = Flask(__name__, template_folder='Templates', static_folder='Static')
-app.secret_key = 'your_secret_key_change_this_in_production'
+
+# Environment-aware configuration
+FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+app.secret_key = os.getenv('SECRET_KEY', 'dev-secure-key-change-in-production-12345')
+app.config['DEBUG'] = FLASK_ENV == 'development'
+
+# Database configuration
+DB_PATH = os.getenv('DATABASE_PATH', os.path.join(os.path.dirname(__file__), 'users.db'))
 
 # Global scheduler
 scheduler = None
@@ -67,7 +76,7 @@ def generate_health_reading_for_animal(animal_tag, species):
     try:
         health_data = get_current_health_data(animal_tag, species)
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -97,7 +106,7 @@ def scheduled_health_reading_job():
     print(f"\n[{datetime.now()}] Running scheduled health readings job...")
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -162,15 +171,17 @@ def get_next_scheduled_reading_time():
 
 def init_db():
     # Initialize users.db
-    if not os.path.exists('users.db'):
-        conn1 = sqlite3.connect('users.db')
-        with open('schema.sql') as f:
-            conn1.executescript(f.read())
+    schema_path = os.path.join(os.path.dirname(__file__), 'schema.sql')
+    if not os.path.exists(DB_PATH):
+        conn1 = sqlite3.connect(DB_PATH)
+        if os.path.exists(schema_path):
+            with open(schema_path) as f:
+                conn1.executescript(f.read())
         conn1.commit()
         conn1.close()
     else:
         # Add missing columns/tables if they don't exist
-        conn1 = sqlite3.connect('users.db')
+        conn1 = sqlite3.connect(DB_PATH)
         cursor1 = conn1.cursor()
         try:
             cursor1.execute("ALTER TABLE users ADD COLUMN age INTEGER")
@@ -296,7 +307,7 @@ def init_db():
         conn1.close()
     
     # Always ensure appointment_queue and vet_notifications tables exist (for existing databases)
-    conn1 = sqlite3.connect('users.db')
+    conn1 = sqlite3.connect(DB_PATH)
     cursor1 = conn1.cursor()
     cursor1.execute('''
         CREATE TABLE IF NOT EXISTS appointment_queue (
@@ -388,7 +399,7 @@ def init_db():
     # Initialize vets.db
     if not os.path.exists('vets.db'):
         conn2 = sqlite3.connect('vets.db')
-        with open('schema.sql') as f:
+        with open(schema_path) as f:
             conn2.executescript(f.read())
         conn2.commit()
         conn2.close()
@@ -408,6 +419,7 @@ def login():
         
         result = login_user(email, password)
         if result == 'success':
+            session.permanent = True
             if is_ajax:
                 return jsonify({'status': 'success', 'message': 'Successfully signing in'})
             flash("Login successful!", "success")
@@ -430,7 +442,7 @@ def signup():
         mobile = request.form.get('mobile')
         password = generate_password_hash(request.form.get('password'))
 
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         try:
             cursor.execute("INSERT INTO users (full_name, email, mobile, password) VALUES (?, ?, ?, ?)",
@@ -517,7 +529,7 @@ def admin_user():
     # Get total animals treated from treatment_history
     total_animals_treated = 0
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM treatment_history')
         result = cursor.fetchone()
@@ -544,7 +556,7 @@ def admin_vet():
     # Get statistics for each vet
     total_animals_treated = 0
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         vet_stats = {}
@@ -649,7 +661,7 @@ def add_vet():
         if not all([full_name, email, password, mobile, region]):
             return jsonify({'status': 'error', 'message': 'All fields are required'}), 400
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         # Check if mobile column exists and add it if it doesn't
@@ -728,7 +740,7 @@ def update_userinfo():
         age = data.get('age')
         gender = data.get('gender')
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -756,7 +768,7 @@ def history():
     
     # Get removed animals history from database
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -912,7 +924,7 @@ def api_export_pdf():
         if not animal_tag or not date_from or not date_to:
             return jsonify({'status': 'error', 'message': 'Missing required parameters'}), 400
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1162,7 +1174,7 @@ def notifications():
     
     # Fetch notifications from database
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1205,7 +1217,7 @@ def settings():
     if not user_email:
         user_name = session.get('user')
         if user_name:
-            conn = sqlite3.connect('users.db')
+            conn = sqlite3.connect(DB_PATH)
             cursor = conn.cursor()
             cursor.execute("SELECT email FROM users WHERE full_name = ?", (user_name,))
             result = cursor.fetchone()
@@ -1228,8 +1240,7 @@ def vetdashboard():
     vet_data = get_vet_by_email(session.get('vet_email'))
     
     # Get dashboard stats
-    conn = sqlite3.connect('users.db')
-    conn.row_factory = sqlite3.Row
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Critical alerts (Ill/Critical status animals with pending appointments)
@@ -1457,7 +1468,7 @@ def api_get_animals_status():
     
     try:
         user_email = session.get('user_email')
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1558,7 +1569,7 @@ def api_remove_animal(tag):
     
     try:
         # Get the last health reading for this animal
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1606,7 +1617,7 @@ def api_reactivate_animal(tag):
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1703,7 +1714,7 @@ def api_save_health_reading(tag):
     try:
         data = request.get_json()
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -1746,7 +1757,7 @@ def api_get_health_readings(tag):
     try:
         limit = request.args.get('limit', 10, type=int)
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1788,7 +1799,7 @@ def api_get_all_health_readings():
         limit = request.args.get('limit', 10, type=int)
         user_email = session.get('user_email')
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -1897,7 +1908,7 @@ def api_get_trend_data(tag):
     try:
         period = request.args.get('period', '1day')
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2015,7 +2026,7 @@ def api_get_notifications():
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2052,7 +2063,7 @@ def api_get_unread_notifications():
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2090,7 +2101,7 @@ def api_create_notification():
     try:
         data = request.get_json()
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -2120,7 +2131,7 @@ def api_mark_notification_read(notification_id):
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -2143,7 +2154,7 @@ def api_mark_all_notifications_read():
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -2167,7 +2178,7 @@ def api_get_vet_notifications():
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2205,7 +2216,7 @@ def api_get_vet_unread_notifications():
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2243,7 +2254,7 @@ def api_mark_vet_notification_read(notification_id):
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -2266,7 +2277,7 @@ def api_mark_all_vet_notifications_read():
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute('UPDATE vet_notifications SET is_read = 1')
@@ -2302,7 +2313,7 @@ def api_book_appointment():
         print(f"Request data: animal_tag={animal_tag}, health_status={health_status}, health_index={health_index}")
         
         # Connect to database
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2422,7 +2433,7 @@ def api_get_appointments():
     try:
         sort_by = request.args.get('sort_by', 'priority')  # 'priority' or 'health_index'
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2472,7 +2483,7 @@ def api_check_appointment(animal_tag):
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2513,7 +2524,7 @@ def api_confirm_appointment(appointment_id):
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2587,7 +2598,7 @@ def api_get_vet_stats():
         return jsonify({'status': 'error', 'message': 'Not authenticated as vet'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2633,7 +2644,7 @@ def api_get_vet_treatment_history():
     print(f"[DEBUG] Getting treatment history for vet: {vet_email}")
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2675,7 +2686,7 @@ def api_get_user_treatment_history():
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2725,7 +2736,7 @@ def api_get_confirmed_appointments():
     print(f"[DEBUG] Getting confirmed appointments for vet: {vet_email}")
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2771,7 +2782,7 @@ def api_mark_confirmed_treated(confirmed_id):
         treatment = data.get('treatment', 'General Treatment')
         notes = data.get('notes', '')
         
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2883,7 +2894,7 @@ def api_check_consecutive_readings(tag):
         return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
     
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         
@@ -2940,7 +2951,7 @@ def vet_logout():
 def cleanup_orphan_readings():
     """Remove health readings for animals that no longer exist"""
     try:
-        conn = sqlite3.connect('users.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         # Delete readings for animals that don't exist in animals table
