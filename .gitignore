@@ -66,6 +66,13 @@ ehthumbs.db
 *.sqlite3
 users.db
 animals.db
+vets.db
+
+# Large model files
+*.h5
+*.pkl
+*.pth
+*.onnx
 
 # Logs
 *.log
