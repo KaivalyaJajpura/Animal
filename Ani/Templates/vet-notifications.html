@@ -4,7 +4,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vet Notifications - Livestock Health Monitor</title>
+<title>Vet Notifications - Ani-Health</title>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Google Fonts -->
@@ -50,7 +50,7 @@
 <div class="bg-[#13ec5b]/20 flex items-center justify-center rounded-xl size-10 text-[#13ec5b]">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pets</span>
 </div>
-<h1 class="text-[#111813] text-lg font-bold leading-normal" data-i18n="vet.livestock_health">Livestock Health</h1>
+<h1 class="text-[#111813] text-lg font-bold leading-normal" data-i18n="vet.livestock_health">Ani-Health</h1>
 </div>
 <nav class="flex-1 flex flex-col gap-2 px-4 py-4">
 <a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#f0f4f2] text-[#637588] transition-colors" href="{{ url_for('vetdashboard') }}">
@@ -390,15 +390,9 @@ function filterNotifications(type) {
     
     console.log('Vet Filter:', type, 'Visible:', visibleCount);
 }
-
-// Helper function to get translation
-function getTranslation(key) {
-    if (window.i18n) {
-        return window.i18n.getTranslation(key, window.i18n.currentLanguage);
-    }
-    return key;
-}
-
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script>
 // Function to update doctor name with translated title
 function updateDoctorNameDisplay() {
     const doctorNameEl = document.getElementById('vetDoctorName');
@@ -406,7 +400,7 @@ function updateDoctorNameDisplay() {
         let fullName = doctorNameEl.getAttribute('data-name');
         // Remove any existing "Dr." or "डॉ." prefix to avoid duplication
         fullName = fullName.replace(/^(Dr\.\s*|डॉ\.\s*)/, '').trim();
-        const doctorTitle = getTranslation('vet.doctor_title');
+        const doctorTitle = window.i18n.getTranslation('vet.doctor_title');
         doctorNameEl.textContent = doctorTitle + ' ' + fullName;
     }
 }
@@ -422,6 +416,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
-<script src="../Static/JS/i18n.js"></script>
 <script src="../Static/JS/script.js"></script>
 </body></html>

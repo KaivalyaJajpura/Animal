@@ -2,7 +2,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Animal Information - Livestock Monitor</title>
+<title>Animal Information - Ani-Health</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="../Static/Css/style.css" rel="stylesheet"/>
@@ -33,7 +33,7 @@
 <div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
 <div class="flex items-center gap-2 text-primary">
 <span class="material-symbols-outlined text-[32px]">agriculture</span>
-<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Ani-Health</span>
 </div>
 </div>
 <div class="flex flex-col gap-2 p-4 flex-1">
@@ -52,6 +52,10 @@
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
 <span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
 <p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">biotech</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.disease_detection">Disease Detection</p>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
 <span class="material-symbols-outlined">tips_and_updates</span>
@@ -197,6 +201,8 @@
 <option data-i18n="animal.sheep">Sheep</option>
 <option data-i18n="animal.goat">Goat</option>
 <option data-i18n="animal.horse">Horse</option>
+<option data-i18n="animal.dog">Dog</option>
+<option data-i18n="animal.cat">Cat</option>
 </select>
 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
 <span class="material-symbols-outlined">expand_more</span>
@@ -277,6 +283,73 @@
 </div>
 </form>
 </div>
+
+<!-- Animals List Table Section -->
+<div class="rounded-2xl bg-surface-light dark:bg-surface-dark shadow-sm border border-slate-100 dark:border-slate-800 p-6 lg:p-8 transition-colors mt-6">
+<div class="mb-8">
+<h2 class="text-lg font-semibold text-slate-900 dark:text-white" data-i18n="animal.list">Your Animals</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1" data-i18n="animal.all_registered">All your registered livestock</p>
+</div>
+
+<!-- Filters Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<!-- Search Filter -->
+<div>
+<label class="block text-sm font-medium text-slate-900 dark:text-slate-200 mb-2" data-i18n="common.search">Search</label>
+<input type="text" id="animalSearchInput" placeholder="Search by name or tag..." data-i18n-placeholder="common.search" class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 px-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm"/>
+</div>
+
+<!-- Species Filter -->
+<div>
+<label class="block text-sm font-medium text-slate-900 dark:text-slate-200 mb-2" data-i18n="animal.species">Species</label>
+<select id="speciesFilter" class="w-full appearance-none rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 px-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm cursor-pointer">
+<option value="">All Species</option>
+<option value="Cow" data-i18n="animal.cow">Cow</option>
+<option value="Buffalo" data-i18n="animal.buffalo">Buffalo</option>
+<option value="Sheep" data-i18n="animal.sheep">Sheep</option>
+<option value="Goat" data-i18n="animal.goat">Goat</option>
+<option value="Horse" data-i18n="animal.horse">Horse</option>
+<option value="Dog" data-i18n="animal.dog">Dog</option>
+<option value="Cat" data-i18n="animal.cat">Cat</option>
+</select>
+</div>
+
+<!-- Status Filter -->
+<div>
+<label class="block text-sm font-medium text-slate-900 dark:text-slate-200 mb-2" data-i18n="animal.status">Status</label>
+<select id="statusFilter" class="w-full appearance-none rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark py-2.5 px-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm cursor-pointer">
+<option value="">All Status</option>
+<option value="Healthy" data-i18n="status.healthy">Healthy</option>
+<option value="Warning" data-i18n="status.warning">Warning</option>
+<!-- <option value="Ill" data-i18n="status.ill">Ill</option> -->
+<option value="Critical" data-i18n="status.critical">Critical</option>
+</select>
+</div>
+</div>
+
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+<thead class="bg-slate-50 dark:bg-white/5 border-b border-slate-100 dark:border-slate-800">
+<tr>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white" data-i18n="animal.animal_id_tag">Animal ID</th>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white" data-i18n="animal.animal_name">Name</th>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white" data-i18n="animal.species">Species</th>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white" data-i18n="animal.age">Age</th>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white">Health Index</th>
+<th class="px-6 py-4 text-left font-semibold text-slate-900 dark:text-white" data-i18n="animal.status">Status</th>
+</tr>
+</thead>
+<tbody id="animalsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Table rows will be populated by JavaScript -->
+</tbody>
+</table>
+<div id="noAnimalsMessage" class="text-center py-8 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-4xl block mb-2 opacity-50">pets</span>
+<p data-i18n="animal.select_animal">No animals found matching your filters</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 </main>
@@ -322,6 +395,190 @@ function closePopupAndReload() {
     };
 
     let isNewAnimal = false;
+    
+    // Animal status data - will be fetched from API
+    let animalStatusData = {};
+    let statusRefreshInterval = null;
+    
+    // Fetch animal status data from API
+    async function loadAnimalStatusData() {
+        try {
+            const response = await fetch('/api/animals/status');
+            const data = await response.json();
+            if (data.status === 'success') {
+                animalStatusData = data.animals || {};
+                renderAnimalsTable();
+            }
+        } catch (error) {
+            console.error('Error fetching animal status:', error);
+            renderAnimalsTable(); // Render with default data
+        }
+    }
+    
+    // Start auto-refresh of animal status (syncs with dashboard)
+    function startStatusAutoRefresh() {
+        // Load immediately on page load
+        loadAnimalStatusData();
+        
+        // Refresh every 30 seconds to stay in sync with dashboard
+        if (statusRefreshInterval) clearInterval(statusRefreshInterval);
+        statusRefreshInterval = setInterval(() => {
+            loadAnimalStatusData();
+        }, 30000);
+    }
+    
+    // Stop auto-refresh when leaving page
+    function stopStatusAutoRefresh() {
+        if (statusRefreshInterval) {
+            clearInterval(statusRefreshInterval);
+            statusRefreshInterval = null;
+        }
+    }
+    
+    // Get status color and badge
+    function getStatusBadge(status) {
+        const statusMap = {
+            'Healthy': { bg: 'bg-green-100 dark:bg-green-900/50', text: 'text-green-700 dark:text-green-300', icon: '#10b981' },
+            'Warning': { bg: 'bg-amber-100 dark:bg-amber-900/50', text: 'text-amber-700 dark:text-amber-300', icon: '#f59e0b' },
+            'Ill': { bg: 'bg-red-100 dark:bg-red-900/50', text: 'text-red-700 dark:text-red-300', icon: '#ef4444' },
+            'Critical': { bg: 'bg-red-100 dark:bg-red-900/50', text: 'text-red-700 dark:text-red-300', icon: '#ef4444' }
+        };
+        return statusMap[status] || statusMap['Healthy'];
+    }
+    
+    // Get health index color based on status (not numeric value)
+    function getHealthIndexColor(status) {
+        if (!status) return { bg: 'bg-gray-100 dark:bg-gray-900/50', text: 'text-gray-700 dark:text-gray-300' };
+        
+        if (status === 'Healthy') {
+            // Green - Healthy
+            return { bg: 'bg-green-100 dark:bg-green-900/50', text: 'text-green-700 dark:text-green-300' };
+        } else if (status === 'Warning') {
+            // Amber/Yellow - Warning
+            return { bg: 'bg-amber-100 dark:bg-amber-900/50', text: 'text-amber-700 dark:text-amber-300' };
+        } else {
+            // Red - Critical/Ill
+            return { bg: 'bg-red-100 dark:bg-red-900/50', text: 'text-red-700 dark:text-red-300' };
+        }
+    }
+    
+    // Translate status to current language
+    function translateStatus(status) {
+        const statusMap = {
+            'Healthy': 'status.healthy',
+            'Warning': 'status.warning',
+            'Ill': 'status.ill',
+            'Critical': 'status.critical',
+            // Handle Hindi input
+            'स्वस्थ': 'status.healthy',
+            'चेतावनी': 'status.warning',
+            'बीमार': 'status.ill',
+            'गंभीर': 'status.critical'
+        };
+        
+        const i18nKey = statusMap[status];
+        if (i18nKey && window.i18n && typeof window.i18n.getTranslation === 'function') {
+            return window.i18n.getTranslation(i18nKey);
+        }
+        return status; // fallback to original
+    }
+    
+    // Render animals table with filter
+    function renderAnimalsTable() {
+        const searchTerm = document.getElementById('animalSearchInput')?.value.toLowerCase() || '';
+        const speciesFilter = document.getElementById('speciesFilter')?.value || '';
+        const statusFilter = document.getElementById('statusFilter')?.value || '';
+        
+        const tbody = document.getElementById('animalsTableBody');
+        const noMessage = document.getElementById('noAnimalsMessage');
+        
+        if (!tbody) return;
+        
+        // Filter animals
+        const filteredAnimals = Object.values(animalData).filter(animal => {
+            const matchesSearch = !searchTerm || 
+                animal.name.toLowerCase().includes(searchTerm) || 
+                animal.id.toLowerCase().includes(searchTerm);
+            const matchesSpecies = !speciesFilter || animal.species === speciesFilter;
+            
+            const animalStatus = animalStatusData[animal.id]?.status || 'Healthy';
+            const matchesStatus = !statusFilter || animalStatus === statusFilter;
+            
+            return matchesSearch && matchesSpecies && matchesStatus;
+        });
+        
+        if (filteredAnimals.length === 0) {
+            tbody.innerHTML = '';
+            noMessage.classList.remove('hidden');
+            return;
+        }
+        
+        noMessage.classList.add('hidden');
+        
+        tbody.innerHTML = filteredAnimals.map(animal => {
+            const status = animalStatusData[animal.id]?.status || 'Healthy';
+            const healthIndex = animalStatusData[animal.id]?.health_index || '--';
+            const statusBadge = getStatusBadge(status);
+            const healthIndexColor = getHealthIndexColor(status);
+            
+            return `
+                <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                    <td class="px-6 py-4">
+                        <span class="font-semibold text-slate-900 dark:text-white">#${animal.id}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-slate-900 dark:text-white">${animal.name}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-slate-600 dark:text-slate-400">${animal.species}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-slate-600 dark:text-slate-400">${animal.age} yrs</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${healthIndexColor.bg} ${healthIndexColor.text}">
+                            ${typeof healthIndex === 'number' ? healthIndex.toFixed(1) + '%' : healthIndex}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${statusBadge.bg} ${statusBadge.text}">
+                            <span class="h-2 w-2 rounded-full" style="background-color: ${statusBadge.icon}"></span>
+                            ${translateStatus(status)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    // Add event listeners for filters
+    document.getElementById('animalSearchInput')?.addEventListener('input', renderAnimalsTable);
+    document.getElementById('speciesFilter')?.addEventListener('change', renderAnimalsTable);
+    document.getElementById('statusFilter')?.addEventListener('change', renderAnimalsTable);
+    
+    // Load data on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        startStatusAutoRefresh();
+    });
+    
+    // Stop refresh when page is hidden (tab switch, navigate away)
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopStatusAutoRefresh();
+        } else {
+            startStatusAutoRefresh();
+        }
+    });
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+        stopStatusAutoRefresh();
+    });
+    
+    // Reload table when language changes
+    window.addEventListener('languageChanged', () => {
+        renderAnimalsTable();
+    });
     
     // Function to set up form for new animal
     function setupNewAnimalForm() {
@@ -497,7 +754,7 @@ function closePopupAndReload() {
 <strong data-i18n="bulk.excel_format">Excel Format:</strong> Your file should have columns: Name, Species, Weight (kg), Age (years), Gender
 </p>
 <p class="text-xs text-blue-700 dark:text-blue-300">
-<strong data-i18n="bulk.valid_species">Valid Species:</strong> Cow, Buffalo, Sheep, Goat, Horse, Pig
+<strong data-i18n="bulk.valid_species">Valid Species:</strong> Cow, Buffalo, Sheep, Goat, Horse, Dog, Cat
 </p>
 </div>
 

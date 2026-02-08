@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Livestock Health Monitoring - Features</title>
+<title>Ani-Health - Features</title>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -40,7 +40,7 @@
 <div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
 <div class="flex items-center gap-2 text-primary">
 <span class="material-symbols-outlined text-[32px]">agriculture</span>
-<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Ani-Health</span>
 </div>
 </div>
 <div class="flex flex-col gap-2 p-4 flex-1">
@@ -59,6 +59,10 @@
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
 <span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
 <p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">biotech</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.disease_detection">Disease Detection</p>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('features') }}">
 <span class="material-symbols-outlined">tips_and_updates</span>
@@ -240,6 +244,18 @@ Explore the comprehensive suite of tools designed for early disease detection an
 <p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.species_available_desc">Support for Cow, Buffalo, Goat, Horse, and Sheep monitoring.</p>
 </div>
 </div>
+<!-- Feature Card 13: AI Disease Detection -->
+<a href="{{ url_for('imgdetect') }}" class="group flex flex-col gap-3 rounded-xl border border-[#dbe6df] dark:border-[#2a4030] bg-surface-light dark:bg-surface-dark p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 h-56 cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">biotech</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-[#111813] dark:text-white text-lg font-bold leading-tight">
+<span data-i18n="features.ai_disease_detection">AI Disease Detection</span>
+</h3>
+<p class="text-[#61896f] dark:text-gray-400 text-sm font-normal leading-relaxed" data-i18n="features.ai_disease_desc">Upload animal photos for instant AI-powered disease diagnosis and health recommendations.</p>
+</div>
+</a>
 </div>
 </div>
 </main>

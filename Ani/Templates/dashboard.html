@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Livestock Health Monitoring Dashboard</title>
+<title>Ani-Health Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -35,7 +35,7 @@
 <div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
 <div class="flex items-center gap-2 text-primary">
 <span class="material-symbols-outlined text-[32px]">agriculture</span>
-<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Ani-Health</span>
 </div>
 </div>
 <div class="flex flex-col gap-2 p-4 flex-1">
@@ -54,6 +54,10 @@
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
 <span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
 <p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">biotech</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.disease_detection">Disease Detection</p>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
 <span class="material-symbols-outlined">tips_and_updates</span>
@@ -1001,10 +1005,10 @@ async function updateLiveHealthDisplay(animalTag) {
     const healthIndexEl = document.getElementById('healthIndex');
     healthIndexEl.textContent = Math.round(averages.health_index) + '%';
     
-    // Color the health index based on value
-    if (averages.health_index >= 85) {
+    // Color the health index based on status (not numeric value)
+    if (latestReading.status === 'Healthy') {
         healthIndexEl.className = 'text-lg font-bold text-green-600';
-    } else if (averages.health_index >= 70) {
+    } else if (latestReading.status === 'Warning') {
         healthIndexEl.className = 'text-lg font-bold text-yellow-600';
     } else {
         healthIndexEl.className = 'text-lg font-bold text-red-600';
@@ -1097,11 +1101,11 @@ function updateReadingsTable(animalTag) {
         const timeStr = getRelativeTime(reading.timestamp);
         const label = index === 0 ? ' (Latest)' : '';
         
-        // Health index bar color
+        // Health index bar color matches status color
         let indexColor = 'bg-green-500';
-        if (reading.health_index < 70) {
+        if (reading.status === 'Critical' || reading.status === 'Ill') {
             indexColor = 'bg-red-500';
-        } else if (reading.health_index < 85) {
+        } else if (reading.status === 'Warning') {
             indexColor = 'bg-yellow-500';
         }
         
@@ -1929,8 +1933,11 @@ function renderTrendChart(labels, dataPoints, period) {
             pathPoints.push(`Q ${midX.toFixed(1)} ${prevY.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`);
         }
         
-        // Add data point circle
-        circleElements.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#13ec5b" stroke="white" stroke-width="1.5"/>`);
+        // Add data point circle with glow effect
+        circleElements.push(`
+            <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.5" fill="#13ec5b" opacity="0.3" filter="url(#glow)"></circle>
+            <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.5" fill="#13ec5b" stroke="white" stroke-width="0.8"></circle>
+        `);
         
         prevX = x;
         prevY = y;
@@ -1949,12 +1956,27 @@ function renderTrendChart(labels, dataPoints, period) {
     chartSvg.innerHTML = `
         <defs>
             <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="#13ec5b" stop-opacity="0.5"></stop>
+                <stop offset="0%" stop-color="#13ec5b" stop-opacity="0.6"></stop>
+                <stop offset="50%" stop-color="#13ec5b" stop-opacity="0.3"></stop>
                 <stop offset="100%" stop-color="#13ec5b" stop-opacity="0"></stop>
             </linearGradient>
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="1" result="coloredBlur"></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+            <filter id="lineGlow">
+                <feGaussianBlur stdDeviation="0.8" result="coloredBlur"></feGaussianBlur>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
         </defs>
-        <path d="${filledPath}" fill="url(#gradient)" opacity="0.3" stroke="none"></path>
-        <path d="${pathD}" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="${filledPath}" fill="url(#gradient)" opacity="0.4" stroke="none"></path>
+        <path d="${pathD}" fill="none" stroke="currentColor" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" filter="url(#lineGlow)" opacity="0.9"></path>
         ${circleElements.join('')}
     `;
     

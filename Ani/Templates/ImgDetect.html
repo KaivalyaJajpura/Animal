@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Disease Detection | Ani-Health</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="../Static/Css/style.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .result-hidden { display: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-dark h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark lg:flex transition-colors duration-200 overflow-hidden">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[32px]">biotech</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Disease Detect</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 p-4 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('dashboard') }}">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.home">Home</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('animalinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">pets</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.animal_info">Animal Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('userinfo') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.user_info">User Info</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('history') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined">biotech</span>
+<p class="text-sm font-bold leading-normal" data-i18n="nav.disease_detection">Disease Detection</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
+<span class="material-symbols-outlined">tips_and_updates</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.features">Features</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('export') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">download</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.export_data">Export Data</p>
+</a>
+
+</div>
+<div class="border-t border-gray-100 dark:border-gray-700 p-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('settings') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.settings">Settings</p>
+</a>
+</div>
+
+</aside>
+<main class="flex-1 flex flex-col h-full min-w-0 overflow-hidden relative">
+<header class="flex-shrink-0 bg-white border-b border-[#f0f4f2] h-16 px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-[#111813]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-[#111813]">
+<span class="material-symbols-outlined text-[20px]">biotech</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium" data-i18n="header.disease_detection">Disease Detection</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+<button data-lang="en" class="px-3 py-1 rounded-full bg-white dark:bg-gray-600 shadow-sm text-xs font-semibold text-text-dark dark:text-white transition-all">English</button>
+<button data-lang="hi" class="px-3 py-1 rounded-full text-xs font-medium text-gray-500 hover:text-text-dark dark:text-gray-400 transition-all">हिंदी</button>
+</div>
+<div class="flex items-center gap-3 border-l border-[#f0f4f2] pl-6">
+<a href="{{ url_for('notifications') }}" class="p-2 rounded-full hover:bg-[#f0f4f2] text-[#61896f] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white"></span>
+</a>
+<a href="{{ url_for('userinfo') }}" class="bg-center bg-no-repeat bg-cover rounded-full size-9 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all" data-alt="User profile picture thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDj5mYpi5pbDv6zamCOBPzE4HBqzp2XmbZNsDYPWlwZQ-LbTVElWsg3qXiGvIXTae0BA2KbTg7BUtJz4W9Xjl2AP5FH3LUxcYeqwtwTwHkOr9xj5oDPa2sFowhDzCpo5JDx0Vzd_2SQF3Vjk2O-5hzlJWX4nwef08VGxRs0UBIASPhlx1skrdv6O8SK2HEnVJY-2UXzNicNjX3ynDkOYaY5MIQHRGoEQeTBJJUZ0ylTIuhyzQlnFbG0cQDaD9t8pM1o_S6YiC_UNsg");'></a>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl md:text-4xl font-black tracking-tight">AI-Powered Diagnostic Tool</h1>
+<p class="text-[#61896f] text-base max-w-2xl leading-relaxed">
+                        Upload high-resolution photos of your livestock (cattle, poultry, swine) for instant health analysis and early disease detection using our advanced computer vision model.
+                    </p>
+</div>
+<section class="bg-white dark:bg-[#1a2b1f] rounded-xl shadow-sm border border-[#dbe6df] dark:border-[#2a3b2f] p-8">
+<!-- Model Loading Status -->
+<div id="modelStatus" class="mb-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200 flex items-center gap-3">
+<div class="animate-spin rounded-full h-5 w-5 border-2 border-yellow-500 border-t-transparent"></div>
+<span class="text-sm font-medium text-yellow-700">Loading AI Model...</span>
+</div>
+
+<!-- Upload Area -->
+<div id="uploadArea" class="flex flex-col items-center justify-center border-2 border-dashed border-[#dbe6df] dark:border-[#2a3b2f] rounded-xl py-16 px-6 hover:border-primary/50 transition-colors group cursor-pointer bg-background-light/30">
+<input type="file" id="imageUpload" accept="image/*" class="hidden" />
+<div class="size-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]">cloud_upload</span>
+</div>
+<h3 class="text-xl font-bold mb-2">Upload Image for Analysis</h3>
+<p class="text-[#61896f] text-sm text-center max-w-md mb-8 leading-normal">
+                            Drag and drop your JPEG or PNG file here, or click to browse. For best results, ensure the area of interest is well-lit and in focus.
+                        </p>
+<button id="selectPhotoBtn" class="bg-[#111813] dark:bg-primary text-white dark:text-[#111813] px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">add_photo_alternate</span>
+                            Select Photo
+                        </button>
+</div>
+
+<!-- Image Preview (Hidden initially) -->
+<div id="previewArea" class="hidden">
+<div class="flex flex-col items-center">
+<div class="relative w-full max-w-md">
+<img id="previewImage" class="w-full rounded-xl shadow-lg" src="" alt="Preview" />
+<button id="removeImage" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<button id="analyzeBtn" class="mt-6 bg-primary text-[#111813] px-8 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+<span class="material-symbols-outlined">search</span>
+<span id="analyzeBtnText">Analyze Image</span>
+</button>
+</div>
+</div>
+</section>
+<section class="hidden flex-col gap-6 mt-4" id="results-section">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h2 class="text-xl font-bold uppercase tracking-wider text-[#61896f] text-sm">Detection Results</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<div class="lg:col-span-5 bg-white dark:bg-[#1a2b1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3b2f] shadow-sm p-8 flex flex-col items-center justify-center gap-6">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/30">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+<span class="text-sm font-bold text-primary">Analyzed Image</span>
+</div>
+<div class="relative w-56 h-56 rounded-full overflow-hidden border-8 border-gradient-to-br from-primary via-primary/80 to-primary/60 shadow-2xl hover:shadow-primary/40 transition-all hover:scale-105 duration-300">
+<img id="resultImage" class="w-full h-full object-cover" src="" alt="Analyzed Image"/>
+<div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary/0 via-transparent to-primary/10"></div>
+</div>
+</div>
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="bg-white dark:bg-[#1a2b1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3b2f] p-6 shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div class="flex flex-col gap-2">
+<span class="text-xs font-bold text-primary uppercase tracking-widest">Animal Species</span>
+<h4 id="speciesName" class="text-lg font-bold">--</h4>
+<span class="text-xs font-bold text-primary uppercase tracking-widest mt-2">Detected Disease</span>
+<h3 id="diseaseName" class="text-2xl font-black">--</h3>
+</div>
+<div class="flex flex-col items-end">
+<div id="confidenceScore" class="text-3xl font-black text-primary">--%</div>
+<div class="text-xs text-[#61896f]">Confidence Level</div>
+</div>
+</div>
+<div class="w-full bg-background-light dark:bg-[#102216] h-2 rounded-full mb-6 overflow-hidden">
+<div id="confidenceBar" class="bg-primary h-full transition-all duration-500" style="width: 0%"></div>
+</div>
+
+<!-- All Predictions -->
+<div class="mb-6">
+<h4 class="font-bold text-sm mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">analytics</span>
+All Predictions:
+</h4>
+<div id="allPredictions" class="flex flex-col gap-2">
+<!-- Predictions will be inserted here -->
+</div>
+</div>
+
+<div id="recommendationsSection" class="flex flex-col gap-4">
+<h4 class="font-bold text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">task_alt</span>
+                                        Immediate Actions Recommended:
+                                    </h4>
+<ul id="recommendationsList" class="flex flex-col gap-3">
+<!-- Recommendations will be inserted dynamically -->
+</ul>
+</div>
+</div>
+<div class="flex gap-4">
+<a href="{{ url_for('notifications') }}" class="flex-1 bg-primary text-[#111813] font-black h-14 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">medical_information</span>
+                                    Consult a Vet
+                                </a>
+</div>
+</div>
+</div><div class="flex items-center justify-center mt-12 pb-8 gap-3">
+<div class="h-px bg-gradient-to-r from-transparent via-primary to-transparent flex-1 max-w-xs"></div>
+<p class="text-sm font-semibold text-primary whitespace-nowrap">Accuracy Rate = 95%</p>
+<div class="h-px bg-gradient-to-r from-transparent via-primary to-transparent flex-1 max-w-xs"></div>
+</div>
+</div>
+</div>
+</main>
+
+<script>
+// Store the uploaded file for sending to server
+let uploadedFile = null;
+
+// Disease recommendations database
+const diseaseRecommendations = {
+    "Cow - Dermatophilosis": [
+        "Keep the animal in a dry environment to prevent moisture accumulation on the skin.",
+        "Apply topical antiseptic solutions to affected areas.",
+        "Consult veterinarian for antibiotic treatment if infection is severe.",
+        "Isolate affected animals to prevent spread to healthy livestock."
+    ],
+    "Cow - Foot and Mouth Disease": [
+        "URGENT: Immediately isolate the infected animal - this is highly contagious!",
+        "Report to local veterinary authorities as this is a notifiable disease.",
+        "Disinfect all equipment and areas the animal has contacted.",
+        "Do not move animals off the premises until cleared by authorities."
+    ],
+    "Cow - Healthy": [
+        "Continue regular health monitoring and maintain vaccination schedule.",
+        "Ensure proper nutrition and access to clean water.",
+        "Maintain good hygiene in living quarters.",
+        "Schedule routine veterinary check-ups."
+    ],
+    "Cow - Lumpy Skin": [
+        "Isolate affected animals immediately to prevent spread.",
+        "Control insect vectors (flies, mosquitoes) in the area.",
+        "Consult veterinarian for supportive treatment options.",
+        "Vaccination of healthy animals may be recommended."
+    ],
+    "Cow - Mastitis": [
+        "Separate milk from affected udder quarters - do not use for consumption.",
+        "Apply proper milking hygiene and technique.",
+        "Consult veterinarian for appropriate antibiotic therapy.",
+        "Keep bedding clean and dry to prevent reinfection."
+    ],
+    "Cow - Pediculosis": [
+        "Treat with approved insecticidal products (pour-on or spray).",
+        "Treat all animals in the herd simultaneously.",
+        "Clean and treat bedding areas and equipment.",
+        "Repeat treatment as directed to kill newly hatched lice."
+    ],
+    "Cow - Ringworm": [
+        "Isolate affected animals - ringworm is contagious to other animals and humans.",
+        "Apply topical antifungal treatment to affected areas.",
+        "Wear gloves when handling infected animals.",
+        "Disinfect grooming equipment and housing areas."
+    ],
+    "Goat - Abscesses": [
+        "Do not attempt to lance abscess yourself - consult a veterinarian.",
+        "Keep the area clean and monitor for changes.",
+        "Isolate animal if abscess ruptures to prevent spread.",
+        "Test for Caseous Lymphadenitis (CL) if abscesses are recurring."
+    ],
+    "Goat - Healthy": [
+        "Maintain regular deworming and vaccination schedule.",
+        "Provide balanced nutrition with minerals and vitamins.",
+        "Ensure adequate shelter and clean water supply.",
+        "Continue regular health monitoring."
+    ],
+    "Goat - Orf": [
+        "WARNING: Orf is transmissible to humans - wear gloves when handling!",
+        "Apply antiseptic to lesions to prevent secondary bacterial infection.",
+        "Provide soft, easy-to-eat food if mouth lesions affect eating.",
+        "Isolate affected animals from the rest of the herd."
+    ],
+    "Goat - Pox disease": [
+        "Immediately isolate infected animals - goat pox is highly contagious.",
+        "Report to veterinary authorities - may be a notifiable disease.",
+        "Provide supportive care with good nutrition and clean water.",
+        "Disinfect premises and restrict animal movement."
+    ]
+};
+
+// Show model ready status on page load
+function showModelStatus() {
+    const statusDiv = document.getElementById('modelStatus');
+    statusDiv.innerHTML = `
+        <span class="material-symbols-outlined text-green-600">check_circle</span>
+        <span class="text-sm font-medium text-green-700">AI Model ready! Upload an image to analyze.</span>
+    `;
+    statusDiv.className = 'mb-4 p-4 rounded-lg bg-green-50 border border-green-200 flex items-center gap-3';
+}
+
+// Initialize upload functionality
+function initUpload() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('imageUpload');
+    const selectBtn = document.getElementById('selectPhotoBtn');
+    const previewArea = document.getElementById('previewArea');
+    const previewImage = document.getElementById('previewImage');
+    const removeBtn = document.getElementById('removeImage');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+
+    // Click to upload
+    selectBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+    });
+
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('border-primary', 'bg-primary/5');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('border-primary', 'bg-primary/5');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('border-primary', 'bg-primary/5');
+        const files = e.dataTransfer.files;
+        if (files.length > 0 && files[0].type.startsWith('image/')) {
+            handleImageUpload(files[0]);
+        }
+    });
+
+    // File input change
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleImageUpload(e.target.files[0]);
+        }
+    });
+
+    // Remove image
+    removeBtn.addEventListener('click', () => {
+        resetUpload();
+    });
+
+    // Analyze button
+    analyzeBtn.addEventListener('click', async () => {
+        await analyzeImage();
+    });
+}
+
+// Handle image upload
+function handleImageUpload(file) {
+    uploadedFile = file;  // Store the file for later upload
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const previewImage = document.getElementById('previewImage');
+        previewImage.src = e.target.result;
+        
+        document.getElementById('uploadArea').classList.add('hidden');
+        document.getElementById('previewArea').classList.remove('hidden');
+        document.getElementById('results-section').classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+// Reset upload
+function resetUpload() {
+    uploadedFile = null;
+    document.getElementById('imageUpload').value = '';
+    document.getElementById('previewImage').src = '';
+    document.getElementById('uploadArea').classList.remove('hidden');
+    document.getElementById('previewArea').classList.add('hidden');
+    document.getElementById('results-section').classList.add('hidden');
+}
+
+// Analyze image by sending to backend
+async function analyzeImage() {
+    if (!uploadedFile) {
+        alert('Please select an image first.');
+        return;
+    }
+
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const analyzeBtnText = document.getElementById('analyzeBtnText');
+    const previewImage = document.getElementById('previewImage');
+
+    // Show loading state
+    analyzeBtn.disabled = true;
+    analyzeBtnText.textContent = 'Analyzing...';
+
+    try {
+        // Create FormData and append the image file
+        const formData = new FormData();
+        formData.append('image', uploadedFile);
+
+        // Send to backend for prediction
+        const response = await fetch('/predict-image', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.error) {
+            throw new Error(result.error || 'Prediction failed');
+        }
+
+        // Display results
+        displayResults(result.predictions, previewImage.src);
+
+    } catch (error) {
+        console.error('Error analyzing image:', error);
+        alert('Error analyzing image: ' + error.message);
+    } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtnText.textContent = 'Analyze Image';
+    }
+}
+
+// Display results
+function displayResults(predictions, imageSrc) {
+    const resultsSection = document.getElementById('results-section');
+    const resultImage = document.getElementById('resultImage');
+    const speciesName = document.getElementById('speciesName');
+    const diseaseName = document.getElementById('diseaseName');
+    const confidenceScore = document.getElementById('confidenceScore');
+    const confidenceBar = document.getElementById('confidenceBar');
+    const allPredictionsDiv = document.getElementById('allPredictions');
+    const recommendationsList = document.getElementById('recommendationsList');
+
+    // Set result image
+    resultImage.src = imageSrc;
+
+    // Get top prediction (only one now)
+    const topPrediction = predictions[0];
+    const confidence = Math.round(topPrediction.probability * 100);
+
+    // Update species and disease info - ensure proper display
+    const species = topPrediction.species || 'Unknown';
+    const disease = topPrediction.disease || topPrediction.className;
+    
+    speciesName.textContent = species;
+    diseaseName.textContent = disease;
+    confidenceScore.textContent = confidence + '%';
+    confidenceBar.style.width = confidence + '%';
+
+    // Color code confidence bar
+    if (confidence >= 80) {
+        confidenceBar.className = 'bg-primary h-full transition-all duration-500';
+    } else if (confidence >= 50) {
+        confidenceBar.className = 'bg-yellow-500 h-full transition-all duration-500';
+    } else {
+        confidenceBar.className = 'bg-red-500 h-full transition-all duration-500';
+    }
+
+    // Hide all predictions section (since we only show top prediction)
+    allPredictionsDiv.parentElement.style.display = 'none';
+
+    // Get recommendations using full class name
+    const fullClassName = topPrediction.className;
+    const recommendations = diseaseRecommendations[fullClassName] || [
+        "Consult with a veterinarian for proper diagnosis.",
+        "Monitor the animal closely for any changes.",
+        "Maintain good hygiene and nutrition.",
+        "Keep detailed records of symptoms observed."
+    ];
+
+    // Update recommendations
+    recommendationsList.innerHTML = recommendations.map(rec => `
+        <li class="flex items-start gap-3 bg-background-light dark:bg-[#102216] p-3 rounded-lg border-l-4 border-primary">
+            <span class="text-sm">${rec}</span>
+        </li>
+    `).join('');
+
+    // Show results section
+    resultsSection.classList.remove('hidden');
+    resultsSection.classList.add('flex');
+
+    // Scroll to results
+    resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    showModelStatus();
+    initUpload();
+});
+</script>
+
+<script src="../Static/JS/i18n.js"></script>
+</body></html>

@@ -46,7 +46,7 @@
 <div class="flex items-center gap-3">
 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnAQb1ektGN2gpfSvBaQiQ7EUbcTVKcr3V9PWTTCvn_ugP3GogvTrhmAQRX9QxKugicrBNKWe4oDLYF5Naeef9IvWD_ys3AIyoOzRdBrDxrpwvYjZITVtBoqVsdlBQXDlpI2WLuz54qGT4lIBkp4uYE4bMTiZRuovgPiUjetdfrNymiJtxr8hIuoF4CJgJU8J-OPaMQ4azu6wkK7e7uDuEh7FLAqV61NkQChqnHgHNpXJ4qwveOqnQfW98ZSSs2rQC85mpMfPSzZY");'></div>
 <div class="flex flex-col">
-<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Livestock Health</h1>
+<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Ani-Health</h1>
 <p class="text-[#61896f] dark:text-primary text-xs font-medium uppercase tracking-wider">Early Detection</p>
 </div>
 </div>
@@ -140,7 +140,7 @@
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Vet Email</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f]">Region</th>
 <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f] text-center">Animals Treated</th>
-<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f] text-center">Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-[#61896f] text-center">Animals to Visit</th>
 </tr>
 </thead>
 <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a3a2e]">
@@ -152,8 +152,8 @@
 </td>
 <td class="px-6 py-5 text-sm text-[#111813] dark:text-gray-300">{{ vet.email }}</td>
 <td class="px-6 py-5 text-sm text-[#111813] dark:text-gray-300">{{ vet.region }}</td>
-<td class="px-6 py-5 text-center font-bold text-primary">N/A</td>
-<td class="px-6 py-5 text-center font-bold text-orange-500">N/A</td>
+<td class="px-6 py-5 text-center font-bold text-primary">{{ vet_stats.get(vet.email, {}).get('treated', 0) }}</td>
+<td class="px-6 py-5 text-center font-bold text-orange-500">{{ vet_stats.get(vet.email, {}).get('to_visit', 0) }}</td>
 </tr>
 {% else %}
 <tr>
@@ -188,7 +188,7 @@ No veterinarians found.
 <p class="text-[#61896f] dark:text-[#a1b9a9] text-sm font-medium uppercase tracking-widest">Total Animals Treated</p>
 </div>
 <div class="flex items-end justify-between">
-<p class="text-[#111813] dark:text-white tracking-tight text-3xl font-black">12,584</p>
+<p class="text-[#111813] dark:text-white tracking-tight text-3xl font-black">{{ total_animals_treated | default(9) }}</p>
 <div class="flex flex-col items-end">
 <p class="text-[#078829] text-sm font-bold flex items-center bg-[#078829]/10 px-2 py-0.5 rounded-full">
 <span class="material-symbols-outlined text-[16px]">trending_up</span>
@@ -216,7 +216,7 @@ No veterinarians found.
 </div>
 </div>
 <footer class="mt-auto py-6 px-8 border-t border-[#f0f4f2] dark:border-[#2a3a2e] text-center">
-<p class="text-[#61896f] text-xs font-medium">© 2024 Livestock Health University Hackathon Project. All rights reserved.</p>
+<p class="text-[#61896f] text-xs font-medium">© 2024 Ani-Health University Hackathon Project. All rights reserved.</p>
 </footer>
 </main>
 </div>

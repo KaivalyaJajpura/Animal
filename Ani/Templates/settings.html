@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Livestock Health System - Settings</title>
+<title>Ani-Health - Settings</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
@@ -63,7 +63,7 @@
 <div class="flex h-16 items-center px-6 border-b border-slate-100">
 <div class="flex items-center gap-2 text-primary">
 <span class="material-symbols-outlined text-[32px]">agriculture</span>
-<span class="text-xl font-bold tracking-tight text-slate-900">AgriHealth</span>
+<span class="text-xl font-bold tracking-tight text-slate-900">Ani-Health</span>
 </div>
 </div>
 <div class="flex flex-col gap-2 p-4 flex-1">
@@ -82,6 +82,10 @@
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('history') }}">
 <span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
 <p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">biotech</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark" data-i18n="nav.disease_detection">Disease Detection</p>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors group" href="{{ url_for('features') }}">
 <span class="material-symbols-outlined">tips_and_updates</span>

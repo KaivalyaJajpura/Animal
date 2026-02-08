@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vet Dashboard - Monitoring Overview</title>
+    <title>Vet Dashboard - Ani-Health</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="../Static/Css/style.css" rel="stylesheet"/>
     <script id="tailwind-config">
@@ -67,7 +67,7 @@
                         <div class="bg-primary/20 flex items-center justify-center rounded-xl size-10 text-primary">
                             <span class="material-symbols-outlined filled-icon">pets</span>
                         </div>
-                        <h1 class="text-[#111813] text-lg font-bold leading-normal" data-i18n="vet.livestock_health">Livestock Health</h1>
+                        <h1 class="text-[#111813] text-lg font-bold leading-normal" data-i18n="vet.livestock_health">Ani-Health</h1>
                     </div>
                     <nav class="flex flex-col gap-2">
                         <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-[#111813] shadow-sm shadow-primary/20" href="{{ url_for('vetdashboard') }}">
@@ -397,9 +397,36 @@
                 'Healthy': { bg: 'bg-green-100', text: 'text-green-700', icon: '#10b981' },
                 'Warning': { bg: 'bg-amber-100', text: 'text-amber-700', icon: '#f59e0b' },
                 'Ill': { bg: 'bg-red-100', text: 'text-red-700', icon: '#ef4444' },
-                'Critical': { bg: 'bg-red-100', text: 'text-red-700', icon: '#ef4444' }
+                'Critical': { bg: 'bg-red-100', text: 'text-red-700', icon: '#ef4444' },
+                // Hindi translations
+                'स्वस्थ': { bg: 'bg-green-100', text: 'text-green-700', icon: '#10b981' },
+                'चेतावनी': { bg: 'bg-amber-100', text: 'text-amber-700', icon: '#f59e0b' },
+                'बीमार': { bg: 'bg-red-100', text: 'text-red-700', icon: '#ef4444' },
+                'गंभीर': { bg: 'bg-red-100', text: 'text-red-700', icon: '#ef4444' }
             };
             return colors[status] || { bg: 'bg-gray-100', text: 'text-gray-700', icon: '#6b7280' };
+        }
+
+        // Translate status to current language
+        function translateStatus(status) {
+            // Normalize status to English first
+            const statusMap = {
+                'Healthy': 'status.healthy',
+                'Warning': 'status.warning',
+                'Ill': 'status.ill',
+                'Critical': 'status.critical',
+                // Handle Hindi input
+                'स्वस्थ': 'status.healthy',
+                'चेतावनी': 'status.warning',
+                'बीमार': 'status.ill',
+                'गंभीर': 'status.critical'
+            };
+            
+            const i18nKey = statusMap[status];
+            if (i18nKey && window.i18n && typeof window.i18n.getTranslation === 'function') {
+                return window.i18n.getTranslation(i18nKey);
+            }
+            return status; // fallback to original
         }
 
         // Get animal icon based on species
@@ -410,7 +437,9 @@
                 'Goat': 'pest_control_rodent',
                 'Sheep': 'pets',
                 'Horse': 'egg',
-                'Pig': 'pets'
+                'Pig': 'pets',
+                'Dog': 'pets',
+                'Cat': 'pets'
             };
             return icons[species] || 'pets';
         }
@@ -423,7 +452,9 @@
                 'Goat': 'bg-amber-100 text-amber-600',
                 'Sheep': 'bg-purple-100 text-purple-600',
                 'Horse': 'bg-pink-100 text-pink-600',
-                'Pig': 'bg-indigo-100 text-indigo-600'
+                'Pig': 'bg-indigo-100 text-indigo-600',
+                'Dog': 'bg-orange-100 text-orange-600',
+                'Cat': 'bg-teal-100 text-teal-600'
             };
             return colors[species] || 'bg-blue-100 text-blue-600';
         }
@@ -482,7 +513,7 @@
                         <td class="px-6 py-4">
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${statusColor.bg} ${statusColor.text}">
                                 <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${statusColor.icon}"></span>
-                                ${apt.health_status}
+                                ${translateStatus(apt.health_status)}
                             </span>
                         </td>
                         <td class="px-6 py-4">
@@ -553,7 +584,7 @@
                     </div>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${statusColor.bg} ${statusColor.text} shadow-sm">
                         <span class="w-2 h-2 rounded-full" style="background-color: ${statusColor.icon}"></span>
-                        ${currentConfirmAppointment.health_status}
+                        ${translateStatus(currentConfirmAppointment.health_status)}
                     </span>
                 </div>
             `;

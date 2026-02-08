@@ -34,6 +34,20 @@ SPECIES_PARAMS = {
         'body_temp': {'min': 38.3, 'max': 39.9, 'normal': 39.1, 'multiplier': 18},
         'blood_pressure': {'min': 90, 'max': 130, 'normal': 110, 'multiplier': 15},
         'movement_expected': 'Normal'
+    },
+    'Dog': {
+        # Dog: Normal temp 38.3-39.2°C (avg 38.6°C), HR 60-120 bpm (avg 90 bpm), BP 110-130/70-90 (avg 120/80)
+        'heart_rate': {'min': 60, 'max': 120, 'normal': 90, 'multiplier': 1.5},
+        'body_temp': {'min': 38.3, 'max': 39.2, 'normal': 38.6, 'multiplier': 28},
+        'blood_pressure': {'min': 110, 'max': 130, 'normal': 120, 'multiplier': 15},
+        'movement_expected': 'Active'
+    },
+    'Cat': {
+        # Cat: Normal temp 38.1-39.2°C (avg 38.9°C), HR 120-180 bpm (avg 150 bpm), BP 110-130/70-90 (avg 120/80)
+        'heart_rate': {'min': 120, 'max': 180, 'normal': 150, 'multiplier': 1.2},
+        'body_temp': {'min': 38.1, 'max': 39.2, 'normal': 38.9, 'multiplier': 30},
+        'blood_pressure': {'min': 110, 'max': 130, 'normal': 120, 'multiplier': 18},
+        'movement_expected': 'Active'
     }
 }
 
@@ -130,11 +144,11 @@ def simulate_reading(species, health_state='random'):
     params = get_species_params(species)
     
     if health_state == 'random':
-        # 70% healthy, 20% warning, 10% ill
+        # 50% healthy, 30% warning, 20% ill
         rand = random.random()
-        if rand < 0.70:
+        if rand < 0.50:
             health_state = 'healthy'
-        elif rand < 0.90:
+        elif rand < 0.80:
             health_state = 'warning'
         else:
             health_state = 'ill'
@@ -229,13 +243,13 @@ def calculate_health_index(heart_rate, body_temp, blood_pressure, movement, spec
 def classify_health_status(health_index):
     """
     Classify health status based on health index
-    80-100: Healthy
-    50-79: Warning
-    <50: Ill
+    65-100: Healthy
+    40-64: Warning
+    <40: Ill
     """
-    if health_index >= 80:
+    if health_index >= 65:
         return 'Healthy'
-    elif health_index >= 50:
+    elif health_index >= 40:
         return 'Warning'
     else:
         return 'Ill'
@@ -431,24 +445,113 @@ def generate_readings_history(species, num_readings=10):
 
 
 def get_current_health_data(animal_tag, species):
-    """Get current health data for an animal with gradual changes"""
+    """
+    Get current health data for an animal with gradual changes.
+    Constraint: Max 10% difference from last reading's health index
+    """
     global previous_readings
     
-    # Get previous reading for this animal
+    # Get previous reading from memory
     prev_reading = previous_readings.get(animal_tag)
     
-    # Generate new reading based on previous (gradual change)
-    reading = generate_gradual_reading(species, prev_reading)
+    # Get last health index from database
+    last_health_index_db = None
+    try:
+        import sqlite3
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT health_index FROM health_readings
+            WHERE animal_tag = ?
+            ORDER BY timestamp DESC
+            LIMIT 1
+        ''', (animal_tag,))
+        result = cursor.fetchone()
+        conn.close()
+        if result:
+            last_health_index_db = result[0]
+    except:
+        pass
     
-    # Check if this reading is an outlier (too different from previous)
-    if prev_reading and is_outlier_reading(reading, prev_reading, species):
-        # This is an outlier - mark it and regenerate a more gradual reading
-        print(f"[{animal_tag}] Outlier detected, regenerating gradual reading...")
+    # Try to generate a reading that respects the constraint
+    for attempt in range(30):
         reading = generate_gradual_reading(species, prev_reading)
+        
+        # Check if this reading is an outlier (too different from previous in-memory reading)
+        if prev_reading and is_outlier_reading(reading, prev_reading, species):
+            continue  # Try again
+        
+        # Calculate health index for this reading
+        health_index = calculate_health_index(
+            reading['heart_rate'],
+            reading['body_temp'],
+            reading['blood_pressure'],
+            reading['movement'],
+            species
+        )
+        
+        # Check constraint: max 10% difference from last database reading
+        if last_health_index_db is not None:
+            health_change = abs(health_index - last_health_index_db)
+            if health_change > 10:
+                continue  # Try again - change is too large
+        
+        # This reading is valid
+        previous_readings[animal_tag] = reading
+        
+        status = classify_health_status(health_index)
+        alert = check_consecutive_alerts(animal_tag, status)
+        
+        return {
+            'animal_tag': animal_tag,
+            'species': species,
+            'heart_rate': reading['heart_rate'],
+            'body_temp': reading['body_temp'],
+            'blood_pressure': reading['blood_pressure'],
+            'movement': reading['movement'],
+            'health_index': health_index,
+            'status': status,
+            'status_color': get_status_color(status),
+            'alert': alert,
+            'timestamp': datetime.now().isoformat()
+        }
     
-    # Store this reading as the previous for next time
-    previous_readings[animal_tag] = reading
+    # Fallback: if we couldn't find a valid reading after 30 attempts,
+    # generate one close to the last database value
+    if last_health_index_db is not None:
+        # Constrain to ±10% of last reading
+        target_min = max(0, last_health_index_db - 10)
+        target_max = min(100, last_health_index_db + 10)
+        
+        # Generate reading targeting this range
+        for attempt in range(20):
+            reading = generate_gradual_reading(species, prev_reading)
+            health_index = calculate_health_index(
+                reading['heart_rate'],
+                reading['body_temp'],
+                reading['blood_pressure'],
+                reading['movement'],
+                species
+            )
+            if target_min <= health_index <= target_max:
+                previous_readings[animal_tag] = reading
+                status = classify_health_status(health_index)
+                alert = check_consecutive_alerts(animal_tag, status)
+                return {
+                    'animal_tag': animal_tag,
+                    'species': species,
+                    'heart_rate': reading['heart_rate'],
+                    'body_temp': reading['body_temp'],
+                    'blood_pressure': reading['blood_pressure'],
+                    'movement': reading['movement'],
+                    'health_index': health_index,
+                    'status': status,
+                    'status_color': get_status_color(status),
+                    'alert': alert,
+                    'timestamp': datetime.now().isoformat()
+                }
     
+    # Last resort: return what we have (should rarely reach here)
     health_index = calculate_health_index(
         reading['heart_rate'],
         reading['body_temp'],
@@ -456,7 +559,7 @@ def get_current_health_data(animal_tag, species):
         reading['movement'],
         species
     )
-    
+    previous_readings[animal_tag] = reading
     status = classify_health_status(health_index)
     alert = check_consecutive_alerts(animal_tag, status)
     

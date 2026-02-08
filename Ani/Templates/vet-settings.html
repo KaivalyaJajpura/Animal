@@ -4,7 +4,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vet Settings - Livestock Health Monitor</title>
+<title>Vet Settings - Ani-Health</title>
 <!-- Google Fonts: Inter -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -49,7 +49,7 @@
 <span class="material-symbols-outlined text-[#13ec5b] text-3xl" style="font-variation-settings: 'FILL' 1;">pets</span>
 </div>
 <div class="flex flex-col">
-<h1 class="text-[#111813] text-lg font-bold leading-tight" data-i18n="vet.livestock_health">Livestock Health</h1>
+<h1 class="text-[#111813] text-lg font-bold leading-tight" data-i18n="vet.livestock_health">Ani-Health</h1>
 <p class="text-[#637588] text-xs font-medium uppercase tracking-wider">Vet Dashboard</p>
 </div>
 </div>
@@ -102,10 +102,6 @@
 </div>
 <a href="{{ url_for('vet_settings') }}" class="size-10 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer hover:opacity-80 transition-opacity" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCndGVYdzAaSugGdYe2j_M7wMD3ZcejVWHENSW9PXjoVc0_MNmKCzr_hPt0YUhtzUCbYJKaWENV9GrxhvUTnmxiDXJkTDIxFHoHcWCtbV8N0JZp0pEPp_Vmv7ED-7DjAFfc4pFOz_cnuHF7Y1ZqlhOZi8z3BM-GNQU5RFmT3OGbqCucmPvpqJWkhzipq4nMJ2iEuLcucTEiZXPriXamK8UPUeyUSkajhUqXadCakX1cEuYqrDi0EFDuARTZ9U_2PqWQ9jzSZ1ECGLE');"></a>
 </div>
-<a href="{{ url_for('vet_logout') }}" class="flex items-center gap-2 text-[#637588] hover:text-red-600 transition-colors px-3 py-2 rounded-lg hover:bg-red-50">
-<span class="material-symbols-outlined text-[20px]">logout</span>
-<span class="text-sm font-medium hidden sm:inline" data-i18n="vet.logout">Logout</span>
-</a>
 </div>
 </header>
 <!-- Main Scrollable Content -->
@@ -341,14 +337,9 @@
             });
         });
 
-        // Helper function to get translation
-        function getTranslation(key) {
-            if (window.i18n) {
-                return window.i18n.getTranslation(key, window.i18n.currentLanguage);
-            }
-            return key;
-        }
-
+    </script>
+<script src="../Static/JS/i18n.js"></script>
+<script>
         // Function to update doctor name with translated title
         function updateDoctorNameDisplay() {
             const doctorNameEl = document.getElementById('vetDoctorName');
@@ -356,7 +347,7 @@
                 let fullName = doctorNameEl.getAttribute('data-name');
                 // Remove any existing "Dr." or "डॉ." prefix to avoid duplication
                 fullName = fullName.replace(/^(Dr\.\s*|डॉ\.\s*)/, '').trim();
-                const doctorTitle = getTranslation('vet.doctor_title');
+                const doctorTitle = window.i18n.getTranslation('vet.doctor_title');
                 doctorNameEl.textContent = doctorTitle + ' ' + fullName;
             }
         }
@@ -370,7 +361,6 @@
                 updateDoctorNameDisplay();
             });
         });
-    </script>
-<script src="../Static/JS/i18n.js"></script>
+</script>
 <script src="../Static/JS/script.js"></script>
 </body></html>

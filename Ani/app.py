@@ -7,20 +7,60 @@ from user import init_animals_table, add_animal, get_animals_by_user, get_all_an
 from simulate import get_current_health_data, generate_readings_history, get_species_normal_ranges, load_previous_readings_from_db
 import os
 from datetime import datetime, timedelta
+import time
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 import io
 import openpyxl
 import csv
+import threading
 from werkzeug.utils import secure_filename
 import base64
 import json
+import numpy as np
+from PIL import Image
+
+# Keras will be imported lazily when needed (avoid Python 3.13 compatibility issues)
 
 app = Flask(__name__, template_folder='Templates', static_folder='Static')
 app.secret_key = 'your_secret_key_change_this_in_production'
 
 # Global scheduler
 scheduler = None
+
+# Global Keras model and labels (loaded once at startup)
+keras_model = None
+keras_labels = []
+
+def load_keras_model():
+    """Load the Keras model and labels once at startup"""
+    global keras_model, keras_labels
+    
+    model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Model', 'keras_model.h5')
+    labels_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Model', 'labels.txt')
+    
+    try:
+        # Use tf_keras for legacy Teachable Machine model support
+        import tf_keras as keras
+        
+        # Load the Keras model with legacy H5 format
+        keras_model = keras.models.load_model(model_path, compile=False)
+        print(f"[{datetime.now()}] Keras model loaded successfully from {model_path}")
+        
+        # Load the labels
+        with open(labels_path, 'r') as f:
+            keras_labels = [line.strip().split(' ', 1)[1] if ' ' in line.strip() else line.strip() for line in f.readlines()]
+        print(f"[{datetime.now()}] Labels loaded: {keras_labels}")
+        
+        # Warm-up prediction to optimize model for faster subsequent predictions
+        dummy_input = np.zeros((1, 224, 224, 3), dtype=np.float32)
+        keras_model.predict(dummy_input, verbose=0)
+        print(f"[{datetime.now()}] Model warm-up complete - ready for fast predictions")
+        
+    except Exception as e:
+        print(f"Error loading Keras model: {e}")
+        keras_model = None
+        keras_labels = []
 
 def generate_health_reading_for_animal(animal_tag, species):
     """Generate and save a health reading for an animal"""
@@ -473,7 +513,25 @@ def admin_user():
         return redirect(url_for('admin_login'))
     
     users = get_all_users()
-    return render_template('admin_user.html', admin=session.get('admin'), users=users)
+    
+    # Get total animals treated from treatment_history
+    total_animals_treated = 0
+    try:
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM treatment_history')
+        result = cursor.fetchone()
+        if result is not None:
+            total_animals_treated = result[0]
+        conn.close()
+        print(f"[ADMIN USER] Total animals treated: {total_animals_treated}")
+    except Exception as e:
+        print(f"Error fetching total animals treated: {e}")
+        import traceback
+        traceback.print_exc()
+        total_animals_treated = 0
+    
+    return render_template('admin_user.html', admin=session.get('admin'), users=users, total_animals_treated=total_animals_treated)
 
 @app.route('/admin_vet')
 def admin_vet():
@@ -482,7 +540,54 @@ def admin_vet():
         return redirect(url_for('admin_login'))
     
     vets = get_all_vets()
-    return render_template('admin_vet.html', admin=session.get('admin'), vets=vets)
+    
+    # Get statistics for each vet
+    total_animals_treated = 0
+    try:
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        
+        vet_stats = {}
+        for vet in vets:
+            vet_email = vet['email']
+            
+            # Count treated animals for this vet
+            cursor.execute('''
+                SELECT COUNT(DISTINCT animal_tag) FROM treatment_history 
+                WHERE vet_email = ?
+            ''', (vet_email,))
+            result = cursor.fetchone()
+            treated_count = result[0] if result else 0
+            
+            # Count animals to visit (confirmed appointments) for this vet
+            cursor.execute('''
+                SELECT COUNT(*) FROM confirmed_appointments 
+                WHERE vet_email = ?
+            ''', (vet_email,))
+            result = cursor.fetchone()
+            to_visit_count = result[0] if result else 0
+            
+            vet_stats[vet_email] = {
+                'treated': treated_count,
+                'to_visit': to_visit_count
+            }
+        
+        # Get total animals treated across all vets (count all treatment records)
+        cursor.execute('SELECT COUNT(*) FROM treatment_history')
+        result = cursor.fetchone()
+        if result is not None:
+            total_animals_treated = result[0]
+        print(f"[ADMIN VET] Total animals treated: {total_animals_treated}")
+        
+        conn.close()
+    except Exception as e:
+        print(f"Error fetching vet statistics: {e}")
+        import traceback
+        traceback.print_exc()
+        vet_stats = {}
+        total_animals_treated = 0
+    
+    return render_template('admin_vet.html', admin=session.get('admin'), vets=vets, vet_stats=vet_stats, total_animals_treated=total_animals_treated)
 
 @app.route('/api/admin/user/<int:user_id>', methods=['DELETE'])
 def delete_admin_user(user_id):
@@ -690,7 +795,100 @@ def features():
         return redirect(url_for('login'))
     return render_template('features.html', user=session.get('user'))
 
-@app.route('/export')
+@app.route('/imgdetect')
+def imgdetect():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('ImgDetect.html', user=session.get('user'))
+
+@app.route('/image-predict')
+def image_predict():
+    """GET route that renders ImgDetect.html for image prediction"""
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('ImgDetect.html', user=session.get('user'))
+
+@app.route('/predict-image', methods=['POST'])
+def predict_image():
+    """POST route that accepts an uploaded image and returns prediction"""
+    global keras_model, keras_labels
+    
+    # Check if model is still loading in background
+    if keras_model is None:
+        return jsonify({'error': 'Model is still loading. Please wait a few seconds and try again.'}), 503
+    
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image file provided'}), 400
+    
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({'error': 'No image selected'}), 400
+    
+    try:
+        # Read and process the image using PIL (fast)
+        img = Image.open(file.stream).convert('RGB')
+        
+        # Resize to 224x224 using BILINEAR for speed (LANCZOS is slower)
+        img = img.resize((224, 224), Image.BILINEAR)
+        
+        # Convert to numpy array and normalize to [0, 1]
+        img_array = np.array(img, dtype=np.float32) / 255.0
+        
+        # Add batch dimension
+        img_array = np.expand_dims(img_array, axis=0)
+        
+        # Run prediction
+        predictions = keras_model.predict(img_array, verbose=0)
+        
+        # Add delay for better UX (simulates processing time)
+        time.sleep(4)
+        
+        # Get the predicted class index and confidence
+        predicted_index = np.argmax(predictions[0])
+        confidence = float(predictions[0][predicted_index])
+        
+        # Get class name
+        class_name = keras_labels[predicted_index] if predicted_index < len(keras_labels) else f"Class {predicted_index}"
+        
+        # Parse species and disease from class name (format: "Species - Disease")
+        parts = class_name.split(' - ', 1)
+        species = parts[0] if len(parts) > 0 else "Unknown"
+        disease = parts[1] if len(parts) > 1 else class_name
+        
+        # Return only top prediction with species and disease separated
+        return jsonify({
+            'success': True,
+            'className': class_name,
+            'species': species,
+            'disease': disease,
+            'confidence': confidence,
+            'predictions': [{
+                'className': class_name,
+                'species': species,
+                'disease': disease,
+                'probability': confidence
+            }]  
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/Static/Model/<path:filename>')
+def serve_model(filename):
+    """Serve model files with proper CORS headers"""
+    import os
+    model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Static', 'Model')
+    response = send_from_directory(model_dir, filename)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    response.headers['Cache-Control'] = 'no-cache'
+    if filename.endswith('.bin'):
+        response.headers['Content-Type'] = 'application/octet-stream'
+    elif filename.endswith('.json'):
+        response.headers['Content-Type'] = 'application/json'
+    return response
+
 @app.route('/export')
 def export():
     if 'user' not in session:
@@ -811,7 +1009,7 @@ def generate_pdf_report(animals, readings, date_from, date_to, user_email):
     )
     
     # Title
-    story.append(Paragraph("🐄 AgriHealth - Livestock Health Report", title_style))
+    story.append(Paragraph("🐄 Ani-Health - Livestock Health Report", title_style))
     story.append(Spacer(1, 12))
     
     # Report info
@@ -950,7 +1148,7 @@ def generate_pdf_report(animals, readings, date_from, date_to, user_email):
         textColor=colors.gray
     )
     story.append(Paragraph("---", footer_style))
-    story.append(Paragraph("This report was automatically generated by AgriHealth Livestock Monitoring System.", footer_style))
+    story.append(Paragraph("This report was automatically generated by Ani-Health Livestock Monitoring System.", footer_style))
     story.append(Paragraph("For any concerns about animal health, please consult with a veterinarian.", footer_style))
     
     doc.build(story)
@@ -1250,6 +1448,59 @@ def api_bulk_upload_animals():
     
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'Error processing file: {str(e)}'}), 500
+
+@app.route('/api/animals/status', methods=['GET'])
+def api_get_animals_status():
+    """Get all animals with their ACTUAL stored health status from database"""
+    if 'user' not in session:
+        return jsonify({'status': 'error', 'message': 'Not authenticated'}), 401
+    
+    try:
+        user_email = session.get('user_email')
+        conn = sqlite3.connect('users.db')
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        # Get all active animals for the user with their LATEST stored health reading
+        cursor.execute('''
+            SELECT 
+                a.tag, a.name, a.species, a.weight, a.age, a.gender, a.date_added,
+                h.health_index, h.status as health_status, h.timestamp as last_reading_time
+            FROM animals a
+            LEFT JOIN (
+                SELECT animal_tag, health_index, status, timestamp
+                FROM health_readings h1
+                WHERE timestamp = (
+                    SELECT MAX(timestamp) 
+                    FROM health_readings h2 
+                    WHERE h2.animal_tag = h1.animal_tag
+                )
+            ) h ON a.tag = h.animal_tag
+            WHERE a.user_email = ? AND (a.is_active = 1 OR a.is_active IS NULL)
+            ORDER BY a.date_added DESC
+        ''', (user_email,))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        animals = {}
+        for row in rows:
+            # Use the ACTUAL stored status, default to 'Healthy' only if no readings exist
+            health_index = row['health_index'] if row['health_index'] is not None else None
+            health_status = row['health_status'] if row['health_status'] is not None else 'Healthy'
+            
+            animals[row['tag']] = {
+                'name': row['name'],
+                'tag': row['tag'],
+                'species': row['species'],
+                'status': health_status,
+                'health_index': health_index if health_index is not None else '--',
+                'last_reading': row['last_reading_time']
+            }
+        
+        return jsonify({'status': 'success', 'animals': animals})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/api/animals/<tag>', methods=['GET'])
 def api_get_animal(tag):
@@ -2716,6 +2967,11 @@ if __name__ == '__main__':
     
     # Load previous readings from database for gradual health changes
     load_previous_readings_from_db()
+    
+    # Load Keras model in background thread for faster first prediction
+    print(f"[{datetime.now()}] Starting background model loading...")
+    model_thread = threading.Thread(target=load_keras_model, daemon=True)
+    model_thread.start()
     
     # Start the background scheduler for automatic readings every 5 minutes
     start_scheduler()

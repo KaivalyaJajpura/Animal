@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Livestock Health History</title>
+<title>Ani-Health History</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -41,7 +41,7 @@
 <div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800/50">
 <div class="flex items-center gap-2 text-primary">
 <span class="material-symbols-outlined text-[32px]">agriculture</span>
-<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">AgriHealth</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Ani-Health</span>
 </div>
 </div>
 <div class="flex flex-col gap-2 p-4 flex-1">
@@ -60,6 +60,10 @@
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/15 text-green-900 dark:text-primary dark:bg-primary/20 transition-colors" href="{{ url_for('history') }}">
 <span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
 <p class="text-sm font-bold leading-normal" data-i18n="nav.history">History</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('imgdetect') }}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">biotech</span>
+<p class="text-sm font-medium leading-normal group-hover:text-text-dark dark:group-hover:text-gray-200" data-i18n="nav.disease_detection">Disease Detection</p>
 </a>
 <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="{{ url_for('features') }}">
 <span class="material-symbols-outlined">tips_and_updates</span>
@@ -283,7 +287,7 @@ Showing <span class="font-semibold text-text-main dark:text-white" id="showingCo
 
 <!-- Footer / Extra Info -->
 <div class="flex justify-between items-center text-xs text-text-muted px-2">
-<p>© 2024 AgriHealth Systems. All rights reserved.</p>
+<p>© 2024 Ani-Health Systems. All rights reserved.</p>
 <div class="flex gap-4">
 <a class="hover:text-primary-dark transition-colors" href="#">Privacy Policy</a>
 <a class="hover:text-primary-dark transition-colors" href="#">Terms of Service</a>

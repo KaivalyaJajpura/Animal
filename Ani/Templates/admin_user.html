@@ -41,7 +41,7 @@
 <div class="flex items-center gap-3">
 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="University hackathon project logo for livestock health" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAnAQb1ektGN2gpfSvBaQiQ7EUbcTVKcr3V9PWTTCvn_ugP3GogvTrhmAQRX9QxKugicrBNKWe4oDLYF5Naeef9IvWD_ys3AIyoOzRdBrDxrpwvYjZITVtBoqVsdlBQXDlpI2WLuz54qGT4lIBkp4uYE4bMTiZRuovgPiUjetdfrNymiJtxr8hIuoF4CJgJU8J-OPaMQ4azu6wkK7e7uDuEh7FLAqV61NkQChqnHgHNpXJ4qwveOqnQfW98ZSSs2rQC85mpMfPSzZY");'></div>
 <div class="flex flex-col">
-<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Livestock Health</h1>
+<h1 class="text-[#111813] dark:text-white text-base font-bold leading-none">Ani-Health</h1>
 <p class="text-[#61896f] dark:text-primary text-xs font-medium uppercase tracking-wider">Early Detection</p>
 </div>
 </div>
@@ -102,10 +102,6 @@
 <h1 class="text-[#111813] dark:text-white text-3xl font-black leading-tight tracking-tight">User &amp; Livestock Management</h1>
 <p class="text-[#61896f] dark:text-[#a1b9a9] text-base font-normal">Monitor registered farmers and detailed breakdown of their livestock assets.</p>
 </div>
-<button class="flex items-center gap-2 cursor-pointer rounded-xl h-11 px-5 bg-primary text-[#111813] text-sm font-bold shadow-sm hover:shadow-md transition-all active:scale-95">
-<span class="material-symbols-outlined text-[20px]">file_download</span>
-<span>Export User Analytics</span>
-</button>
 </div>
 <div class="bg-white dark:bg-[#1a2e1f] rounded-xl border border-[#dbe6df] dark:border-[#2a3a2e] overflow-hidden shadow-sm">
 <div class="overflow-x-auto">
@@ -180,7 +176,7 @@ No users found.
 <p class="text-[#61896f] dark:text-[#a1b9a9] text-sm font-medium uppercase tracking-widest">Total Animals Treated</p>
 </div>
 <div class="flex items-end justify-between">
-<p class="text-[#111813] dark:text-white tracking-tight text-3xl font-black">4,582</p>
+<p class="text-[#111813] dark:text-white tracking-tight text-3xl font-black">{{ total_animals_treated | default(9) }}</p>
 <p class="text-[#078829] text-sm font-bold flex items-center bg-[#078829]/10 px-2 py-0.5 rounded-full">
 <span class="material-symbols-outlined text-[16px]">trending_up</span>
                             8.7%
@@ -190,7 +186,7 @@ No users found.
 </div>
 </div>
 <footer class="mt-auto py-6 px-8 border-t border-[#f0f4f2] dark:border-[#2a3a2e] text-center">
-<p class="text-[#61896f] text-xs font-medium">© 2024 Livestock Health University Hackathon Project. All rights reserved.</p>
+<p class="text-[#61896f] text-xs font-medium">© 2024 Ani-Health University Hackathon Project. All rights reserved.</p>
 </footer>
 </main>
 </div>

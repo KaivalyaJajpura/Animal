@@ -9,6 +9,7 @@ const translations = {
         "nav.animal_info": "Animal Info",
         "nav.user_info": "User Info",
         "nav.history": "History",
+        "nav.disease_detection": "Disease Detect",
         "nav.features": "Features",
         "nav.export_data": "Export Data",
         "nav.settings": "Settings",
@@ -16,11 +17,12 @@ const translations = {
         
         // Header
         "header.dashboard": "Dashboard",
+        "header.disease_detection": "Disease Detect",
         "header.home_icon": "home",
         "header.language": "Language",
         
         // Dashboard
-        "dashboard.title": "Livestock Health Monitoring Dashboard",
+        "dashboard.title": "Ani-Health Monitoring Dashboard",
         "dashboard.welcome": "Welcome to Ani-Health",
         "dashboard.health_overview": "Health Overview",
         "dashboard.recent_alerts": "Recent Alerts",
@@ -135,6 +137,8 @@ const translations = {
         "animal.sheep": "Sheep",
         "animal.goat": "Goat",
         "animal.horse": "Horse",
+        "animal.dog": "Dog",
+        "animal.cat": "Cat",
         "animal.years": "years",
         "animal.kg": "kg",
         "animal.disease_history": "Previous Disease History",
@@ -267,6 +271,8 @@ const translations = {
         "features.exportable_data_desc": "One-click downloadable pdf reports for analysis.",
         "features.species_available": "Species Available",
         "features.species_available_desc": "Support for Cow, Buffalo, Goat, Horse, and Sheep monitoring.",
+        "features.ai_disease_detection": "Skin Disease Detection by Image",
+        "features.ai_disease_desc": "Upload animal photos for instant AI-powered disease diagnosis and health recommendations.",
         
         // Export
         "export.title": "Export Data",
@@ -480,7 +486,7 @@ const translations = {
         "auth.account_success": "Account created successfully! Signing you in...",
         "auth.account_error": "An error occurred. Please try again.",
         "auth.smart_farming": "Smart Farming",
-        "auth.monitor_realtime": "Monitor Livestock Health in Real-Time",
+        "auth.monitor_realtime": "Monitor Livestock Health in Real-Time with Ani-Health",
         "auth.early_detection_desc": "Early disease detection and comprehensive health tracking for modern agriculture.",
         "vet.portal_title": "Veterinarian Portal",
         "vet.portal_desc": "Please sign in to access livestock health records.",
@@ -499,13 +505,13 @@ const translations = {
         "vet.real_time_data": "Real-time Data",
         "vet.empowering_vets": "Empowering Vets with Data",
         "vet.monitor_herd": "Seamlessly monitor herd health metrics and receive instant alerts for potential disease outbreaks.",
-        "vet.copyright": "© 2024 Livestock Health Systems. University Hackathon Project.",
+        "vet.copyright": "© 2024 Ani-Health Systems. University Hackathon Project.",
         "vet.dashboard": "Dashboard",
         "vet.notifications": "Notifications",
         "vet.history": "History",
         "vet.settings": "Settings",
         "vet.logout": "Logout",
-        "vet.livestock_health": "Livestock Health",
+        "vet.livestock_health": "Ani-Health",
         "vet.monitoring_overview": "Monitoring Overview",
         "vet.herd_status_today": "Here's what's happening with the livestock today.",
         "vet.critical_alerts": "Critical Alerts",
@@ -555,7 +561,8 @@ const translations = {
         "common.search": "Search",
         "common.filter": "Filter",
         "common.sort": "Sort",
-        "common.logout": "Logout"
+        "common.logout": "Logout",
+        "common.action": "Action"
     },
     
     hi: {
@@ -690,6 +697,8 @@ const translations = {
         "animal.sheep": "भेड़",
         "animal.goat": "बकरी",
         "animal.horse": "घोड़ा",
+        "animal.dog": "कुत्ता",
+        "animal.cat": "बिल्ली",
         "animal.years": "साल",
         "animal.kg": "किलो",
         "animal.disease_history": "पिछला रोग इतिहास",
@@ -822,6 +831,8 @@ const translations = {
         "features.exportable_data_desc": "विश्लेषण के लिए एक-क्लिक डाउनलोड योग्य PDF रिपोर्ट।",
         "features.species_available": "उपलब्ध प्रजातियां",
         "features.species_available_desc": "गाय, भैंस, बकरी, घोड़ा और भेड़ की निगरानी के लिए समर्थन।",
+        "features.ai_disease_detection": "छवि द्वारा त्वचा रोग का पता लगाना",
+        "features.ai_disease_desc": "तुरंत एआई-संचालित रोग निदान और स्वास्थ्य सिफारिशों के लिए पशु फ़ोटो अपलोड करें।",
         
         // Export
         "export.title": "डेटा निर्यात करें",
@@ -1114,7 +1125,8 @@ const translations = {
         "common.search": "खोज",
         "common.filter": "फ़िल्टर",
         "common.sort": "सॉर्ट करें",
-        "common.logout": "लॉगआउट करें"
+        "common.logout": "लॉगआउट करें",
+        "common.action": "कार्रवाई"
     }
 };
 

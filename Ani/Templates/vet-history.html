@@ -4,7 +4,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vet History - Treated Animals Records</title>
+<title>Vet History - Ani-Health</title>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Google Fonts -->
@@ -62,7 +62,7 @@
 <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">pets</span>
 </div>
 <div class="flex flex-col">
-<h1 class="text-[#111813] text-lg font-bold leading-tight">Livestock Health</h1>
+<h1 class="text-[#111813] text-lg font-bold leading-tight">Ani-Health</h1>
 <p class="text-[#637588] text-xs font-medium">Vet Dashboard</p>
 </div>
 </div>
@@ -73,9 +73,9 @@
 <span class="material-symbols-outlined">dashboard</span>
 <span class="text-sm font-medium" data-i18n="vet.dashboard">Dashboard</span>
 </a>
-<a class="flex items-center gap-3 rounded-xl px-4 py-3 text-[#637588] hover:bg-[#f0f4f2] hover:text-[#111813] transition-colors" href="{{ url_for('vet_notifications') }}" data-i18n="vet.notifications">
+<a class="flex items-center gap-3 rounded-xl px-4 py-3 text-[#637588] hover:bg-[#f0f4f2] hover:text-[#111813] transition-colors" href="{{ url_for('vet_notifications') }}">
 <span class="material-symbols-outlined">notifications</span>
-<span class="text-sm font-medium">Notifications</span>
+<span class="text-sm font-medium" data-i18n="vet.notifications">Notifications</span>
 <span class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-red-100 text-[10px] font-bold text-red-600">3</span>
 </a>
 <!-- Active State -->
@@ -119,9 +119,6 @@
 </div>
 <a href="{{ url_for('vet_settings') }}" class="h-10 w-10 rounded-full bg-cover bg-center border-2 border-white shadow-sm cursor-pointer hover:opacity-80 transition-opacity" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB67CGvASZMghgzllJIgsDttzew6wlPpOvhhGghLvgl4WgWtFGRCgYE5xuF_Awm3eIThsAFKiykvbmSNjk1XjOgbUibtLHifZBjeqPLNcI8FsRdk_88PHzPY5ui-KbHYzt-WswcoO64p0NYUq4ox3Ts4jrb1KM6kR5j7tk2H3IK44UUl9LO64PnyhB0aWkWLjSBuDnUWVHvYIxYV_yMPzU0w83I8cCb5EE7lJCDxp9p6xVnVdI5HmriqnGskPU0kjd0Yt-zThOLyOQ");'></a>
 </div>
-<a href="{{ url_for('vet_logout') }}" class="flex items-center justify-center h-10 w-10 rounded-lg text-[#637588] hover:bg-red-50 hover:text-red-600 transition-colors">
-<span class="material-symbols-outlined">logout</span>
-</a>
 </div>
 </header>
 <!-- Scrollable Content -->
@@ -186,6 +183,8 @@
 <button onclick="filterBySpecies('Goat')" class="w-full text-left px-4 py-2 text-sm text-text-main hover:bg-background-light transition-colors">Goat</button>
 <button onclick="filterBySpecies('Horse')" class="w-full text-left px-4 py-2 text-sm text-text-main hover:bg-background-light transition-colors">Horse</button>
 <button onclick="filterBySpecies('Sheep')" class="w-full text-left px-4 py-2 text-sm text-text-main hover:bg-background-light transition-colors">Sheep</button>
+<button onclick="filterBySpecies('Dog')" class="w-full text-left px-4 py-2 text-sm text-text-main hover:bg-background-light transition-colors">Dog</button>
+<button onclick="filterBySpecies('Cat')" class="w-full text-left px-4 py-2 text-sm text-text-main hover:bg-background-light transition-colors">Cat</button>
 </div>
 </div>
 </div>
@@ -267,7 +266,7 @@
 <div class="flex justify-center pb-8">
 <p class="text-xs text-text-secondary text-center max-w-lg">
                             Confidential Medical Records. Authorized Veterinary Personnel Only. 
-                            <br/>System Version 2.4.1 | Livestock Health Monitoring &amp; Early Disease Detection System
+                            <br/>System Version 2.4.1 | Ani-Health Monitoring &amp; Early Disease Detection System
                         </p>
 </div>
 </div>
@@ -821,14 +820,9 @@
         }
     }
 
-    // Helper function to get translation
-    function getTranslation(key) {
-        if (window.i18n) {
-            return window.i18n.getTranslation(key, window.i18n.currentLanguage);
-        }
-        return key;
-    }
-
+</script>
+<script src="../Static/JS/i18n.js"></script>
+<script>
     // Function to update doctor name with translated title
     function updateDoctorNameDisplay() {
         const doctorNameEl = document.getElementById('vetDoctorName');
@@ -836,7 +830,7 @@
             let fullName = doctorNameEl.getAttribute('data-name');
             // Remove any existing "Dr." or "डॉ." prefix to avoid duplication
             fullName = fullName.replace(/^(Dr\.\s*|डॉ\.\s*)/, '').trim();
-            const doctorTitle = getTranslation('vet.doctor_title');
+            const doctorTitle = window.i18n.getTranslation('vet.doctor_title');
             doctorNameEl.textContent = doctorTitle + ' ' + fullName;
         }
     }
@@ -850,8 +844,6 @@
             updateDoctorNameDisplay();
         });
     });
-
 </script>
-<script src="../Static/JS/i18n.js"></script>
 <script src="../Static/JS/script.js"></script>
 </body></html>
