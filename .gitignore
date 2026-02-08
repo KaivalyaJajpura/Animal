@@ -7,34 +7,82 @@ __pycache__/
 env/
 venv/
 .venv
+ENV/
+.eggs/
 *.egg-info/
 dist/
 build/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# IDE
-.vscode/
+# PyCharm
 .idea/
-*.swp
-*.swo
-*~
+*.iml
+*.iws
+*.ipr
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# Environment files
+.env
+.env.local
+.env.*.local
 
 # OS
 .DS_Store
 Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 
-# Environment
-.env
-.env.local
+# IDE
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
 
-# Model files (if they're too large)
-*.h5
-*.pkl
+# Database (store in cloud for production)
+*.db
+*.sqlite
+*.sqlite3
+users.db
+animals.db
+
+# Logs
+*.log
+logs/
 
 # Temporary files
-*.txt
-!README.txt
+*.tmp
+*.temp
+*.bak
+*~
+
+# Node/Vercel
+node_modules/
+.next/
+.vercel/
+
+# Build artifacts
+build/
+dist/
+*.whl
