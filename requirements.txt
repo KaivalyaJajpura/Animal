@@ -1,0 +1,11 @@
+Flask==3.1.2
+Werkzeug==3.1.5
+APScheduler==3.11.2
+openpyxl==3.1.5
+Pillow==12.1.0
+numpy==2.4.1
+requests==2.32.5
+python-dateutil==2.9.0.post0
+tf_keras==2.20.1
+tensorflow==2.20.0
+gunicorn==24.1.0
