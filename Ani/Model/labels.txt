@@ -1,0 +1,11 @@
+0 Cow - Dermatophilosis
+1 Cow - Foot and Mouth Disease
+2 Cow - Healthy
+3 Cow - Lumpy Skin
+4 Cow - Mastitis
+5 Cow - Pediculosis
+6 Cow - Ringworm
+7 Goat - Abscesses
+8 Goat - Healthy
+9 Goat - Orf
+10 Goat - Pox disease
