@@ -1,21 +1,71 @@
+# Version Control
 .git
 .gitignore
-node_modules
-*.pyc
-__pycache__
-.env
+.github
+.gitattributes
+
+# Python Virtual Environments
 .venv
+.venv/
+venv/
 venv
+env/
+ENV/
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Node/Build
+node_modules
+.next
+.nuxt
+dist
+build
+
+# Databases (should not be deployed)
 *.db
 *.sqlite
-.DS_Store
-Thumbs.db
+*.sqlite3
+users.db
+animals.db
+vets.db
+
+# Files
+*.log
+.env
+.env.local
+.env.*.local
+
+# IDE/Editor
 .vscode
 .idea
-*.log
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
 .pytest_cache
 .coverage
-__pycache__/
+.tox
+
+# Package info
 *.egg-info/
-dist/
-build/
+*.egg
+*.whl
+
+# Documentation
+docs/
+.pytest_cache/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
